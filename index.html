@@ -1,0 +1,171 @@
+﻿<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A3 Studio</title>
+    <script type="module" crossorigin src="./a3.js"></script>
+    <link rel="stylesheet" crossorigin href="./a3.css">
+  </head>
+  <body class="is-loading">
+    <canvas id="gl"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="loader" aria-hidden="true"><span>A3</span><i></i></div>
+
+    <header class="nav" data-intro>
+      <a class="nav__logo" href="#" aria-label="A3 — на главную">
+        <span class="nav__logo-mark">A3</span>
+      </a>
+      <nav class="nav__links">
+        <a href="#" data-scramble>Работы</a>
+        <a href="#" data-scramble>Услуги</a>
+        <a href="#" data-scramble>О студии</a>
+        <a href="#" data-scramble>Лаборатория</a>
+      </nav>
+      <a class="nav__cta" href="#" data-scramble>Обсудить проект</a>
+      <button class="nav__menu" aria-label="Меню"><i></i><i></i></button>
+    </header>
+
+    <nav class="sections" aria-label="Разделы">
+      <a href="#" class="sections__item is-active" data-sec="hero"><i></i><span>TOP</span></a>
+      <a href="#works" class="sections__item" data-sec="works"><i></i><span>WORKS</span></a>
+      <div class="sections__ticks"></div>
+      <a href="#pains" class="sections__item" data-sec="pains"><i></i><span>WHY</span></a>
+      <a href="#cases" class="sections__item" data-sec="cases"><i></i><span>CASES</span></a>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <aside class="hud hud--rot" data-intro>
+          <div class="hud__head">
+            <span data-scramble>Logo Rotation</span><span class="hud__blink">●</span>
+          </div>
+          <div class="hud__quat">
+            <span>x <b data-q="x">0.00</b></span>
+            <span>y <b data-q="y">0.00</b></span>
+            <span>z <b data-q="z">0.00</b></span>
+            <span>w <b data-q="w">1.00</b></span>
+          </div>
+          <canvas class="hud__gizmo" width="96" height="96"></canvas>
+          <button class="hud__btn" data-reset data-scramble>Reset rotation</button>
+          <p class="hud__tip">тяни объект мышью</p>
+        </aside>
+
+        <aside class="hud hud--mat" data-intro>
+          <div class="hud__head"><span data-scramble>Logo Material</span></div>
+          <label class="hud__row">roughness <input type="range" min="0" max="1" step="0.01" value="0.75" data-mat="roughness" /><output>0.75</output></label>
+          <label class="hud__row">ior <input type="range" min="1" max="2.33" step="0.01" value="1.7" data-mat="ior" /><output>1.70</output></label>
+          <label class="hud__row">dispersion <input type="range" min="0" max="20" step="0.1" value="12" data-mat="dispersion" /><output>12.0</output></label>
+          <label class="hud__row">thickness <input type="range" min="0" max="5" step="0.05" value="2.4" data-mat="thickness" /><output>2.40</output></label>
+        </aside>
+
+        <div class="news" data-intro>
+          <h2 class="news__title">Новости</h2>
+          <ul>
+            <li><time data-scramble>2026.09.12</time><a href="#">Здесь будет заголовок вашей новости или анонса</a></li>
+            <li><time data-scramble>2026.08.30</time><a href="#">Второй анонс — например, запуск нового проекта студии</a></li>
+            <li><time data-scramble>2026.07.18</time><a href="#">Третья новость: коротко о событии и ссылка на подробности</a></li>
+          </ul>
+        </div>
+
+        <div class="scroll-cue" data-intro><span>Scroll</span><i></i></div>
+      </section>
+
+      <section class="works-intro" id="works">
+        <p class="works-intro__label" data-scramble>(01) — Работы</p>
+        <h2 class="works-intro__title">Избранные<br />проекты</h2>
+      </section>
+
+      <section class="works">
+        <div class="works__sticky">
+          <div class="works__info">
+            <time class="works__date"></time>
+            <h3 class="works__title"></h3>
+            <p class="works__sub"></p>
+            <ul class="works__tags"></ul>
+          </div>
+          <div class="works__counter"><b class="works__num">01</b><span>/</span><span class="works__total">08</span></div>
+          <a class="works__more" href="#" data-scramble>Все работы ↗</a>
+        </div>
+      </section>
+
+      <section class="pains" id="pains">
+        <div class="pains__stage">
+          <div class="pains__mark" aria-hidden="true">
+            <div class="pains__mark-3d"><svg class="pains__outline"><path class="pains__logo" /></svg></div>
+          </div>
+
+          <p class="pains__label">(02) — Знакомо?</p>
+
+          <div class="pains__group">
+            <p class="pline"><span class="pline__m">Все сайты в нише одинаковые</span></p>
+            <p class="pline"><span class="pline__m">Красиво, но заявок нет</span></p>
+            <p class="pline"><span class="pline__m">Бренд выглядит дешевле продукта</span></p>
+            <p class="pains__en">Every site in the niche looks the same.<br />Beautiful, yet no one reaches out.</p>
+          </div>
+          <div class="pains__group pains__group--right">
+            <p class="pline"><span class="pline__m">Ваш запомнят с первого скролла</span></p>
+            <p class="pline"><span class="pline__m">Красиво — и поэтому пишут</span></p>
+            <p class="pline"><span class="pline__m">Продукт выглядит на свою цену</span></p>
+            <p class="pains__en">Remembered from the first scroll.<br />Beautiful — and that is why they write.</p>
+          </div>
+          <div class="pains__group">
+            <p class="pline"><span class="pline__m">Уже платили за редизайн. Дважды</span></p>
+            <p class="pline"><span class="pline__m">Хотим «вау», а бюджет на «норм»</span></p>
+            <p class="pline"><span class="pline__m">Подрядчик пропал на третьей неделе</span></p>
+            <p class="pains__en">Paid for a redesign. Twice.<br />Wanted "wow", got a budget for "fine".</p>
+          </div>
+          <div class="pains__group pains__group--right">
+            <p class="pline"><span class="pline__m">Третий раз не понадобится</span></p>
+            <p class="pline"><span class="pline__m">Делаем «вау» там, где оно окупается</span></p>
+            <p class="pline"><span class="pline__m">На связи до запуска и после</span></p>
+            <p class="pains__en">No third time needed.<br />"Wow" exactly where it pays off.</p>
+          </div>
+
+          <div class="pains__final">
+            <p class="pline pline--big"><span class="pline__m">Обычное стоит дороже.</span></p>
+            <p class="pains__sub">A3 — студия и агентство, которые делают так,<br />чтобы выбирали вас.</p>
+            <a class="pains__cta" href="#">Обсудить проект <span>→</span></a>
+          </div>
+
+          <div class="pains__progress"><i></i></div>
+        </div>
+      </section>
+
+      <section class="cases" id="cases">
+        <div class="cases__stage">
+          <video class="cases__ambient" muted loop playsinline autoplay aria-hidden="true"></video>
+          <div class="cases__shade"></div>
+          <canvas class="cases__gl" aria-hidden="true"></canvas>
+          <!-- appears with the last category; the camera then dives through the A's triangle -->
+          <div class="pains__mark cases__mark" aria-hidden="true">
+            <div class="pains__mark-3d"><svg class="pains__outline"><path class="pains__logo" /></svg></div>
+          </div>
+          <p class="cases__label">(03) — Кейсы</p>
+          <div class="cases__scene"><div class="cases__panels"></div></div>
+          <div class="cases__info"></div>
+          <p class="cases__count"><b>01</b> / <span>08</span></p>
+          <div class="cases__progress"><i></i></div>
+        </div>
+      </section>
+
+      <!-- inverted twin of "Знакомо?": dark stage, white markers, the steps of the process -->
+      <section class="process" id="process">
+        <div class="process__stage">
+          <div class="pains__mark process__mark" aria-hidden="true">
+            <div class="pains__mark-3d"><svg class="pains__outline"><path class="pains__logo" /></svg></div>
+          </div>
+          <p class="process__label">(04) — Как мы работаем</p>
+          <div class="process__groups"></div>
+          <div class="process__final">
+            <p class="pline pline--big"><span class="pline__m">Прозрачно на каждом шаге.</span></p>
+            <p class="process__sub">Вы всегда знаете, что сейчас происходит с проектом,<br />сколько осталось и за что вы платите.</p>
+            <a class="process__cta" href="#">Обсудить проект <span>→</span></a>
+          </div>
+          <div class="process__progress"><i></i></div>
+        </div>
+      </section>
+    </main>
+
+  </body>
+</html>
