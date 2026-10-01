@@ -35,36 +35,14 @@
 
     <main>
       <section class="hero">
-        <aside class="hud hud--rot" data-intro>
-          <div class="hud__head">
-            <span data-scramble>Logo Rotation</span><span class="hud__blink">●</span>
-          </div>
-          <div class="hud__quat">
-            <span>x <b data-q="x">0.00</b></span>
-            <span>y <b data-q="y">0.00</b></span>
-            <span>z <b data-q="z">0.00</b></span>
-            <span>w <b data-q="w">1.00</b></span>
-          </div>
-          <canvas class="hud__gizmo" width="96" height="96"></canvas>
-          <button class="hud__btn" data-reset data-scramble>Reset rotation</button>
-          <p class="hud__tip">тяни объект мышью</p>
-        </aside>
+        <div class="hero__offer" data-intro>
+          <h1 class="hero__title">Создаём сайты, которые выбирают.</h1>
+          <p class="hero__sub">Не ещё один шаблон — сайт, который выделяет вас среди конкурентов.</p>
+        </div>
 
-        <aside class="hud hud--mat" data-intro>
-          <div class="hud__head"><span data-scramble>Logo Material</span></div>
-          <label class="hud__row">roughness <input type="range" min="0" max="1" step="0.01" value="0.75" data-mat="roughness" /><output>0.75</output></label>
-          <label class="hud__row">ior <input type="range" min="1" max="2.33" step="0.01" value="1.7" data-mat="ior" /><output>1.70</output></label>
-          <label class="hud__row">dispersion <input type="range" min="0" max="20" step="0.1" value="12" data-mat="dispersion" /><output>12.0</output></label>
-          <label class="hud__row">thickness <input type="range" min="0" max="5" step="0.05" value="2.4" data-mat="thickness" /><output>2.40</output></label>
-        </aside>
-
-        <div class="news" data-intro>
-          <h2 class="news__title">Новости</h2>
-          <ul>
-            <li><time data-scramble>2026.09.12</time><a href="#">Здесь будет заголовок вашей новости или анонса</a></li>
-            <li><time data-scramble>2026.08.30</time><a href="#">Второй анонс — например, запуск нового проекта студии</a></li>
-            <li><time data-scramble>2026.07.18</time><a href="#">Третья новость: коротко о событии и ссылка на подробности</a></li>
-          </ul>
+        <div class="hero__price" data-intro>
+          <p class="hero__price-value"><span>от</span> 50 000 ₽</p>
+          <a class="hero__cta" href="#contact">Обсудить проект <span aria-hidden="true">→</span></a>
         </div>
 
         <div class="scroll-cue" data-intro><span>Scroll</span><i></i></div>
