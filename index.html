@@ -25,14 +25,6 @@
       <button class="nav__menu" aria-label="Меню"><i></i><i></i></button>
     </header>
 
-    <nav class="sections" aria-label="Разделы">
-      <a href="#" class="sections__item is-active" data-sec="hero"><i></i><span>TOP</span></a>
-      <a href="#works" class="sections__item" data-sec="works"><i></i><span>WORKS</span></a>
-      <div class="sections__ticks"></div>
-      <a href="#pains" class="sections__item" data-sec="pains"><i></i><span>WHY</span></a>
-      <a href="#cases" class="sections__item" data-sec="cases"><i></i><span>CASES</span></a>
-    </nav>
-
     <main>
       <section class="hero">
         <div class="hero__scrim" aria-hidden="true"></div>
@@ -131,7 +123,49 @@
           <div class="process__progress"><i></i></div>
         </div>
       </section>
+      <!-- (05) full cycle: grows out of the A3 logo in the header, where block (04) disappeared -->
+      <section class="agency" id="agency">
+        <div class="agency__stage">
+          <div class="agency__bg" aria-hidden="true"><i></i><i></i></div>
+          <p class="agency__label">(05) - Полный цикл</p>
+          <!-- the same extruded outline as A3 STUDIO in (04); the word under A3 glitches into AGENCY -->
+          <div class="pains__mark agency__mark" aria-label="A3 Agency">
+            <div class="pains__mark-3d"><svg class="pains__outline"><path class="pains__logo" /></svg></div>
+          </div>
+          <div class="agency__body">
+            <p class="agency__lead">Сайт это только начало.<br />Дальше мы приводим к нему клиентов.</p>
+            <div class="agency__dirs">
+              <a class="agency__dir" href="https://a3-agency.ru/a3bot"><span>01</span><h3>A3 Bot ↗</h3><p>ИИ-боты для бизнеса</p><p class="agency__more">Бот отвечает клиентам днём и ночью, записывает, принимает заявки и оплату прямо в чате.</p></a>
+              <a class="agency__dir" href="https://a3-agency.ru/a3-context"><span>02</span><h3>A3 Context ↗</h3><p>Контекстная реклама</p><p class="agency__more">О вас узнают те, кто прямо сейчас ищет ваши услуги в Яндексе и Google. Платите только за переходы.</p></a>
+              <a class="agency__dir" href="https://a3-agency.ru/a3-seo"><span>03</span><h3>A3 SEO ↗</h3><p>SEO-продвижение сайтов</p><p class="agency__more">Поднимаем сайт в поиске, чтобы клиенты находили вас сами, без оплаты за каждый клик.</p></a>
+            </div>
+            <a class="hero__cta agency__cta" href="#contact">
+              <span class="hero__cta-text">Обсудить проект</span>
+              <span class="hero__cta-tri" aria-hidden="true"><svg viewBox="0 0 56 56"><path d="M28 6 L52 50 L4 50 Z" /></svg><i>→</i></span>
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
-
+
+    <!-- footer, after alche.studio: links, contacts, and НАПИСАТЬ / A3 STUDIO stretched to the full width.
+         Contacts are placeholders until the real ones arrive -->
+    <footer class="foot" id="contact">
+      <div class="foot__bg" aria-hidden="true"><i></i><i></i></div>
+      <div class="foot__top">
+        <div class="foot__cols">
+          <ul><li><a href="#">Главная</a></li><li><a href="#" data-works>Работы</a></li><li><a href="#">Услуги</a></li></ul>
+          <ul><li><a href="#">О студии</a></li><li><a href="#contact">Контакты</a></li></ul>
+          <ul class="foot__sm"><li class="foot__head">Ссылки ▾</li><li><a href="#">Telegram</a></li><li><a href="#">VK</a></li><li><a href="#">Behance</a></li><li><a href="#">Dribbble</a></li><li><a href="#">Instagram</a></li><li><a href="#">YouTube</a></li></ul>
+        </div>
+        <div class="foot__right">
+          <div class="foot__btns"><a href="#">Обсудить проект <i>↗</i></a><a href="#">Telegram <i>↗</i></a></div>
+          <div class="foot__legal"><a href="#">Политика конфиденциальности</a></div>
+          <p class="foot__copy">©2026 A3 Studio</p>
+        </div>
+      </div>
+      <a class="foot__giant" href="#" aria-label="Написать A3 Studio"><span>НАПИСАТЬ</span><span>A3 STUDIO</span></a>
+    </footer>
+
   </body>
 </html>
