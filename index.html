@@ -17,11 +17,12 @@
       </a>
       <nav class="nav__links">
         <a href="#" data-scramble data-works>Работы</a>
-        <a href="#" data-scramble>Услуги</a>
-        <a href="#" data-scramble>О студии</a>
-        <a href="#" data-scramble>Лаборатория</a>
+        <a href="#" data-scramble data-page="services">Услуги</a>
+        <a href="#" data-scramble data-page="about">О студии</a>
+        <a href="#" data-scramble data-page="lab">Лаборатория</a>
+        <a href="#" data-scramble data-page="contacts">Контакты</a>
       </nav>
-      <a class="nav__cta" href="#" data-scramble>Обсудить проект</a>
+      <a class="nav__cta" href="#" data-scramble data-lead>Обсудить проект</a>
       <button class="nav__menu" aria-label="Меню"><i></i><i></i></button>
     </header>
 
@@ -54,6 +55,7 @@
             <h3 class="works__title"></h3>
             <p class="works__sub"></p>
             <ul class="works__tags"></ul>
+            <a class="works__more" href="#" hidden>Подробнее ↗</a>
           </div>
           <div class="works__counter"><b class="works__num">01</b><span>/</span><span class="works__total">08</span></div>
         </div>
@@ -154,18 +156,18 @@
       <div class="foot__bg" aria-hidden="true"><i></i><i></i></div>
       <div class="foot__top">
         <div class="foot__cols">
-          <ul><li><a href="#">Главная</a></li><li><a href="#" data-works>Работы</a></li><li><a href="#">Услуги</a></li></ul>
-          <ul><li><a href="#">О студии</a></li><li><a href="#contact">Контакты</a></li></ul>
+          <ul><li><a href="#" data-home>Главная</a></li><li><a href="#" data-works>Работы</a></li><li><a href="#" data-page="services">Услуги</a></li></ul>
+          <ul><li><a href="#" data-page="about">О студии</a></li><li><a href="#" data-page="lab">Лаборатория</a></li><li><a href="#" data-page="contacts">Контакты</a></li></ul>
           <ul class="foot__sm"><li class="foot__head">Ссылки ▾</li><li><a href="#">Telegram</a></li><li><a href="#">VK</a></li><li><a href="#">Behance</a></li><li><a href="#">Dribbble</a></li><li><a href="#">Instagram</a></li><li><a href="#">YouTube</a></li></ul>
         </div>
         <div class="foot__right">
-          <div class="foot__btns"><a href="#">Обсудить проект <i>↗</i></a><a href="#">Telegram <i>↗</i></a></div>
+          <div class="foot__btns"><a href="#" data-lead>Обсудить проект <i>↗</i></a><a href="#">Telegram <i>↗</i></a></div>
           <div class="foot__legal"><a href="#">Политика конфиденциальности</a></div>
           <p class="foot__copy">©2026 A3 Studio</p>
         </div>
       </div>
-      <a class="foot__giant" href="#" aria-label="Написать A3 Studio"><span>НАПИСАТЬ</span><span>A3 STUDIO</span></a>
+      <a class="foot__giant" href="#" data-lead aria-label="Написать A3 Studio"><span>НАПИСАТЬ</span><span>A3 STUDIO</span></a>
     </footer>
-
+
   </body>
 </html>
