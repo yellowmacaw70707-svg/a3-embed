@@ -63,3 +63,20 @@ html,body{background:#07090b!important}
 .a3c-foot .foot__btns{row-gap:14px}
 .a3-toast{position:fixed;left:50%;bottom:28px;z-index:9999;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#f2f2ee;color:#04060a;font:500 14px 'JetBrains Mono',monospace;padding:14px 20px;border-radius:40px;box-shadow:0 10px 40px rgba(0,0,0,.4);transition:opacity .3s,transform .3s;max-width:90vw;text-align:center}
 .a3-toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---- the banner ---- */
+.ck{font-family:'JetBrains Mono',monospace;color:#f2f2ee;position:fixed;z-index:70;left:24px;bottom:24px;width:min(440px,calc(100vw - 32px));padding:22px 22px 20px;border:1px solid rgba(242,242,238,.22);border-radius:14px;background:rgba(255,255,255,.07);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(20px);opacity:0;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s}
+.ck.on{transform:none;opacity:1}
+.ck__label{font-size:11px;letter-spacing:.14em;color:rgba(242,242,238,.6);display:flex;align-items:center;gap:8px}
+.ck__label::before{content:'';width:6px;height:6px;border-radius:50%;background:#8fd8ff;box-shadow:0 0 10px #8fd8ff}
+.ck__title{font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;line-height:1.2;margin:12px 0 8px}
+.ck__text{font-family:system-ui,sans-serif;font-size:13.5px;line-height:1.55;color:rgba(242,242,238,.75)}
+.ck__text a{color:#f2f2ee}
+.ck__btns{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.ck__btns button{all:unset;cursor:pointer;font-size:13px;letter-spacing:.04em;padding:11px 18px;border-radius:30px;border:1px solid rgba(242,242,238,.22);transition:background .2s,color .2s,border-color .2s}
+.ck__btns .yes{background:#f2f2ee;color:#04060a;border-color:#f2f2ee}
+.ck__btns .yes:hover{background:#fff}
+.ck__btns .no:hover{border-color:#f2f2ee}
+@media (max-width:600px){.ck{font-family:'JetBrains Mono',monospace;color:#f2f2ee;left:16px;bottom:16px;padding:18px}.ck__btns button{flex:1;text-align:center}}
+.ck{left:max(16px,3.4vw);right:max(16px,3.4vw);bottom:auto;top:84px;width:auto;display:flex;align-items:center;gap:22px;padding:14px 18px;transform:translateY(-12px)}.ck .ck__text{flex:1;min-width:0}.ck .ck__btns{margin:0}
+@media(max-width:900px){.ck{top:64px;flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px}.ck .ck__text{font-size:12.5px}.ck .ck__btns button{flex:1;text-align:center}}

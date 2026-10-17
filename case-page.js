@@ -7,11 +7,25 @@
     if (!page || document.querySelector('.a3c-foot')) return;
     var HOME = '/a3-studio';
     // Yandex Metrika of A3 Studio (counter 113658769): only on the studio case pages
+    var startYm = function () {
     if (!window.__a3ym) {
       window.__a3ym = true;
       (function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); }; m[i].l = 1 * new Date(); for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) return; } k = e.createElement(t); a = e.getElementsByTagName(t)[0]; k.async = 1; k.src = r; a.parentNode.insertBefore(k, a); })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=113658769', 'ym');
       window.ym(113658769, 'init', { ssr: true, webvisor: true, clickmap: true, referrer: document.referrer, url: location.href, accurateTrackBounce: true, trackLinks: true });
       document.addEventListener('click', function (ev) { var l = ev.target.closest && ev.target.closest('a[href]'); if (l && /^(https?:)?\/\/(t\.me|wa\.me|max\.ru)\//.test(l.getAttribute('href'))) window.ym(113658769, 'reachGoal', 'click_messenger'); }, true);
+    }
+    };
+    // Metrika from the first visit; the cookie notice only informs (shown once per browser)
+    startYm();
+    var ckSeen = false; try { ckSeen = !!localStorage.getItem('a3-cookie'); } catch (e) {}
+    if (!ckSeen) {
+      var ck = document.createElement('div'); ck.className = 'ck'; ck.setAttribute('role', 'status');
+      ck.innerHTML = '<p class="ck__text">Мы используем cookie и Яндекс Метрику, чтобы сайт работал и мы понимали, как его улучшить. Метрика собирает обезличенные данные о посещениях: страницы, устройство, источник перехода. Подробнее в <a href="' + HOME + '/confidence">политике конфиденциальности</a>.</p><div class="ck__btns"><button class="yes" type="button">Понятно</button></div>';
+      document.body.appendChild(ck);
+      var ckClose = function () { if (!ck.parentNode) return; try { localStorage.setItem('a3-cookie', 'ok'); } catch (e) {} ck.classList.remove('on'); window.removeEventListener('scroll', ckScroll); setTimeout(function () { ck.remove(); }, 600); };
+      var ckY = null; var ckScroll = function () { if (ckY === null) { ckY = window.scrollY; return; } if (Math.abs(window.scrollY - ckY) > 80) ckClose(); };
+      setTimeout(function () { ck.classList.add('on'); window.addEventListener('scroll', ckScroll); }, 1800);
+      ck.querySelector('.yes').addEventListener('click', ckClose);
     }
     var HELLO = encodeURIComponent('Здравствуйте! Пишу по поводу создания сайта.');
     var TG = 'https://t.me/Agency_a3?text=' + HELLO, WA = 'https://wa.me/79180337015?text=' + HELLO, MAX = 'https://max.ru/u/f9LHodD0cOL55TPSFyPvoONvFPdmK_7ai1wAXHZZeKI27mL5WTRMpC79K4I';
