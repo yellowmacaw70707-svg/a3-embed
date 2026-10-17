@@ -1,0 +1,18 @@
+html,body.a3post-body{background:#07090b!important}
+.a3post .t-feed__post-popup{position:static!important;display:block!important;background:transparent!important;overflow:visible!important;height:auto!important}
+.a3post .t-feed__post-popup__container{padding:30px var(--g) 80px!important;max-width:900px;margin:0 auto!important;background:transparent!important}
+.a3post .t-feed__post-popup__content{width:100%!important;max-width:none!important;margin:0!important;float:none!important}
+.a3post__menu{display:flex;gap:34px;font-size:13px;letter-spacing:.04em}
+.a3post__menu a{opacity:.85}.a3post__menu a:hover{opacity:1}
+.a3post__crumbs{display:flex;gap:10px;font-size:12px;color:rgba(242,242,238,.5);margin-bottom:26px}.a3post__crumbs i{font-style:normal;opacity:.5}
+.a3post .t-feed__post-popup__date,.a3post .t-uptitle{font-family:var(--m)!important;font-size:12px!important;letter-spacing:.12em;color:rgba(242,242,238,.5)!important}
+.a3post .t-feed__post-popup__title{font-family:var(--d)!important;font-weight:800!important;font-size:clamp(28px,4.2vw,56px)!important;line-height:1.08!important;color:#f2f2ee!important;margin:14px 0 40px!important}
+.a3post .t-feed__post-popup__text,.a3post .t-redactor__text{font-family:system-ui,sans-serif!important;font-size:18px!important;line-height:1.7!important;color:rgba(242,242,238,.82)!important}
+.a3post .t-redactor__text:first-child{font-size:22px!important;line-height:1.5!important;color:#f2f2ee!important}
+.a3post .t-redactor__h2{font-family:var(--d)!important;font-weight:800!important;font-size:clamp(22px,2.4vw,30px)!important;line-height:1.2!important;color:#f2f2ee!important;margin:56px 0 18px!important;padding-top:28px;border-top:1px solid rgba(242,242,238,.14)}
+.a3post .t-redactor__text ul{padding-left:0;list-style:none;display:grid;gap:10px}
+.a3post .t-redactor__text li{padding:16px 20px;border:1px solid rgba(242,242,238,.14);border-radius:6px}
+.a3post .t-redactor__text a{color:#f2f2ee;border-bottom:1px solid currentColor}
+.a3post .t-redactor__text b,.a3post .t-redactor__text strong{color:#f2f2ee}
+.a3post .a3c__cta{margin-top:70px}
+@media(max-width:900px){.a3post__menu{display:none}.a3post .t-feed__post-popup__text,.a3post .t-redactor__text{font-size:16px!important}.a3post .t-redactor__text:first-child{font-size:19px!important}}
