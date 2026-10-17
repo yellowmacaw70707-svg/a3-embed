@@ -21,7 +21,10 @@
       links.map(function (l) { return '<a href="' + HOME + l[1] + '">' + l[0] + '</a>'; }).join('') +
       '<div class="a3eco"><span class="a3eco__btn">Экосистема <i>▾</i></span><div class="a3eco__list">' +
       ECO.map(function (p) { return '<a href="' + p[2] + '"><b>' + p[0] + '</b><span>' + p[1] + '</span></a>'; }).join('') +
-      '</div></div></div><a class="a3c__btn" href="' + HOME + '/contacts">Обсудить проект</a>';
+      '</div></div></div><a class="a3c__btn" href="' + HOME + '/contacts">Обсудить проект</a>' +
+      '<button class="a3burger" type="button" aria-label="Меню"><i></i><i></i></button>';
+    // phones: the burger opens the menu as a full-screen panel
+    n.querySelector('.a3burger').addEventListener('click', function () { n.classList.toggle('open'); document.documentElement.classList.toggle('a3nav-open'); });
     return n;
   }
   function footEco() {

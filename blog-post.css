@@ -56,3 +56,22 @@ html,body.a3post-body{background:#07090b!important}
 .a3more .a3blog__card h3{font-size:18px;hyphens:auto;overflow-wrap:anywhere}
 /* the sticky header gets a solid backdrop, so the text does not show through it */
 .a3post .a3c__nav,.a3blog .a3c__nav{background:rgba(7,9,11,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+/* phones: burger and a full-screen menu */
+.a3burger{display:none}
+@media(max-width:900px){
+  .a3burger{all:unset;display:grid;gap:7px;width:28px;cursor:pointer;z-index:2}
+  .a3burger i{display:block;height:1.5px;background:#f2f2ee;transition:transform .3s}
+  .a3c__nav.open .a3burger i:first-child{transform:translateY(4.25px) rotate(45deg)}
+  .a3c__nav.open .a3burger i:last-child{transform:translateY(-4.25px) rotate(-45deg)}
+  .a3c__nav .a3c__btn{display:none}
+  .a3c__nav.open .a3post__menu{display:flex;position:fixed;inset:0;z-index:1;flex-direction:column;align-items:flex-start;justify-content:center;gap:22px;padding:0 var(--g);background:#07090b;font-family:var(--d);font-weight:800;font-size:30px;letter-spacing:0}
+  .a3c__nav.open .a3eco{display:grid;gap:12px}
+  .a3c__nav.open .a3eco__btn{font-size:30px}.a3c__nav.open .a3eco__btn i{display:none}
+  .a3c__nav.open .a3eco__list{position:static;opacity:1;pointer-events:auto;transform:none;padding:0;min-width:0}
+  .a3c__nav.open .a3eco__list::before{display:none}
+  .a3c__nav.open .a3eco__list a{padding:2px 0;font-family:var(--m);font-weight:400}
+  .a3c__nav.open .a3eco__list b{font-size:15px}.a3c__nav.open .a3eco__list span{display:none}
+  .a3nav-open,.a3nav-open body{overflow:hidden}
+  .a3c__nav.open{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .a3c__nav .a3c__logo{position:relative;z-index:2}
+}

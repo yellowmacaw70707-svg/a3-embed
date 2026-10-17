@@ -80,3 +80,4 @@ html,body{background:#07090b!important}
 @media (max-width:600px){.ck{font-family:'JetBrains Mono',monospace;color:#f2f2ee;left:16px;bottom:16px;padding:18px}.ck__btns button{flex:1;text-align:center}}
 .ck{left:50%;right:auto;top:auto;bottom:16px;width:max-content;max-width:calc(100vw - 32px);display:flex;align-items:center;gap:14px;padding:6px 6px 6px 16px;border-radius:30px;transform:translate(-50%,12px)}.ck.on{transform:translate(-50%,0)}.ck .ck__text{font-size:12.5px;line-height:1.3;white-space:nowrap}.ck .ck__btns{margin:0}.ck .ck__btns button{padding:7px 14px;font-size:12px}
 @media(max-width:600px){.ck{bottom:12px;gap:10px;padding-left:14px}.ck .ck__text{font-size:11.5px}.ck .ck__btns button{flex:none;padding:7px 12px}}
+@media(max-width:900px){.a3c-foot .foot__cols{flex-wrap:wrap;row-gap:34px}}
