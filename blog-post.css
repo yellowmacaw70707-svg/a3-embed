@@ -15,4 +15,6 @@ html,body.a3post-body{background:#07090b!important}
 .a3post .t-redactor__text a{color:#f2f2ee;border-bottom:1px solid currentColor}
 .a3post .t-redactor__text b,.a3post .t-redactor__text strong{color:#f2f2ee}
 .a3post .a3c__cta{margin-top:70px}
+/* blog posts get a plain black footer instead of the blue gradient used on case pages */
+.a3post ~ .a3c-foot{background:#07090b}
 @media(max-width:900px){.a3post__menu{display:none}.a3post .t-feed__post-popup__text,.a3post .t-redactor__text{font-size:16px!important}.a3post .t-redactor__text:first-child{font-size:19px!important}}
