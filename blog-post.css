@@ -76,3 +76,9 @@ html,body.a3post-body{background:#07090b!important}
   .a3nav-open,.a3nav-open body{overflow:hidden}
   .a3c__nav .a3c__logo{position:relative;z-index:2}
 }
+/* tables in articles (html blocks of the post editor) */
+.a3post .t-feed__post-popup__text table{width:100%;border-collapse:collapse;margin:24px 0;font-family:system-ui,sans-serif;font-size:15px;line-height:1.5;color:rgba(242,242,238,.82)}
+.a3post .t-feed__post-popup__text th{text-align:left;font-family:var(--m);font-weight:500;font-size:12px;letter-spacing:.08em;color:rgba(242,242,238,.55);padding:12px 14px;border-bottom:1px solid rgba(242,242,238,.3)}
+.a3post .t-feed__post-popup__text td{padding:12px 14px;border-bottom:1px solid rgba(242,242,238,.12);vertical-align:top}
+.a3post .t-feed__post-popup__text h3,.a3post .t-redactor__h3{font-family:var(--d)!important;font-weight:800!important;font-size:20px!important;color:#f2f2ee!important;margin:34px 0 12px!important}
+@media(max-width:900px){.a3post .t-feed__post-popup__text table{display:block;overflow-x:auto;font-size:14px}}
