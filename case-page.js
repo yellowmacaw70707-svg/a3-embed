@@ -34,7 +34,9 @@
     var type = (location.pathname.match(/\/cases\/([^/]+)/) || [])[1];
     var pr = PRICES[type] || ['сайт', 'от 50 000 ₽', 'от 20 дней'];
     document.querySelectorAll('.a3c__cta').forEach(function (c) {
-      c.innerHTML = '<div class="a3c__cta-text"><p>Хотите такой же сайт для своего бизнеса?</p><span>Похожий ' + pr[0] + ': <b>' + pr[1] + '</b>, ' + pr[2] + '. Точную смету назовём после короткого звонка.</span></div><a href="' + HOME + '/contacts">Обсудить проект →</a>';
+      c.innerHTML = page.classList.contains('a3post')
+        ? '<div class="a3c__cta-text"><p>Нужен сайт для вашего бизнеса?</p><span>Лендинг <b>от 50 000 ₽</b>, корпоративный сайт <b>от 150 000 ₽</b>. Точную смету назовём после короткого звонка.</span></div><a href="' + HOME + '/contacts">Обсудить проект →</a>'
+        : '<div class="a3c__cta-text"><p>Хотите такой же сайт для своего бизнеса?</p><span>Похожий ' + pr[0] + ': <b>' + pr[1] + '</b>, ' + pr[2] + '. Точную смету назовём после короткого звонка.</span></div><a href="' + HOME + '/contacts">Обсудить проект →</a>';
     });
     // «На главную» lands on the cases block of the main page
     document.querySelectorAll('.a3c__back').forEach(function (a) { a.href = HOME + '#cases'; });

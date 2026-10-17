@@ -19,7 +19,7 @@
     var crumbs = document.createElement('div');
     crumbs.className = 'a3post__crumbs';
     crumbs.innerHTML = '<a href="' + HOME + '">A3 Studio</a><i>/</i><span>Статьи</span>';
-    var tw = post.querySelector('.t-feed__post-popup__title-wrapper');
+    var tw = post.querySelector('.t-feed__post-popup__date-parts-wrapper') || post.querySelector('.t-feed__post-popup__title-wrapper');
     if (tw) tw.parentNode.insertBefore(crumbs, tw);
     var cta = document.createElement('div');
     cta.className = 'a3c__cta';
