@@ -34,7 +34,7 @@
     var type = (location.pathname.match(/\/cases\/([^/]+)/) || [])[1];
     var pr = PRICES[type] || ['сайт', 'от 50 000 ₽', 'от 20 дней'];
     document.querySelectorAll('.a3c__cta').forEach(function (c) {
-      c.innerHTML = page.classList.contains('a3post')
+      c.innerHTML = page.matches('.a3post, .a3blog')
         ? '<div class="a3c__cta-text"><p>Нужен сайт для вашего бизнеса?</p><span>Лендинг <b>от 50 000 ₽</b>, корпоративный сайт <b>от 150 000 ₽</b>. Точную смету назовём после короткого звонка.</span></div><a href="' + HOME + '/contacts">Обсудить проект →</a>'
         : '<div class="a3c__cta-text"><p>Хотите такой же сайт для своего бизнеса?</p><span>Похожий ' + pr[0] + ': <b>' + pr[1] + '</b>, ' + pr[2] + '. Точную смету назовём после короткого звонка.</span></div><a href="' + HOME + '/contacts">Обсудить проект →</a>';
     });
@@ -42,7 +42,7 @@
     document.querySelectorAll('.a3c__back').forEach(function (a) { a.href = HOME + '#cases'; });
     // «Обсудить проект» leads to the contacts page (the request form lives there)
     document.querySelectorAll('a[href$="#contact"]').forEach(function (a) { a.href = HOME + '/contacts'; });
-    var links = [['Главная', HOME], ['Работы', HOME + '/works'], ['Услуги', HOME + '/services'], ['О студии', HOME + '/about'], ['Лаборатория', HOME + '/lab'], ['Контакты', HOME + '/contacts']];
+    var links = [['Главная', HOME], ['Работы', HOME + '/works'], ['Услуги', HOME + '/services'], ['О студии', HOME + '/about'], ['Лаборатория', HOME + '/lab'], ['Блог', HOME + '/blog'], ['Контакты', HOME + '/contacts']];
     var li = function (l) { return '<li><a href="' + l[1] + '">' + l[0] + '</a></li>'; };
     var foot = document.createElement('footer');
     foot.className = 'foot a3c-foot';
