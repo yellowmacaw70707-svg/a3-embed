@@ -20,7 +20,7 @@
     var ckSeen = false; try { ckSeen = !!localStorage.getItem('a3-cookie'); } catch (e) {}
     if (!ckSeen) {
       var ck = document.createElement('div'); ck.className = 'ck'; ck.setAttribute('role', 'status');
-      ck.innerHTML = '<p class="ck__text">Мы используем cookie и Яндекс Метрику, чтобы сайт работал и мы понимали, как его улучшить. Метрика собирает обезличенные данные о посещениях: страницы, устройство, источник перехода. Подробнее в <a href="' + HOME + '/confidence">политике конфиденциальности</a>.</p><div class="ck__btns"><button class="yes" type="button">Понятно</button></div>';
+      ck.innerHTML = '<p class="ck__text">Мы используем cookie и Яндекс Метрику. <a href="' + HOME + '/confidence">Подробнее</a></p><div class="ck__btns"><button class="yes" type="button">Ок</button></div>';
       document.body.appendChild(ck);
       var ckClose = function () { if (!ck.parentNode) return; try { localStorage.setItem('a3-cookie', 'ok'); } catch (e) {} ck.classList.remove('on'); window.removeEventListener('scroll', ckScroll); setTimeout(function () { ck.remove(); }, 600); };
       var ckY = null; var ckScroll = function () { if (ckY === null) { ckY = window.scrollY; return; } if (Math.abs(window.scrollY - ckY) > 80) ckClose(); };
