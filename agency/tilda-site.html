@@ -93,9 +93,12 @@ h1 .sw{display:inline-block}
 
 @media (max-width:760px){
   header{padding:20px 16px}.pill:not(.solid){display:none}
-  h1{left:16px;top:84px;font-size:46px}
-  .ctas{left:16px;top:200px;flex-direction:column;gap:14px}.ctas a{min-width:230px}
-  .card{display:none}.hint{bottom:26px;font-size:11px}.scrolld{display:none}
+  h1{left:16px;top:84px;font-size:10.4vw}
+  #hero{height:170vh}
+  .pin{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
+  .svc .lab{padding:8px 10px 9px}.svc .lab b{font-size:19px}.svc .lab i{display:none}.svc .lab small{font-size:9px}
+  .ctas{left:16px;top:calc(84px + 10.4vw*1.8 + 28px);flex-direction:column;gap:14px}.ctas a{min-width:230px}
+  .card{display:none}.hint{bottom:26px;font-size:12px;width:100%}.scrolld{display:none}
 }
 /* ---------- плашка «страница ещё собирается» ---------- */
 #wip{position:relative;z-index:2;padding:10vh 32px 14vh}
@@ -153,7 +156,7 @@ h1 .sw{display:inline-block}
         <a href="#">Обсудить проект <span>→</span></a>
         <a href="#">Созвон 30 минут <span>→</span></a>
       </div>
-      <div class="hint fade">Зажмите, чтобы увидеть, <em>из чего состоит A3</em><br>Отпустите, и мы соберём обратно</div>
+      <div class="hint fade" id="hint">Зажмите, чтобы увидеть, <em>из чего состоит A3</em><br>Отпустите, и мы соберём обратно</div>
       <div class="card fade">
         <div class="tb mono"><div>A3<br>agency</div><div>Полный цикл<br>от сайта до продаж</div></div>
         <p>Сайты, реклама, SEO, SMM, маркетплейсы и боты. Одна команда отвечает за результат.</p>
@@ -244,7 +247,7 @@ geo.computeBoundingBox();const bb=geo.boundingBox;
 const AX=new THREE.Vector2(.42,1).normalize(); // ось нарезки (наклонная — живее, чем горизонталь)
 let mn=1e9,mx=-1e9;const pos=geo.attributes.position;
 for(let i=0;i<pos.count;i++){const d=pos.getX(i)*AX.x+pos.getY(i)*AX.y;mn=Math.min(mn,d);mx=Math.max(mx,d)}
-const BANDS=isMob?7:11;
+const BANDS=isMob?9:11; // услуг 6, крайние полосы не подписываем — нужно минимум 8
 const logo=new THREE.Group();scene.add(logo);
 const bands=[];
 for(let b=0;b<BANDS;b++){
@@ -280,8 +283,8 @@ const tagsEl=document.getElementById('tags3d');
 pick.forEach((b,k)=>{const el=document.createElement('a');el.href='#';el.className='svc';
   el.innerHTML=`<span class="leg"></span><span class="dot"></span><span class="lab"><small>0${k+1} / 0${SERV.length}</small><b>${SERV[k][0]}</b><i>${SERV[k][1]}</i></span>`;
   tagsEl.appendChild(el);b.tag={el,leg:el.querySelector('.leg'),lab:el.querySelector('.lab'),side:k%2?1:-1,dy:(k%3-1)*22}});
-logo.position.set(isMob?0:2.1,isMob?-1.4:-.35,0);
-const baseScale=isMob?.5:.66;logo.scale.setScalar(baseScale);
+logo.position.set(isMob?0:2.1,isMob?-.9:-.35,0);
+const baseScale=isMob?Math.min(.5,.5*innerWidth/innerHeight/.62):.66;logo.scale.setScalar(baseScale);
 
 /* --- орбиты: длинные тонкие эллипсы через весь экран --- */
 const orbits=new THREE.Group();scene.add(orbits);
@@ -308,6 +311,8 @@ addEventListener('pointermove',e=>{mouse.set(e.clientX/innerWidth*2-1,-(e.client
 const tilt=document.getElementById('tilt'),ctas=document.querySelector('.ctas');
 let holding=false;
 const pin=document.querySelector('.pin');
+pin.addEventListener('contextmenu',e=>e.preventDefault());
+if(matchMedia('(hover:none)').matches)document.getElementById('hint').innerHTML='Удерживайте палец:<br><em>из чего состоит A3</em>';
 pin.addEventListener('pointerdown',e=>{if(e.target.closest('a')||!S.ready)return;holding=true;clearTimeout(rt);
   gsap.to(S,{blast:1,duration:1.1,ease:'expo.out',overwrite:true});gsap.to(S,{flash:1,duration:.15,yoyo:true,repeat:1});
   gsap.to(tilt,{rotation:-4,y:12,scale:1.015,duration:1.2,ease:'expo.out'});});
