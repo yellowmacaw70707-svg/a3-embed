@@ -228,7 +228,7 @@ return { state };
 (() => {
 gsap.ticker.add(() => document.querySelectorAll('.chapter .cap').forEach(c => {
 if (getComputedStyle(c).visibility === 'hidden') { c.style.marginTop = ''; return; }
-const r = c.getBoundingClientRect(), over = r.bottom - (innerHeight - 10);
+const r = c.getBoundingClientRect(), over = r.bottom - ((window.visualViewport ? visualViewport.height : innerHeight) - 10);
 if (over > 0) c.style.marginTop = ((parseFloat(c.style.marginTop) || 0) - over) + 'px';
 }));
 addEventListener('resize', () => document.querySelectorAll('.chapter .cap').forEach(c => c.style.marginTop = ''));
