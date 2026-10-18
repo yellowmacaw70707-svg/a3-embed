@@ -743,6 +743,7 @@ for (let i=0;i<=n;i++){ const t=i/n, x=x1+(x2-x1)*t+(Math.random()-.5)*j, y=y1+(
 let last = 0, mx = 0, my = 0;
 addEventListener('pointermove', e => { mx = e.clientX/innerWidth-.5; my = e.clientY/innerHeight-.5; });
 gsap.ticker.add(time => {
+if (window.__menuOpen) return;
 S.forEach(f => {
 const vis = getComputedStyle(f.pn).visibility !== 'hidden' && +getComputedStyle(f.pn).opacity > 0;
 if (vis && !f.shown) { f.shown = true; f.paths.forEach((p,i) => gsap.fromTo(p, { strokeDashoffset:1 }, { strokeDashoffset:0, duration:.7, delay:i*.12, ease:'power2.inOut' })); }
@@ -971,9 +972,11 @@ gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 const uT = gl.getUniformLocation(pr, 't'), uP = gl.getUniformLocation(pr, 'p'), t0 = performance.now();
 const intro = { p:0 }; gsap.to(intro, { p:1, duration:2.6, ease:'power2.out', delay:.3 });
 (function frame() {
+if (__live(cv)) {
 gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
 gl.uniform1f(uT, (performance.now() - t0)/1000); gl.uniform1f(uP, Math.min(intro.p, 1 - inkTitle.p));
-gl.drawArrays(gl.TRIANGLES, 0, 3); requestAnimationFrame(frame);
+gl.drawArrays(gl.TRIANGLES, 0, 3); }
+requestAnimationFrame(frame);
 })();
 })();
 {
@@ -985,6 +988,7 @@ document.getElementById('startStory_1').onclick = () => {
 const snd = window.document.querySelector('.hdr .pill .snd'); if (snd && !snd.classList.contains('on')) snd.click();
 const sc = document.querySelector('.scene'); window.lenis.scrollTo(sc.offsetTop + (sc.offsetHeight - innerHeight)*.16, { duration:2.4 });
 };
+const __live = c => !window.__menuOpen && (() => { const r = c.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && getComputedStyle(c).visibility !== 'hidden'; })();
 const tl = gsap.timeline({ defaults:{ ease:'none' },
 scrollTrigger:{ trigger:'.scene', start:'top top', end:'bottom bottom', scrub:.4 } });
 tl.to('.hint', { autoAlpha:0, duration:.2 }, 0)
@@ -1097,7 +1101,7 @@ const size = () => { const k = Math.min(devicePixelRatio,1.5); canvas.width = ca
 size(); addEventListener('resize', size);
 const t0 = performance.now();
 (function frame(){
-if (canvas.offsetParent !== null || canvas === titleSky_1) {
+if (__live(canvas)) {
 gl.uniform2f(uR,canvas.width,canvas.height); gl.uniform1f(uT,(performance.now()-t0)/1000); gl.uniform2f(uM,mouse[0],mouse[1]);
 gl.drawArrays(gl.TRIANGLES,0,3);
 }
@@ -1149,9 +1153,11 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 const t0 = performance.now();
 (function frame(){
+if (__live(canvas)) {
 gl.uniform2f(uR,canvas.width,canvas.height); gl.uniform2f(uIR,img.width,img.height);
 gl.uniform1f(uT,(performance.now()-t0)/1000); gl.uniform2f(uM,mouse[0],mouse[1]);
-gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(frame);
+gl.drawArrays(gl.TRIANGLES,0,3); }
+requestAnimationFrame(frame);
 })();
 };
 img.src = src;

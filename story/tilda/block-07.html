@@ -108,6 +108,7 @@ for (let i=0;i<=n;i++){ const t=i/n, x=x1+(x2-x1)*t+(Math.random()-.5)*j, y=y1+(
 let last = 0, mx = 0, my = 0;
 addEventListener('pointermove', e => { mx = e.clientX/innerWidth-.5; my = e.clientY/innerHeight-.5; });
 gsap.ticker.add(time => {
+if (window.__menuOpen) return;
 S.forEach(f => {
 const vis = getComputedStyle(f.pn).visibility !== 'hidden' && +getComputedStyle(f.pn).opacity > 0;
 if (vis && !f.shown) { f.shown = true; f.paths.forEach((p,i) => gsap.fromTo(p, { strokeDashoffset:1 }, { strokeDashoffset:0, duration:.7, delay:i*.12, ease:'power2.inOut' })); }
