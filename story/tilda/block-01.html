@@ -269,7 +269,7 @@ body {overflow-x:hidden; font-family:Manrope, sans-serif;}
 #ch3 .farTower {position:absolute; z-index:2; right:7vw; bottom:28vh; height:44vh; aspect-ratio:500/1500; background:url(https://static.tildacdn.com/tild3864-3633-4130-b561-303331323632/tower.webp) center bottom/contain no-repeat;}
 #ch3 .lane {position:absolute; z-index:1; left:0; right:calc(7vw + 7.3vh); top:38vh; height:34vh; overflow:hidden;}
 #ch3 .lane img {position:absolute; bottom:0; height:82%; width:auto;}
-@media (max-width:700px) {#ch3 .plain { background-position:100% 50%; }}
+@media (max-width:700px) {#ch3 .plain { background-position:86% 50%; }#ch3 .sign { left:-14vw; top:30vh; height:62vh; }#ch3 .c2, #ch3 .c1 { top:auto !important; bottom:4vh !important; }}
 :root {--ink:#0d0d0d; --red:#c4161c;}
 * {box-sizing:border-box; margin:0; padding:0;}
 html, body {background:#efede8; color:var(--ink);}
@@ -614,7 +614,8 @@ body {overflow-x:hidden; font-family:Manrope, sans-serif;}
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>window.__W3 = {"2": "https://static.tildacdn.com/tild3330-6666-4666-b633-653037336262/w2.webp", "3": "https://static.tildacdn.com/tild6637-3939-4933-b666-383538303062/w3.webp", "4": "https://static.tildacdn.com/tild6638-3963-4961-b836-353538663435/w4.webp", "5": "https://static.tildacdn.com/tild6163-3463-4461-a333-336664386534/w5.webp", "6": "https://static.tildacdn.com/tild3563-6663-4535-b237-323937326232/w6.webp"};
 gsap.registerPlugin(ScrollTrigger);
-const lenis = window.lenis = new Lenis({ lerp:.085 });
+const lenis = window.lenis = new Lenis({ lerp:.085, syncTouch:true, syncTouchLerp:.075, touchInertiaMultiplier:28 });
+let __lastY = scrollY; addEventListener('scroll', () => { if (Math.abs(scrollY - __lastY) > innerHeight*3 && !lenis.isScrolling) { lenis.scrollTo(scrollY, { immediate:true }); ScrollTrigger.refresh(); } __lastY = scrollY; }, { passive:true });
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add(t => lenis.raf(t * 1000));
 gsap.ticker.lagSmoothing(0);

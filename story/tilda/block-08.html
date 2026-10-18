@@ -161,6 +161,15 @@ return { state };
 .hdr .pill { pointer-events:auto; }
 @media (max-width:700px) { .ft .wrap { padding-top:110px; } .xs .wrap { padding-left:16px; padding-right:16px; } .dp .card { left:10px; right:10px; bottom:10px; padding:12px 14px; } .dp h3 { font-size:30px; } }
 @media (max-width:700px) { .xs .ttl { font-size:clamp(34px,10.5vw,60px); white-space:nowrap; } .xs .dp h3 { white-space:nowrap; font-size:28px; } .ft .giant { white-space:nowrap; } }
+@media (max-width:700px) {
+.mnu { padding:70px 20px 24px; }
+.mnu .g { gap:22px; }
+.mnu h5 { margin-bottom:6px; }
+.mnu a { font-size:clamp(22px,7vw,30px); line-height:1.12; }
+.mnu a.sm { font-size:14px; line-height:1.8; }
+}
+.mnu a::after { content:''; position:absolute; left:0; bottom:.08em; height:2px; width:100%; background:#c4161c; transform:scaleX(0); transform-origin:0 50%; transition:transform .35s; }
+.mnu a:hover::after, .mnu a:active::after { transform:scaleX(1); }
 </style>
 <svg width="0" height="0" style="position:absolute"><filter id="boilLite"><feTurbulence id="boilLiteT" type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="1.6"/></filter></svg>
 <section class="xs dirs" id="dirs">
@@ -201,7 +210,7 @@ return { state };
 <div><h5>Агентство</h5><a href="#ch1" data-ch="1">История</a><a href="#dirs" data-to="dirs">Направления</a><a href="#">О нас</a><a href="#">Контакты</a></div>
 <div><h5>Направления</h5><a href="https://a3-agency.ru/a3-studio">A3 Studio</a><a href="#">A3 Marketplace</a><a href="#">A3 Bot</a><a href="#">A3 Context</a><a href="#">A3 SEO</a><a href="#">A3 SMM</a></div>
 <div><h5>Ссылки</h5><a href="#">Telegram-канал</a><a href="#">VK</a><a href="#">Behance</a><a href="#">YouTube</a></div>
-<div><h5>Ещё</h5><a href="https://a3-agency.ru/a3-studio/blog">Блог</a><a href="#">Работы</a></div>
+<div><h5>Ещё</h5><a href="#">Работы</a></div>
 <div class="contacts"><div class="row"><a href="#">Telegram ↗</a><a href="#">WhatsApp ↗</a><a href="#">MAX ↗</a></div>
 <small>ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ · ©2026 A3 AGENCY</small></div>
 </div>
@@ -212,7 +221,7 @@ return { state };
 <div class="g">
 <div><h5>История</h5><a href="#ch1" data-ch="1">I · A3 Agency</a><a href="#ch2" data-ch="2">II · Маяк</a><a href="#ch3" data-ch="3">III · Дороги</a><a href="#ch4" data-ch="4">IV · Голоса</a><a href="#ch5" data-ch="5">V · Рынок</a><a href="#ch6" data-ch="6">VI · Страж</a><a href="#ch7" data-ch="7">VII · Ответ</a></div>
 <div><h5>Направления</h5><a href="https://a3-agency.ru/a3-studio">A3 Studio</a><a href="#">A3 Marketplace</a><a href="#">A3 Bot</a><a href="#">A3 Context</a><a href="#">A3 SEO</a><a href="#">A3 SMM</a></div>
-<div><h5>Агентство</h5><a class="sm" href="#dirs" data-to="dirs">Все направления</a><a class="sm" href="#contact" data-to="contact">Контакты</a><a class="sm" href="https://a3-agency.ru/a3-studio/blog">Блог</a></div>
+<div><h5>Агентство</h5><a class="sm" href="#dirs" data-to="dirs">Все направления</a><a class="sm" href="#contact" data-to="contact">Контакты</a></div>
 </div>
 </div>
 <script>
@@ -233,7 +242,7 @@ go(document.getElementById(a.dataset.ch ? 'ch' + a.dataset.ch : a.dataset.to));
 const mnu = document.getElementById('mnu');
 document.getElementById('mnuX').onclick = () => mnu.classList.remove('on');
 let inked = false;
-const open = () => { mnu.classList.add('on'); window.__menuOpen = true; window.lenis && lenis.stop();
+const open = () => { mnu.classList.add('on'); gsap.fromTo(mnu.querySelectorAll('h5, a'), { y:24, autoAlpha:0, skewY:4 }, { y:0, autoAlpha:1, skewY:0, stagger:.025, duration:.5, ease:'power3.out' }); window.__menuOpen = true; window.lenis && lenis.stop();
 if (!inked && innerWidth > 900) { inked = true; requestAnimationFrame(() => mnu.querySelectorAll('a:not(.sm)').forEach(a => inkText(a))); } };
 const close = () => { mnu.classList.remove('on'); window.__menuOpen = false; window.lenis && lenis.start(); };
 document.getElementById('mnuX').onclick = close;
