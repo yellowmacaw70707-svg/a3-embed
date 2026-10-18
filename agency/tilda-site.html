@@ -97,6 +97,25 @@ h1 .sw{display:inline-block}
   .ctas{left:16px;top:200px;flex-direction:column;gap:14px}.ctas a{min-width:230px}
   .card{display:none}.hint{bottom:26px;font-size:11px}.scrolld{display:none}
 }
+/* ---------- плашка «страница ещё собирается» ---------- */
+#wip{position:relative;z-index:2;padding:10vh 32px 14vh}
+#wip .plate{position:relative;border:1px solid #2a2c31;background:rgba(4,5,8,.78);backdrop-filter:blur(8px);padding:clamp(28px,5vw,72px);overflow:hidden}
+#wip .plate::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent 0 22px,rgba(255,90,31,.05) 22px 23px);pointer-events:none}
+#wip .x{position:absolute;font:13px 'Martian Mono';color:var(--dim)}
+#wip .top{display:flex;justify-content:space-between;align-items:center;gap:20px}
+#wip .st{display:inline-flex;align-items:center;gap:10px;color:var(--hot)}
+#wip .st b{width:8px;height:8px;border-radius:50%;background:var(--hot);animation:wipb 1.2s infinite}
+@keyframes wipb{50%{opacity:.2}}
+#wip h2{margin-top:clamp(40px,7vh,80px);font-weight:400;font-size:clamp(46px,8vw,132px);line-height:.9;letter-spacing:-.065em;font-family:'Inter Tight',sans-serif}
+#wip h2 em{font-style:normal;color:var(--hot)}
+#wip .bot{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-top:clamp(36px,6vh,70px)}
+#wip p{max-width:420px;font-size:15px;line-height:1.4;letter-spacing:-.01em;color:#a9abb0}
+#wip .bar{grid-column:1/-1;height:2px;background:#1b1d22;position:relative;overflow:hidden}
+#wip .bar i{position:absolute;inset:0 auto 0 0;width:38%;background:var(--hot);animation:wipl 2.8s cubic-bezier(.7,0,.2,1) infinite}
+@keyframes wipl{0%{transform:translateX(-100%)}100%{transform:translateX(270%)}}
+#wip .go{display:inline-flex;justify-content:space-between;gap:40px;min-width:240px;padding-bottom:8px;border-bottom:1px solid var(--fg)}
+#wip .go:hover{color:var(--hot);border-color:var(--hot)}
+@media (max-width:760px){#wip{padding:8vh 16px 10vh}#wip .bot{grid-template-columns:1fr}#wip .top{flex-direction:column;align-items:flex-start}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 #a3s h1,#a3s h2{font-family:'Inter Tight',sans-serif}
 .t-records,#allrecords{background:#040508}
@@ -155,7 +174,19 @@ h1 .sw{display:inline-block}
   <div class="foc">Чёткая цель.<br>Измеримый результат.</div>
 </section>
 <div class="marq"><div class="tr" id="mq"></div></div>
-<div style="height:40vh"></div>
+<section id="wip">
+  <div class="plate">
+    <span class="x" style="left:12px;top:8px">×</span><span class="x" style="right:12px;top:8px">×</span>
+    <span class="x" style="left:12px;bottom:8px">+</span><span class="x" style="right:12px;bottom:8px">+</span>
+    <div class="top mono"><span class="st"><b></b>Идёт сборка</span><span>Блоки 02 из 07 · <span id="wipn">0%</span></span></div>
+    <h2>Страница ещё<br>собирается. <em>Совсем скоро.</em></h2>
+    <div class="bot">
+      <p>Мы добавляем новые блоки прямо сейчас: кейсы, услуги, цифры и отзывы. Загляните чуть позже или напишите нам, расскажем всё лично.</p>
+      <a class="go mono" href="https://t.me/Agency_a3" target="_blank" rel="noopener">Написать в Telegram <span>→</span></a>
+      <div class="bar"><i></i></div>
+    </div>
+  </div>
+</section>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
@@ -320,6 +351,13 @@ function aboutScroll(){
 }
 addEventListener('scroll',()=>{vel=scrollY-lastY;lastY=scrollY;aboutScroll()},{passive:true});aboutScroll();
 (function mqLoop(){mqX-=1+Math.min(30,Math.abs(vel))*.4;vel*=.9;const w=mq.scrollWidth/3;if(-mqX>w)mqX+=w;mq.style.transform=`translateX(${mqX}px)`;requestAnimationFrame(mqLoop)})();
+
+// плашка «ещё собирается»: появление и бегущий счётчик
+gsap.set('#wip .plate',{opacity:0,y:60});
+new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();
+  gsap.to('#wip .plate',{opacity:1,y:0,duration:1.2,ease:'expo.out'});
+  const w={v:0};gsap.to(w,{v:28,duration:2.4,ease:'power2.out',onUpdate:()=>document.getElementById('wipn').textContent=Math.round(w.v)+'%'});
+},{threshold:.25}).observe(document.getElementById('wip'));
 
 /* ================= LOOP ================= */
 const clk=new THREE.Clock(),tmpQ=new THREE.Quaternion(),e1=new THREE.Quaternion(),e2=new THREE.Quaternion();
