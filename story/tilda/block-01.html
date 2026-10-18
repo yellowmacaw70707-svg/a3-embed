@@ -1,0 +1,1168 @@
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Manrope:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root {--ink:#0d0d0d; --paper:#f4f2ee; --red:#c4161c; --ochre:#b58a3c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:var(--paper); color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+.hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+.logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+.logo small {font-size:10px; font-weight:600; margin-left:6px;}
+.pill {display:flex; gap:0; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+.pill span {padding:7px 12px;}
+.pill span + span {border-left:1.5px solid var(--ink);}
+.pill .on {background:var(--ink); color:#fff;}
+.paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+.logo-solo { position:fixed; left:24px; top:18px; z-index:70; color:#fff; mix-blend-mode:difference; pointer-events:none; }
+:root {--ink:#0d0d0d; --paper:#f4f2ee; --red:#c4161c; --ochre:#b58a3c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:var(--paper); color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+#ch1 .hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+#ch1 .logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+#ch1 .logo small {font-size:10px; font-weight:600; margin-left:6px;}
+#ch1 .pill {display:flex; gap:0; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+#ch1 .pill span {padding:7px 12px;}
+#ch1 .pill span + span {border-left:1.5px solid var(--ink);}
+#ch1 .pill .on {background:var(--ink); color:#fff;}
+#ch1 .scene {position:relative; height:1200vh;}
+#ch1 .stage {position:sticky; top:0; height:100vh; overflow:hidden; perspective:1400px; perspective-origin:50% 40%;}
+#ch1 .abs {position:absolute;}
+#ch1 .img {background-size:cover; background-position:center;}
+#ch1 .mul {mix-blend-mode:multiply;}
+#ch1 .panel {position:absolute; background:#fff; overflow:hidden; transform-style:preserve-3d; will-change:transform;}
+#ch1 .title {inset:0; background:var(--ink); z-index:10;}
+#ch1 .title .clouds {left:-5%; right:-5%; bottom:-2%; height:100%; width:110%; display:block;}
+#ch1 .title h1 {position:absolute; left:0; right:0; top:28%; text-align:center; color:#fff; font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; letter-spacing:-.01em; text-transform:uppercase;}
+#ch1 .title h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch1 .title h1 i {font-style:normal; color:var(--red);}
+#ch1 .p1 {left:6vw; top:12vh; width:88vw; height:76vh;}
+#ch1 .p1 .sky {inset:0; width:100%; height:100%; display:block;}
+#ch1 .p1 .bg {display:none; inset:-4%; background-image:url(https://static.tildacdn.com/tild3635-6637-4465-a331-373534633637/p1-bg.webp); -webkit-mask-image:linear-gradient(to bottom, transparent 73.6%, #000 73.8%); mask-image:linear-gradient(to bottom, transparent 73.6%, #000 73.8%);}
+#ch1 .walker {inset:0;}
+@keyframes bob { from { margin-bottom:0; rotate:-.6deg; } to { margin-bottom:-.6%; rotate:.6deg; } }
+#ch1 .paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+#ch1 .p1 .hero {left:50%; bottom:4%; height:62%; aspect-ratio:2/3; translate:-50% 0; background:url(https://static.tildacdn.com/tild3035-6537-4262-b931-656364373564/p1-hero-cut.webp) center bottom/contain no-repeat; transform-origin:50% 100%;}
+#ch1 .eyes {left:8vw; top:8vh; width:min(36vw,520px); aspect-ratio:3/1; z-index:6;}
+#ch1 .eyes .img {inset:0; background-image:url(https://static.tildacdn.com/tild3030-6135-4332-b231-633530663932/p1-eyes.webp);}
+#ch1 .p2 {left:12vw; top:14vh; width:76vw; height:72vh; transform-origin:50% 100%;}
+#ch1 .p2 .sky {inset:0; background:#fff;}
+#ch1 .p2 .sun {left:50%; top:16%; width:44%; aspect-ratio:1; translate:-58% 0; border-radius:50%; background:var(--red);}
+#ch1 .p2 .shop {inset:0; background:url(https://static.tildacdn.com/tild6434-3237-4661-a261-343865303165/p2-shop.webp) center 70%/cover;}
+#ch1 .tw {position:absolute; left:0; bottom:9%; width:9%; aspect-ratio:1; animation:tw-x 11s linear infinite; z-index:2;}
+#ch1 .tw-hop {position:absolute; inset:0; animation:tw-y 1.1s cubic-bezier(.3,0,.7,1) infinite;}
+#ch1 .tw-hop img {width:100%; height:100%; display:block; animation:tw-r 1.6s linear infinite;}
+#ch1 .tw-sh {position:absolute; left:10%; right:10%; bottom:-6%; height:12%; border-radius:50%; background:radial-gradient(closest-side, rgba(13,13,13,.45), transparent); animation:tw-s 1.1s cubic-bezier(.3,0,.7,1) infinite;}
+@keyframes tw-x { from { transform:translateX(1250%); } to { transform:translateX(-160%); } }
+@keyframes tw-y { 0%,100% { transform:translateY(0) scaleY(.93); } 8% { transform:translateY(0) scaleY(1); } 50% { transform:translateY(-38%); } }
+@keyframes tw-r { to { transform:rotate(-360deg); } }
+@keyframes tw-s { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(.6); opacity:.45; } }
+#ch1 .hand {right:5vw; bottom:6vh; width:min(30vw,440px); aspect-ratio:4/3; z-index:7;}
+#ch1 .hand .img {inset:0; background-image:url(https://static.tildacdn.com/tild3562-3531-4835-b335-663330343532/p2-hand.webp);}
+#ch1 .ink-frame {position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:8; overflow:visible;}
+#ch1 .ink-frame path {fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;}
+#ch1 .cap {position:absolute; z-index:9; max-width:580px; padding:20px 28px 19px; background:#fff; border:0; font:600 19px/1.75 'Archivo Narrow', sans-serif; letter-spacing:.015em; text-transform:uppercase; opacity:0;}
+#ch1 .cap b {color:var(--red); font-weight:600;}
+#ch1 .cap .w {opacity:0;}
+#ch1 .cap .w.on {opacity:1;}
+#ch1 .cap::before {content:''; position:absolute; top:12px; width:18px; height:2px; background:var(--ink);}
+#ch1 .cap.tl::before {left:-21px;}
+#ch1 .cap.tr::before {right:-21px;}
+#ch1 .ink {left:0; right:0; top:0; height:190vh; z-index:20; transform:translateY(105vh);}
+#ch1 .ink svg {width:100%; height:100%; display:block;}
+#ch1 .final {inset:0; z-index:21; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch1 .final h2 {font:400 clamp(54px,9vw,160px)/.86 'Instrument Serif', serif; text-transform:uppercase;}
+#ch1 .final h2 span {display:inline-block;}
+#ch1 .final p {margin-top:26px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#999;}
+#ch1 .final .bar {width:0; height:4px; background:var(--red); margin:22px auto 0;}
+#ch1 .prof {inset:0; z-index:5; pointer-events:none;}
+#ch1 .strip {left:41vw; top:24vh; width:21vw; height:76vh;}
+#ch1 .strip .clouds2 {inset:0; width:100%; height:100%; display:block;}
+#ch1 .profile {left:34vw; bottom:0; height:86vh; aspect-ratio:800/1066; background:url(https://static.tildacdn.com/tild3236-3663-4663-b936-663062363661/hero-profile-cut.webp) center bottom/contain no-repeat; z-index:3;}
+#ch1 .ticks {inset:0; width:100%; height:100%; z-index:2; overflow:visible;}
+#ch1 .ticks line {stroke:var(--ink); stroke-width:2.2; stroke-linecap:round;}
+#ch1 .sunout {position:absolute; z-index:1; pointer-events:none; clip-path:inset(-80% -30% 100% -30%);}
+#ch1 .sunout img {position:absolute; display:block;}
+#ch1 .final h2 .l, #ch1 .nextT .l {display:inline-block;}
+#ch1 .nextT {inset:0; z-index:22; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch1 .nextT h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch1 .nextT h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch1 .nextT h1 i {font-style:normal; color:var(--red);}
+#ch1 .nextT p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch1 .hint {position:absolute; left:50%; bottom:22px; translate:-50% 0; z-index:12; color:#fff; font:600 10px 'IBM Plex Mono'; letter-spacing:.3em;}
+@media (max-width:700px) {#ch1 .pill { display:none; }#ch1 .p1 { left:12px; width:calc(100vw - 24px); top:16vh; height:58vh; }#ch1 .p2 { left:12px; width:calc(100vw - 24px); top:18vh; height:52vh; }#ch1 .eyes { left:12px; width:70vw; top:9vh; }#ch1 .hand { right:12px; width:60vw; bottom:5vh; }#ch1 .cap { max-width:62vw; font-size:9.5px; }}
+#ch1 .lead {margin-top:26px; font:400 clamp(28px,3.4vw,52px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+#ch1 .brand {margin-top:12px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.35em; color:#8a8a8a;}
+#ch1 .go {display:inline-flex; align-items:center; gap:14px; margin-top:30px; padding:16px 26px 15px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; position:relative; pointer-events:auto; box-shadow:6px 6px 0 var(--red); transition:background .25s, color .25s, box-shadow .25s, transform .25s;}
+#ch1 .go i {font-style:normal; font-size:20px; transition:transform .25s;}
+#ch1 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
+#ch1 .go:hover i {transform:translate(3px,-3px);}
+#ch1 .title .sdf {position:relative; display:inline-block;}
+#ch1 .title .sdf i {color:transparent !important;}
+#ch1 .title .hint {color:#fff !important; font-weight:700; background:#0d0d0d; padding:10px 16px; border:1.5px solid #fff; white-space:nowrap; z-index:5;}
+#ch1 .title .intro {position:absolute; left:0; right:0; top:calc(28% + clamp(64px,11vw,190px)*1.08 + 40px); text-align:center; color:#fff; z-index:2; padding:0 16px;}
+#ch1 .title .hook {font:400 clamp(26px,3vw,48px)/1.05 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.02em;}
+#ch1 .title .hook b {color:var(--red); font-weight:400;}
+#ch1 .title .who {margin-top:16px; text-shadow:0 0 6px #0d0d0d, 0 0 12px #0d0d0d; font:600 12px/1.6 'IBM Plex Mono', monospace; letter-spacing:.22em; text-transform:uppercase; color:#9a9a9a;}
+#ch1 .title .intro {z-index:5 !important;}
+#ch1 .title .intro > * {text-shadow:0 0 10px #0d0d0d, 0 0 22px #0d0d0d, 0 0 34px #0d0d0d;}
+#ch1 .title .clouds {z-index:1;}
+#ch1 .title h1 {z-index:3;}
+#ch1 .title .lede {max-width:560px; margin:16px auto 0; font:600 14px/1.65 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.04em; color:#bdbdbd; text-shadow:0 0 8px #0d0d0d;}
+#ch1 .title .start {pointer-events:auto; display:inline-flex; gap:12px; margin-top:26px; padding:16px 28px; border:2.5px solid #fff; color:#fff; background:#0d0d0d; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.16em; text-transform:uppercase; box-shadow:6px 6px 0 #c4161c; cursor:pointer;}
+#ch1 .title .start:hover {transform:translate(3px,3px); box-shadow:2px 2px 0 #c4161c;}
+#ch1 .title .corner {position:absolute; top:84px; z-index:3; font:600 10.5px/1.8 'IBM Plex Mono', monospace; letter-spacing:.22em; color:#8a8a8a; text-transform:uppercase;}
+#ch1 .title .corner.l {left:24px; text-align:left;}
+#ch1 .title .corner.r {right:24px; text-align:right;}
+#ch1 .title .corner a {color:inherit; text-decoration:none; border-bottom:1px solid #555; pointer-events:auto;}
+#ch1 .title .corner a:hover {color:#fff;}
+#ch1 .title .toc {position:absolute; left:0; right:0; bottom:26px; z-index:3; list-style:none; display:flex; justify-content:center; gap:clamp(14px,2.6vw,40px); flex-wrap:wrap; padding:0 16px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.2em; color:#0d0d0d; text-transform:uppercase;}
+#ch1 .title .toc b {font:400 18px 'Instrument Serif', serif; margin-right:8px; letter-spacing:0;}
+@media (max-width:700px) {#ch1 .cap { left:14px !important; right:14px !important; max-width:none !important; font-size:13px !important; line-height:1.65 !important; padding:14px 16px !important; }#ch1 .cap::before { display:none; }}
+@media (max-width:700px) {#ch1 .strip { left:22vw; width:56vw; top:34vh; height:66vh; }#ch1 .profile { left:50%; translate:-50% 0; height:58vh; }#ch1 .title .corner { display:none; }#ch1 .title .toc { font-size:10px; gap:10px; bottom:18px; }}
+@media (max-height:500px) {#ch1 .cap { font-size:11.5px !important; line-height:1.45 !important; padding:8px 12px !important; max-width:46vw !important; }}
+:root {--ink:#0d0d0d; --red:#c4161c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:#efede8; color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+#ch2 .hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+#ch2 .logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+#ch2 .logo small {font-size:10px; font-weight:600; margin-left:6px;}
+#ch2 .pill {display:flex; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+#ch2 .pill span {padding:7px 12px;}
+#ch2 .pill span + span {border-left:1.5px solid var(--ink);}
+#ch2 .pill .on {background:var(--ink); color:#fff;}
+#ch2 .paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+#ch2 .scene {position:relative; height:1100vh;}
+#ch2 .stage {position:sticky; top:0; height:100vh; overflow:hidden; perspective:1400px; perspective-origin:50% 40%;}
+#ch2 .abs {position:absolute;}
+#ch2 .panel {position:absolute; background:#fff; overflow:hidden; transform-style:preserve-3d; will-change:transform;}
+#ch2 .ink-frame {position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:8; overflow:visible;}
+#ch2 .ink-frame path {fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;}
+#ch2 .title {inset:0; background:var(--ink); z-index:10; display:grid; place-content:center; text-align:center; color:#fff;}
+#ch2 .title h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch2 .title h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch2 .title h1 i {font-style:normal; color:var(--red);}
+#ch2 .title p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch2 .n1 {left:6vw; top:12vh; width:88vw; height:76vh;}
+#ch2 .night {inset:0; background:url(https://static.tildacdn.com/tild3062-3564-4965-b636-633639313361/ch2-night.webp) center/cover;}
+#ch2 .stars i {position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; animation:tw 3s ease-in-out infinite;}
+@keyframes tw { 50% { opacity:.15; } }
+#ch2 .towerbox {left:0; right:0; top:0; bottom:35%; overflow:hidden;}
+#ch2 .tower {left:63%; bottom:0; height:92%; aspect-ratio:500/1500; background:url(https://static.tildacdn.com/tild3864-3633-4130-b561-303331323632/tower.webp) center bottom/contain no-repeat; transform-origin:50% 100%;}
+#ch2 .lamp {position:absolute; left:63%; top:0; width:0; height:0;}
+#ch2 .beam {position:absolute; left:0; top:0; width:120vw; height:34vh; translate:0 -50%; transform-origin:0 50%; background:linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,.55) 35%, rgba(255,255,255,0) 85%); clip-path:polygon(0 47%, 100% 0, 100% 100%, 0 53%); -webkit-mask-image:repeating-linear-gradient(90deg, #000 0 3px, rgba(0,0,0,.55) 3px 5px); mask-image:repeating-linear-gradient(90deg, #000 0 3px, rgba(0,0,0,.55) 3px 5px); animation:sweep 7s ease-in-out infinite; mix-blend-mode:screen;}
+#ch2 .beam.b2 {animation-delay:-3.5s;}
+@keyframes sweep { 0% { transform:rotate(-4deg) scaleX(1); } 25% { transform:rotate(2deg) scaleX(.35); } 50% { transform:rotate(-4deg) scaleX(-1); } 75% { transform:rotate(-10deg) scaleX(-.35); } 100% { transform:rotate(-4deg) scaleX(1); } }
+#ch2 .glow {position:absolute; left:-40px; top:-40px; width:80px; height:80px; border-radius:50%; background:radial-gradient(closest-side, #fff, rgba(255,255,255,.4) 50%, transparent); animation:pulse 2.2s ease-in-out infinite;}
+@keyframes pulse { 50% { transform:scale(1.25); opacity:.8; } }
+#ch2 .lightoff .beam, #ch2 .lightoff .glow {opacity:0;}
+#ch2 .hands {left:7vw; bottom:7vh; width:min(30vw,440px); aspect-ratio:4/3; z-index:7;}
+#ch2 .hands .img {inset:0; background:url(https://static.tildacdn.com/tild3437-6237-4639-b561-666539373166/ch2-hands.webp) center/cover;}
+#ch2 .n2 {left:14vw; top:9vh; width:72vw; height:82vh; transform-origin:50% 100%; clip-path:polygon(12% 0, 88% 0, 100% 100%, 0 100%);}
+#ch2 .n2 .night {background-position:70% 50%; transform:scale(1.25); transform-origin:70% 65%;}
+#ch2 .n2 .lamp {left:84%; top:14%;}
+#ch2 .n2 .beam {width:90vw; animation:sweep2 9s ease-in-out infinite;}
+@keyframes sweep2 { 0%,100% { transform:rotate(152deg); } 50% { transform:rotate(172deg); } }
+#ch2 .n2 .tower {position:absolute; left:80%; bottom:35%; height:60%; aspect-ratio:500/1500; background:url(https://static.tildacdn.com/tild3864-3633-4130-b561-303331323632/tower.webp) center bottom/contain no-repeat;}
+#ch2 .crowd {position:absolute; left:32%; right:24%; bottom:27%; height:17%; display:flex; justify-content:space-around; align-items:flex-end;}
+#ch2 .crowd img {height:100%; width:auto; opacity:0; transform:translateY(12%);}
+#ch2 .crowd img:nth-child(odd) {height:88%;}
+#ch2 .cap {position:absolute; z-index:9; max-width:580px; padding:20px 28px 19px; background:#fff; border:0; font:600 19px/1.75 'Archivo Narrow', sans-serif; letter-spacing:.015em; text-transform:uppercase; opacity:0;}
+#ch2 .cap b {color:var(--red); font-weight:600;}
+#ch2 .cap .w {opacity:0;}
+#ch2 .cap .w.on {opacity:1;}
+#ch2 .cap::before {content:''; position:absolute; top:12px; width:18px; height:2px; background:var(--ink);}
+#ch2 .cap.tl::before {left:-21px;}
+#ch2 .cap.tr::before {right:-21px;}
+#ch2 .ink {left:0; right:0; top:0; height:190vh; z-index:20; transform:translateY(105vh);}
+#ch2 .ink svg {width:100%; height:100%; display:block;}
+#ch2 .final {inset:0; z-index:21; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch2 .final h2 {font:400 clamp(54px,9vw,160px)/.86 'Instrument Serif', serif; text-transform:uppercase;}
+#ch2 .final h2 span {display:inline-block;}
+#ch2 .final p {margin-top:26px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#999;}
+#ch2 .final .bar {width:0; height:4px; background:var(--red); margin:22px auto 0;}
+@media (max-width:700px) {#ch2 .pill { display:none; }#ch2 .n1 { left:12px; width:calc(100vw - 24px); top:16vh; height:58vh; }#ch2 .n2 { left:12px; width:calc(100vw - 24px); top:18vh; height:52vh; }#ch2 .hands { left:12px; width:60vw; bottom:5vh; }#ch2 .cap { max-width:70vw; font-size:11px; padding:12px 14px; }}
+#ch2 .final h2 .l, #ch2 .nextT .l {display:inline-block;}
+#ch2 .nextT {inset:0; z-index:22; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch2 .nextT h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch2 .nextT h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch2 .nextT h1 i {font-style:normal; color:var(--red);}
+#ch2 .nextT p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch2 .lead {margin-top:26px; font:400 clamp(28px,3.4vw,52px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+#ch2 .brand {margin-top:12px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.35em; color:#8a8a8a;}
+#ch2 .go {display:inline-flex; align-items:center; gap:14px; margin-top:30px; padding:16px 26px 15px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; position:relative; pointer-events:auto; box-shadow:6px 6px 0 var(--red); transition:background .25s, color .25s, box-shadow .25s, transform .25s;}
+#ch2 .go i {font-style:normal; font-size:20px; transition:transform .25s;}
+#ch2 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
+#ch2 .go:hover i {transform:translate(3px,-3px);}
+#ch2 .final {pointer-events:none;}
+#ch2 .final .ask {margin-top:30px; font:400 clamp(24px,2.6vw,40px)/1.1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.03em; color:#fff;}
+#ch2 .final .ask b {color:var(--red); font-weight:400;}
+#ch2 .final .go {margin-top:22px;}
+#ch2 .gos {display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+@media (max-width:700px) {#ch2 .cap { left:14px !important; right:14px !important; max-width:none !important; font-size:13px !important; line-height:1.65 !important; padding:14px 16px !important; }#ch2 .cap::before { display:none; }}
+@media (max-height:500px) {#ch2 .cap { font-size:11.5px !important; line-height:1.45 !important; padding:8px 12px !important; max-width:46vw !important; }}
+:root {--ink:#0d0d0d; --red:#c4161c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:#efede8; color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+#ch3 .hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+#ch3 .logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+#ch3 .logo small {font-size:10px; font-weight:600; margin-left:6px;}
+#ch3 .pill {display:flex; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+#ch3 .pill span {padding:7px 12px;}
+#ch3 .pill span + span {border-left:1.5px solid var(--ink);}
+#ch3 .pill .on {background:var(--ink); color:#fff;}
+#ch3 .paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+#ch3 .scene {position:relative; height:1100vh;}
+#ch3 .stage {position:sticky; top:0; height:100vh; overflow:hidden; perspective:1400px; perspective-origin:50% 40%;}
+#ch3 .abs {position:absolute;}
+#ch3 .panel {position:absolute; background:#fff; overflow:hidden; transform-style:preserve-3d; will-change:transform;}
+#ch3 .ink-frame {position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:8; overflow:visible;}
+#ch3 .ink-frame path {fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;}
+#ch3 .title {inset:0; background:var(--ink); z-index:10; display:grid; place-content:center; text-align:center; color:#fff;}
+#ch3 .title h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch3 .title h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch3 .title h1 i {font-style:normal; color:var(--red);}
+#ch3 .title p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch3 .cap {position:absolute; z-index:9; max-width:580px; padding:20px 28px 19px; background:#fff; border:0; font:600 19px/1.75 'Archivo Narrow', sans-serif; letter-spacing:.015em; text-transform:uppercase; opacity:0;}
+#ch3 .cap b {color:var(--red); font-weight:600;}
+#ch3 .cap .w {opacity:0;}
+#ch3 .cap .w.on {opacity:1;}
+#ch3 .cap::before {content:''; position:absolute; top:12px; width:18px; height:2px; background:var(--ink);}
+#ch3 .cap.tl::before {left:-21px;}
+#ch3 .cap.tr::before {right:-21px;}
+#ch3 .ink {left:0; right:0; top:0; height:190vh; z-index:20; transform:translateY(105vh);}
+#ch3 .ink svg {width:100%; height:100%; display:block;}
+#ch3 .final {inset:0; z-index:21; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch3 .final h2 {font:400 clamp(54px,9vw,160px)/.86 'Instrument Serif', serif; text-transform:uppercase;}
+#ch3 .final h2 span {display:inline-block;}
+#ch3 .final p {margin-top:26px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#999;}
+#ch3 .final .bar {width:0; height:4px; background:var(--red); margin:22px auto 0;}
+@media (max-width:700px) {#ch3 .pill { display:none; }#ch3 .cap { max-width:70vw; font-size:11px; padding:12px 14px; }}
+@media (max-width:700px) {#ch3 .cap { left:14px !important; right:14px !important; max-width:none !important; font-size:13px !important; line-height:1.65 !important; padding:14px 16px !important; }#ch3 .cap::before { display:none; }}
+@media (max-height:500px) {#ch3 .cap { font-size:11.5px !important; line-height:1.45 !important; padding:8px 12px !important; max-width:46vw !important; }}
+#ch3 .final h2 .l, #ch3 .nextT .l {display:inline-block;}
+#ch3 .nextT {inset:0; z-index:22; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch3 .nextT h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch3 .nextT h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch3 .nextT h1 i {font-style:normal; color:var(--red);}
+#ch3 .lead {margin-top:26px; font:400 clamp(28px,3.4vw,52px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+#ch3 .brand {margin-top:12px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.35em; color:#8a8a8a;}
+#ch3 .gos {display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+#ch3 .go {display:inline-flex; align-items:center; gap:14px; margin-top:30px; padding:16px 26px 15px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; position:relative; pointer-events:auto; box-shadow:6px 6px 0 var(--red); transition:background .25s, color .25s, box-shadow .25s, transform .25s;}
+#ch3 .go i {font-style:normal; font-size:20px; transition:transform .25s;}
+#ch3 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
+#ch3 .go:hover i {transform:translate(3px,-3px);}
+#ch3 .final {pointer-events:none;}
+#ch3 .final .ask {margin-top:30px; font:400 clamp(24px,2.6vw,40px)/1.1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.03em; color:#fff;}
+#ch3 .final .ask b {color:var(--red); font-weight:400;}
+#ch3 .final .go {margin-top:22px;}
+#ch3 .r1 {left:6vw; top:12vh; width:88vw; height:76vh;}
+#ch3 .plain {inset:0; background:url(https://static.tildacdn.com/tild3736-3430-4134-b466-666231353631/ch3-plain.webp) center/cover;}
+#ch3 .roads {inset:0; width:100%; height:100%;}
+#ch3 .stones {right:6vw; bottom:6vh; width:min(30vw,440px); aspect-ratio:4/3; z-index:7;}
+#ch3 .stones .img {inset:0; background:url(https://static.tildacdn.com/tild6134-3332-4262-a664-663937306236/ch3-stones.webp) center/cover;}
+#ch3 .sign {left:3vw; top:14vh; height:84vh; aspect-ratio:571/1200; z-index:6; background:url(https://static.tildacdn.com/tild3764-6536-4566-a366-613061346164/sign-text.webp) center/contain no-repeat; transform-origin:50% 100%;}
+#ch3 .parade {inset:0; z-index:8; pointer-events:none;}
+#ch3 .ground {position:absolute; left:0; right:0; top:72vh; height:3px; background:var(--ink); transform-origin:0 50%;}
+#ch3 .ground::after {content:''; position:absolute; left:0; right:0; top:8px; height:2px; background:repeating-linear-gradient(90deg, var(--ink) 0 26px, transparent 26px 44px);}
+#ch3 .farTower {position:absolute; z-index:2; right:7vw; bottom:28vh; height:44vh; aspect-ratio:500/1500; background:url(https://static.tildacdn.com/tild3864-3633-4130-b561-303331323632/tower.webp) center bottom/contain no-repeat;}
+#ch3 .lane {position:absolute; z-index:1; left:0; right:calc(7vw + 7.3vh); top:38vh; height:34vh; overflow:hidden;}
+#ch3 .lane img {position:absolute; bottom:0; height:82%; width:auto;}
+:root {--ink:#0d0d0d; --red:#c4161c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:#efede8; color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+#ch4 .hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+#ch4 .logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+#ch4 .logo small {font-size:10px; font-weight:600; margin-left:6px;}
+#ch4 .pill {display:flex; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+#ch4 .pill span {padding:7px 12px;}
+#ch4 .pill span + span {border-left:1.5px solid var(--ink);}
+#ch4 .pill .on {background:var(--ink); color:#fff;}
+#ch4 .paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+#ch4 .scene {position:relative; height:1100vh;}
+#ch4 .stage {position:sticky; top:0; height:100vh; overflow:hidden; perspective:1400px; perspective-origin:50% 40%;}
+#ch4 .abs {position:absolute;}
+#ch4 .panel {position:absolute; background:#fff; overflow:hidden; transform-style:preserve-3d; will-change:transform;}
+#ch4 .ink-frame {position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:8; overflow:visible;}
+#ch4 .ink-frame path {fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;}
+#ch4 .title {inset:0; background:var(--ink); z-index:10; display:grid; place-content:center; text-align:center; color:#fff;}
+#ch4 .title h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch4 .title h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch4 .title h1 i {font-style:normal; color:var(--red);}
+#ch4 .title p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch4 .cap {position:absolute; z-index:9; max-width:580px; padding:20px 28px 19px; background:#fff; border:0; font:600 19px/1.75 'Archivo Narrow', sans-serif; letter-spacing:.015em; text-transform:uppercase; opacity:0;}
+#ch4 .cap b {color:var(--red); font-weight:600;}
+#ch4 .cap .w {opacity:0;}
+#ch4 .cap .w.on {opacity:1;}
+#ch4 .cap::before {content:''; position:absolute; top:12px; width:18px; height:2px; background:var(--ink);}
+#ch4 .cap.tl::before {left:-21px;}
+#ch4 .cap.tr::before {right:-21px;}
+#ch4 .ink {left:0; right:0; top:0; height:190vh; z-index:20; transform:translateY(105vh);}
+#ch4 .ink svg {width:100%; height:100%; display:block;}
+#ch4 .final {inset:0; z-index:21; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch4 .final h2 {font:400 clamp(54px,9vw,160px)/.86 'Instrument Serif', serif; text-transform:uppercase;}
+#ch4 .final h2 span {display:inline-block;}
+#ch4 .final p {margin-top:26px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#999;}
+#ch4 .final .bar {width:0; height:4px; background:var(--red); margin:22px auto 0;}
+@media (max-width:700px) {#ch4 .pill { display:none; }#ch4 .cap { max-width:70vw; font-size:11px; padding:12px 14px; }}
+@media (max-width:700px) {#ch4 .cap { left:14px !important; right:14px !important; max-width:none !important; font-size:13px !important; line-height:1.65 !important; padding:14px 16px !important; }#ch4 .cap::before { display:none; }}
+@media (max-height:500px) {#ch4 .cap { font-size:11.5px !important; line-height:1.45 !important; padding:8px 12px !important; max-width:46vw !important; }}
+#ch4 .final h2 .l, #ch4 .nextT .l {display:inline-block;}
+#ch4 .nextT {inset:0; z-index:22; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch4 .nextT h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch4 .nextT h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch4 .nextT h1 i {font-style:normal; color:var(--red);}
+#ch4 .lead {margin-top:26px; font:400 clamp(28px,3.4vw,52px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+#ch4 .brand {margin-top:12px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.35em; color:#8a8a8a;}
+#ch4 .gos {display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+#ch4 .go {display:inline-flex; align-items:center; gap:14px; margin-top:30px; padding:16px 26px 15px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; position:relative; pointer-events:auto; box-shadow:6px 6px 0 var(--red); transition:background .25s, color .25s, box-shadow .25s, transform .25s;}
+#ch4 .go i {font-style:normal; font-size:20px; transition:transform .25s;}
+#ch4 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
+#ch4 .go:hover i {transform:translate(3px,-3px);}
+#ch4 .final {pointer-events:none;}
+#ch4 .final .ask {margin-top:30px; font:400 clamp(24px,2.6vw,40px)/1.1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.03em; color:#fff;}
+#ch4 .final .ask b {color:var(--red); font-weight:400;}
+#ch4 .final .go {margin-top:22px;}
+#ch4 .q1 {left:6vw; top:12vh; width:88vw; height:76vh;}
+#ch4 .square {inset:0; background:url(https://static.tildacdn.com/tild3962-3339-4135-a265-396633663233/ch4-square.webp) center 70%/cover;}
+#ch4 .bubbles {inset:0; z-index:3; pointer-events:none;}
+#ch4 .bub {position:absolute; padding:10px 16px; background:#fff; border:2.5px solid var(--ink); border-radius:22px; font:700 clamp(12px,1.25vw,18px)/1.2 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.02em; white-space:nowrap;}
+#ch4 .bub::after {content:''; position:absolute; left:22px; bottom:-14px; width:16px; height:16px; background:#fff; border-right:2.5px solid var(--ink); border-bottom:2.5px solid var(--ink); transform:skewX(-30deg) rotate(45deg);}
+#ch4 .bub.r::after {left:auto; right:22px; transform:skewX(30deg) rotate(45deg);}
+#ch4 .bub b {color:var(--red);}
+#ch4 .talk {left:5vw; bottom:6vh; width:min(30vw,440px); aspect-ratio:4/3; z-index:7;}
+#ch4 .talk .img {inset:0; background:url(https://static.tildacdn.com/tild3963-6566-4262-a465-343232656361/ch4-talk.webp) center/cover;}
+#ch4 .ph {inset:0; z-index:4; pointer-events:none;}
+#ch4 .phone {position:absolute; right:6vw; bottom:-6vh; height:104vh; aspect-ratio:900/1200;}
+#ch4 .phone .body {position:absolute; inset:0; background:url(https://static.tildacdn.com/tild6232-3430-4539-b464-663938646231/phone.webp) center bottom/contain no-repeat; z-index:2;}
+#ch4 .screen {position:absolute; left:34.6%; top:7.4%; width:35.6%; height:55.4%; overflow:hidden; background:#fff; border-radius:14px; z-index:3;}
+#ch4 .feed {position:absolute; left:0; right:0; top:0; animation:feed 26s linear infinite;}
+@keyframes feed { to { transform:translateY(-50%); } }
+#ch4 .post {margin:10px; border:2px solid var(--ink); background:#fff;}
+#ch4 .post .pic {aspect-ratio:4/3; background-size:cover; background-position:center; border-bottom:2px solid var(--ink);}
+#ch4 .post .meta {display:flex; justify-content:space-between; padding:6px 8px; font:700 11px/1 'Archivo Narrow', sans-serif; text-transform:uppercase;}
+#ch4 .post .meta b {color:var(--red);}
+#ch4 .post .txt {padding:0 8px 8px; font:600 11px/1.3 'Archivo Narrow', sans-serif; text-transform:uppercase;}
+#ch4 .hearts {position:absolute; inset:0; z-index:4; overflow:visible;}
+#ch4 .heart {position:absolute; width:26px; height:26px; color:var(--red);}
+:root {--ink:#0d0d0d; --red:#c4161c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:#efede8; color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+#ch5 .hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+#ch5 .logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+#ch5 .logo small {font-size:10px; font-weight:600; margin-left:6px;}
+#ch5 .pill {display:flex; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+#ch5 .pill span {padding:7px 12px;}
+#ch5 .pill span + span {border-left:1.5px solid var(--ink);}
+#ch5 .pill .on {background:var(--ink); color:#fff;}
+#ch5 .paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+#ch5 .scene {position:relative; height:1100vh;}
+#ch5 .stage {position:sticky; top:0; height:100vh; overflow:hidden; perspective:1400px; perspective-origin:50% 40%;}
+#ch5 .abs {position:absolute;}
+#ch5 .panel {position:absolute; background:#fff; overflow:hidden; transform-style:preserve-3d; will-change:transform;}
+#ch5 .ink-frame {position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:8; overflow:visible;}
+#ch5 .ink-frame path {fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;}
+#ch5 .title {inset:0; background:var(--ink); z-index:10; display:grid; place-content:center; text-align:center; color:#fff;}
+#ch5 .title h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch5 .title h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch5 .title h1 i {font-style:normal; color:var(--red);}
+#ch5 .title p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch5 .cap {position:absolute; z-index:9; max-width:580px; padding:20px 28px 19px; background:#fff; border:0; font:600 19px/1.75 'Archivo Narrow', sans-serif; letter-spacing:.015em; text-transform:uppercase; opacity:0;}
+#ch5 .cap b {color:var(--red); font-weight:600;}
+#ch5 .cap .w {opacity:0;}
+#ch5 .cap .w.on {opacity:1;}
+#ch5 .cap::before {content:''; position:absolute; top:12px; width:18px; height:2px; background:var(--ink);}
+#ch5 .cap.tl::before {left:-21px;}
+#ch5 .cap.tr::before {right:-21px;}
+#ch5 .ink {left:0; right:0; top:0; height:190vh; z-index:20; transform:translateY(105vh);}
+#ch5 .ink svg {width:100%; height:100%; display:block;}
+#ch5 .final {inset:0; z-index:21; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch5 .final h2 {font:400 clamp(54px,9vw,160px)/.86 'Instrument Serif', serif; text-transform:uppercase;}
+#ch5 .final h2 span {display:inline-block;}
+#ch5 .final p {margin-top:26px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#999;}
+#ch5 .final .bar {width:0; height:4px; background:var(--red); margin:22px auto 0;}
+@media (max-width:700px) {#ch5 .pill { display:none; }#ch5 .cap { max-width:70vw; font-size:11px; padding:12px 14px; }}
+@media (max-width:700px) {#ch5 .cap { left:14px !important; right:14px !important; max-width:none !important; font-size:13px !important; line-height:1.65 !important; padding:14px 16px !important; }#ch5 .cap::before { display:none; }}
+@media (max-height:500px) {#ch5 .cap { font-size:11.5px !important; line-height:1.45 !important; padding:8px 12px !important; max-width:46vw !important; }}
+#ch5 .final h2 .l, #ch5 .nextT .l {display:inline-block;}
+#ch5 .nextT {inset:0; z-index:22; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch5 .nextT h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch5 .nextT h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch5 .nextT h1 i {font-style:normal; color:var(--red);}
+#ch5 .lead {margin-top:26px; font:400 clamp(28px,3.4vw,52px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+#ch5 .brand {margin-top:12px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.35em; color:#8a8a8a;}
+#ch5 .gos {display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+#ch5 .go {display:inline-flex; align-items:center; gap:14px; margin-top:30px; padding:16px 26px 15px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; position:relative; pointer-events:auto; box-shadow:6px 6px 0 var(--red); transition:background .25s, color .25s, box-shadow .25s, transform .25s;}
+#ch5 .go i {font-style:normal; font-size:20px; transition:transform .25s;}
+#ch5 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
+#ch5 .go:hover i {transform:translate(3px,-3px);}
+#ch5 .final {pointer-events:none;}
+#ch5 .final .ask {margin-top:30px; font:400 clamp(24px,2.6vw,40px)/1.1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.03em; color:#fff;}
+#ch5 .final .ask b {color:var(--red); font-weight:400;}
+#ch5 .final .go {margin-top:22px;}
+#ch5 .m1 {left:8vw; top:11vh; width:84vw; height:78vh;}
+#ch5 .hall {inset:0; background:url(https://static.tildacdn.com/tild3338-3265-4536-b934-626338346435/ch5-shelves.webp) center/cover;}
+#ch5 .ourbox {position:absolute; left:50%; top:52%; width:22%; aspect-ratio:600/499; translate:-50% -50%; z-index:3; background:url(https://static.tildacdn.com/tild3239-3562-4334-a637-626137303134/box.webp) center/contain no-repeat; filter:drop-shadow(0 0 0 #c4161c);}
+#ch5 .ourbox::after {content:'A3'; position:absolute; left:63%; top:57%; translate:-50% -50%; font:800 clamp(10px,1.3vw,20px) Manrope; color:#3a2f1c; letter-spacing:-.02em;}
+#ch5 .glow {position:absolute; inset:-14%; border:3px dashed var(--red); border-radius:50%; opacity:0; animation:spin 9s linear infinite;}
+@keyframes spin { to { transform:rotate(360deg); } }
+#ch5 .camera {right:5vw; bottom:6vh; width:min(30vw,440px); aspect-ratio:4/3; z-index:7;}
+#ch5 .camera .img {inset:0; background:url(https://static.tildacdn.com/tild3163-3064-4033-b631-613463343233/ch5-camera.webp) center/cover;}
+#ch5 .pc {inset:0; z-index:4; pointer-events:none;}
+#ch5 .card {position:absolute; right:8vw; top:12vh; width:min(36vw,520px); background:#fff; border:3px solid var(--ink); box-shadow:10px 10px 0 var(--ink);}
+#ch5 .card .pic {aspect-ratio:1; background:#f2efe7 url(https://static.tildacdn.com/tild3239-3562-4334-a637-626137303134/box.webp) center/70% no-repeat; border-bottom:3px solid var(--ink); position:relative;}
+#ch5 .card .badge {position:absolute; left:14px; top:14px; padding:6px 10px; background:var(--red); color:#fff; font:700 13px/1 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.06em;}
+#ch5 .card .body {padding:16px 18px 18px;}
+#ch5 .card h3 {font:700 22px/1.1 'Archivo Narrow', sans-serif; text-transform:uppercase;}
+#ch5 .stars {margin:10px 0 14px; display:flex; gap:4px;}
+#ch5 .stars i {width:22px; height:22px; clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); background:#d8d3c6;}
+#ch5 .stars i.on {background:var(--red);}
+#ch5 .buy {display:flex; justify-content:space-between; align-items:center;}
+#ch5 .buy .price {font:700 26px/1 'Archivo Narrow', sans-serif;}
+#ch5 .buy .btn {padding:12px 18px; background:var(--ink); color:#fff; font:700 14px/1 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.08em; animation:press 1.6s ease-in-out infinite;}
+@keyframes press { 0%,70%,100% { transform:translate(0,0); } 80% { transform:translate(3px,3px); } }
+#ch5 .orders {position:absolute; inset:0; overflow:visible;}
+#ch5 .order {position:absolute; padding:7px 11px; background:#fff; border:2.5px solid var(--ink); font:700 14px/1 'Archivo Narrow', sans-serif; text-transform:uppercase; white-space:nowrap;}
+#ch5 .order b {color:var(--red);}
+:root {--ink:#0d0d0d; --red:#c4161c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:#efede8; color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+#ch6 .hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+#ch6 .logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+#ch6 .logo small {font-size:10px; font-weight:600; margin-left:6px;}
+#ch6 .pill {display:flex; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+#ch6 .pill span {padding:7px 12px;}
+#ch6 .pill span + span {border-left:1.5px solid var(--ink);}
+#ch6 .pill .on {background:var(--ink); color:#fff;}
+#ch6 .paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+#ch6 .scene {position:relative; height:1100vh;}
+#ch6 .stage {position:sticky; top:0; height:100vh; overflow:hidden; perspective:1400px; perspective-origin:50% 40%;}
+#ch6 .abs {position:absolute;}
+#ch6 .panel {position:absolute; background:#fff; overflow:hidden; transform-style:preserve-3d; will-change:transform;}
+#ch6 .ink-frame {position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:8; overflow:visible;}
+#ch6 .ink-frame path {fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;}
+#ch6 .title {inset:0; background:var(--ink); z-index:10; display:grid; place-content:center; text-align:center; color:#fff;}
+#ch6 .title h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch6 .title h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch6 .title h1 i {font-style:normal; color:var(--red);}
+#ch6 .title p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch6 .cap {position:absolute; z-index:9; max-width:580px; padding:20px 28px 19px; background:#fff; border:0; font:600 19px/1.75 'Archivo Narrow', sans-serif; letter-spacing:.015em; text-transform:uppercase; opacity:0;}
+#ch6 .cap b {color:var(--red); font-weight:600;}
+#ch6 .cap .w {opacity:0;}
+#ch6 .cap .w.on {opacity:1;}
+#ch6 .cap::before {content:''; position:absolute; top:12px; width:18px; height:2px; background:var(--ink);}
+#ch6 .cap.tl::before {left:-21px;}
+#ch6 .cap.tr::before {right:-21px;}
+#ch6 .ink {left:0; right:0; top:0; height:190vh; z-index:20; transform:translateY(105vh);}
+#ch6 .ink svg {width:100%; height:100%; display:block;}
+#ch6 .final {inset:0; z-index:21; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch6 .final h2 {font:400 clamp(54px,9vw,160px)/.86 'Instrument Serif', serif; text-transform:uppercase;}
+#ch6 .final h2 span {display:inline-block;}
+#ch6 .final p {margin-top:26px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#999;}
+#ch6 .final .bar {width:0; height:4px; background:var(--red); margin:22px auto 0;}
+@media (max-width:700px) {#ch6 .pill { display:none; }#ch6 .cap { max-width:70vw; font-size:11px; padding:12px 14px; }}
+@media (max-width:700px) {#ch6 .cap { left:14px !important; right:14px !important; max-width:none !important; font-size:13px !important; line-height:1.65 !important; padding:14px 16px !important; }#ch6 .cap::before { display:none; }}
+@media (max-height:500px) {#ch6 .cap { font-size:11.5px !important; line-height:1.45 !important; padding:8px 12px !important; max-width:46vw !important; }}
+#ch6 .final h2 .l, #ch6 .nextT .l {display:inline-block;}
+#ch6 .nextT {inset:0; z-index:22; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch6 .nextT h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch6 .nextT h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch6 .nextT h1 i {font-style:normal; color:var(--red);}
+#ch6 .lead {margin-top:26px; font:400 clamp(28px,3.4vw,52px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+#ch6 .brand {margin-top:12px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.35em; color:#8a8a8a;}
+#ch6 .gos {display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+#ch6 .go {display:inline-flex; align-items:center; gap:14px; margin-top:30px; padding:16px 26px 15px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; position:relative; pointer-events:auto; box-shadow:6px 6px 0 var(--red); transition:background .25s, color .25s, box-shadow .25s, transform .25s;}
+#ch6 .go i {font-style:normal; font-size:20px; transition:transform .25s;}
+#ch6 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
+#ch6 .go:hover i {transform:translate(3px,-3px);}
+#ch6 .final {pointer-events:none;}
+#ch6 .final .ask {margin-top:30px; font:400 clamp(24px,2.6vw,40px)/1.1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.03em; color:#fff;}
+#ch6 .final .ask b {color:var(--red); font-weight:400;}
+#ch6 .final .go {margin-top:22px;}
+#ch6 .g1 {left:6vw; top:12vh; width:88vw; height:76vh;}
+#ch6 .guard {inset:0; background:url(https://static.tildacdn.com/tild6434-3230-4032-b561-663363653636/ch6-guard.webp) center/cover;}
+#ch6 .lantern {position:absolute; left:62.6%; top:46%; width:22%; aspect-ratio:1; translate:-50% -50%; border-radius:50%; background:radial-gradient(closest-side, rgba(255,226,150,.55), rgba(255,210,120,.18) 45%, transparent); mix-blend-mode:screen; animation:flick 2.2s steps(6) infinite;}
+@keyframes flick { 0% { opacity:.85; transform:scale(1); } 30% { opacity:1; transform:scale(1.06); } 55% { opacity:.7; transform:scale(.96); } 80% { opacity:.95; transform:scale(1.03); } }
+#ch6 .chat {inset:0; z-index:4; pointer-events:none;}
+#ch6 .dlg {position:absolute; right:8vw; top:13vh; width:min(40vw,560px); display:flex; flex-direction:column; gap:14px;}
+#ch6 .msg {max-width:80%; padding:12px 16px; background:#fff; border:2.5px solid var(--ink); border-radius:20px; font:700 clamp(13px,1.3vw,19px)/1.3 'Archivo Narrow', sans-serif; text-transform:uppercase; position:relative;}
+#ch6 .msg.u {align-self:flex-start; border-bottom-left-radius:4px;}
+#ch6 .msg.b {align-self:flex-end; background:var(--ink); color:#fff; border-bottom-right-radius:4px;}
+#ch6 .msg.b::before {content:'A3 BOT'; position:absolute; right:12px; top:-11px; padding:2px 6px; background:var(--red); color:#fff; font:700 10px/1.2 'IBM Plex Mono', monospace; letter-spacing:.1em;}
+#ch6 .dots i {display:inline-block; width:7px; height:7px; margin:0 2px; border-radius:50%; background:#fff; animation:dot 1s infinite;}
+#ch6 .dots i:nth-child(2) {animation-delay:.15s;}
+#ch6 .dots i:nth-child(3) {animation-delay:.3s;}
+@keyframes dot { 50% { transform:translateY(-4px); opacity:.4; } }
+#ch6 .clock {position:absolute; left:9vw; top:58vh; width:min(16vw,220px); aspect-ratio:1;}
+#ch6 .clock .hand {transform-origin:50px 50px;}
+#ch6 .clock .h {animation:rot 24s linear infinite;}
+#ch6 .clock .m {animation:rot 2s linear infinite;}
+@keyframes rot { to { transform:rotate(360deg); } }
+#ch6 .clock-cap {position:absolute; left:9vw; top:calc(58vh + min(16vw,220px) + 12px); font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#555;}
+#ch6 .g2 {right:5vw; top:9vh; width:min(46vw,680px); height:82vh; clip-path:polygon(10% 0, 90% 0, 100% 100%, 0 100%); z-index:3;}
+#ch6 .night2 {inset:0; background:url(https://static.tildacdn.com/tild6434-3230-4032-b561-663363653636/ch6-guard.webp) 64% 55%/auto 150% no-repeat; filter:brightness(.55) contrast(1.1);}
+#ch6 .lantern.l2 {left:58%; top:47%; width:60%;}
+#ch6 .chat .dlg {right:calc(5vw + min(46vw,680px)*.1); width:min(36vw,520px); top:16vh; z-index:5;}
+:root {--ink:#0d0d0d; --red:#c4161c;}
+* {box-sizing:border-box; margin:0; padding:0;}
+html, body {background:#efede8; color:var(--ink);}
+body {overflow-x:hidden; font-family:Manrope, sans-serif;}
+#ch7 .hdr {position:fixed; inset:0 0 auto 0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 24px; pointer-events:none;}
+#ch7 .logo {color:#fff; mix-blend-mode:difference; font:800 20px Manrope; letter-spacing:-.02em;}
+#ch7 .logo small {font-size:10px; font-weight:600; margin-left:6px;}
+#ch7 .pill {display:flex; background:#fff; border:1.5px solid var(--ink); font:600 10px 'IBM Plex Mono', monospace; letter-spacing:.12em;}
+#ch7 .pill span {padding:7px 12px;}
+#ch7 .pill span + span {border-left:1.5px solid var(--ink);}
+#ch7 .pill .on {background:var(--ink); color:#fff;}
+#ch7 .paper {position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.18; mix-blend-mode:multiply; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+#ch7 .scene {position:relative; height:1100vh;}
+#ch7 .stage {position:sticky; top:0; height:100vh; overflow:hidden; perspective:1400px; perspective-origin:50% 40%;}
+#ch7 .abs {position:absolute;}
+#ch7 .panel {position:absolute; background:#fff; overflow:hidden; transform-style:preserve-3d; will-change:transform;}
+#ch7 .ink-frame {position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:8; overflow:visible;}
+#ch7 .ink-frame path {fill:none; stroke:var(--ink); stroke-linecap:round; stroke-linejoin:round;}
+#ch7 .title {inset:0; background:var(--ink); z-index:10; display:grid; place-content:center; text-align:center; color:#fff;}
+#ch7 .title h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch7 .title h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch7 .title h1 i {font-style:normal; color:var(--red);}
+#ch7 .title p {margin-top:28px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#8a8a8a;}
+#ch7 .cap {position:absolute; z-index:9; max-width:580px; padding:20px 28px 19px; background:#fff; border:0; font:600 19px/1.75 'Archivo Narrow', sans-serif; letter-spacing:.015em; text-transform:uppercase; opacity:0;}
+#ch7 .cap b {color:var(--red); font-weight:600;}
+#ch7 .cap .w {opacity:0;}
+#ch7 .cap .w.on {opacity:1;}
+#ch7 .cap::before {content:''; position:absolute; top:12px; width:18px; height:2px; background:var(--ink);}
+#ch7 .cap.tl::before {left:-21px;}
+#ch7 .cap.tr::before {right:-21px;}
+#ch7 .ink {left:0; right:0; top:0; height:190vh; z-index:20; transform:translateY(105vh);}
+#ch7 .ink svg {width:100%; height:100%; display:block;}
+#ch7 .final {inset:0; z-index:21; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch7 .final h2 {font:400 clamp(54px,9vw,160px)/.86 'Instrument Serif', serif; text-transform:uppercase;}
+#ch7 .final h2 span {display:inline-block;}
+#ch7 .final p {margin-top:26px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#999;}
+#ch7 .final .bar {width:0; height:4px; background:var(--red); margin:22px auto 0;}
+@media (max-width:700px) {#ch7 .pill { display:none; }#ch7 .cap { max-width:70vw; font-size:11px; padding:12px 14px; }}
+@media (max-width:700px) {#ch7 .cap { left:14px !important; right:14px !important; max-width:none !important; font-size:13px !important; line-height:1.65 !important; padding:14px 16px !important; }#ch7 .cap::before { display:none; }}
+@media (max-height:500px) {#ch7 .cap { font-size:11.5px !important; line-height:1.45 !important; padding:8px 12px !important; max-width:46vw !important; }}
+#ch7 .final h2 .l, #ch7 .nextT .l {display:inline-block;}
+#ch7 .nextT {inset:0; z-index:22; display:grid; place-content:center; text-align:center; color:#fff; pointer-events:none;}
+#ch7 .nextT h1 {font:400 clamp(64px,11vw,190px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch7 .nextT h1 small {display:block; font-size:.22em; letter-spacing:.4em; margin-bottom:.35em;}
+#ch7 .nextT h1 i {font-style:normal; color:var(--red);}
+#ch7 .lead {margin-top:26px; font:400 clamp(28px,3.4vw,52px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em; color:#fff;}
+#ch7 .brand {margin-top:12px; font:600 12px 'IBM Plex Mono', monospace; letter-spacing:.35em; color:#8a8a8a;}
+#ch7 .gos {display:flex; gap:18px; justify-content:center; flex-wrap:wrap;}
+#ch7 .go {display:inline-flex; align-items:center; gap:14px; margin-top:30px; padding:16px 26px 15px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; position:relative; pointer-events:auto; box-shadow:6px 6px 0 var(--red); transition:background .25s, color .25s, box-shadow .25s, transform .25s;}
+#ch7 .go i {font-style:normal; font-size:20px; transition:transform .25s;}
+#ch7 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
+#ch7 .go:hover i {transform:translate(3px,-3px);}
+#ch7 .final {pointer-events:none;}
+#ch7 .final .ask {margin-top:30px; font:400 clamp(24px,2.6vw,40px)/1.1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.03em; color:#fff;}
+#ch7 .final .ask b {color:var(--red); font-weight:400;}
+#ch7 .final .go {margin-top:22px;}
+#ch7 .scene {height:1300vh;}
+#ch7 .fx {inset:0; pointer-events:none;}
+#ch7 .dark {inset:0; background:var(--ink); z-index:2;}
+#ch7 .eyes7 {left:50%; top:50%; width:min(86vw,1200px); aspect-ratio:3/1; translate:-50% -50%; z-index:3; overflow:hidden; border:4px solid #fff;}
+#ch7 .eyes7 .img {inset:0; background:url(https://static.tildacdn.com/tild3030-6135-4332-b231-633530663932/p1-eyes.webp) center/cover; transform-origin:50% 50%;}
+#ch7 .eyes7 .lid {position:absolute; left:0; right:0; height:50%; background:var(--ink);}
+#ch7 .eyes7 .lid.t {top:0;}
+#ch7 .eyes7 .lid.b {bottom:0;}
+#ch7 .lift {inset:0; z-index:4; display:grid; place-items:center;}
+#ch7 .burst {position:absolute; left:50%; top:52%; width:120vmax; height:120vmax; translate:-50% -50%;}
+#ch7 .riser {position:absolute; left:50%; bottom:-4vh; height:92vh; aspect-ratio:800/1066; translate:-50% 0; background:url(https://static.tildacdn.com/tild3236-3663-4663-b936-663062363661/hero-profile-cut.webp) center bottom/contain no-repeat;}
+#ch7 .shard {position:absolute; width:14px; height:22px; background:var(--ink); clip-path:polygon(50% 0, 100% 40%, 70% 100%, 0 70%);}
+#ch7 .redbg {inset:0; background:#b0141a; z-index:5;}
+#ch7 .crumble {left:50%; top:50%; width:min(80vw,1100px); aspect-ratio:1448/1086; translate:-50% -50%; z-index:6;}
+#ch7 .crumble i {position:absolute; background-image:url(https://static.tildacdn.com/tild6434-3237-4661-a261-343865303165/p2-shop.webp); background-size:var(--W) var(--H); border:1px solid rgba(0,0,0,.25);}
+#ch7 .redtitle {inset:0; z-index:7; display:grid; place-content:center; text-align:center; color:#fff;}
+#ch7 .redtitle h1 {font:400 clamp(70px,13vw,220px)/.82 'Instrument Serif', serif; text-transform:uppercase;}
+#ch7 .redtitle h1 small {display:block; font-size:.16em; letter-spacing:.4em; margin-bottom:.4em;}
+#ch7 .redtitle h1 i {font-style:normal; color:var(--ink);}
+#ch7 .redtitle p {margin-top:26px; font:400 clamp(30px,3.8vw,60px)/1 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.04em;}
+#ch7 .pano {left:4vw; top:12vh; width:92vw; height:76vh; z-index:8;}
+#ch7 .pano .img {inset:0; background:url(https://static.tildacdn.com/tild3539-3939-4531-b761-373664383262/ch7-panorama.webp) center/cover;}
+#ch7 .poster {inset:0; z-index:9; background:#b0141a; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:80px 5vw 40px;}
+#ch7 .poster .big {font:400 clamp(28px,min(10vw,13vh),170px)/.84 'Instrument Serif', serif; text-transform:uppercase;}
+#ch7 .poster .big span {display:block;}
+#ch7 .poster .rule {width:min(900px,90%); display:flex; align-items:center; gap:16px; margin:26px 0 22px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em;}
+#ch7 .poster .rule::before, #ch7 .poster .rule::after {content:''; flex:1; height:2px; background:#fff;}
+#ch7 .cols {display:grid; grid-template-columns:repeat(3,1fr); gap:28px; width:min(980px,100%); text-align:left;}
+@media (max-width:760px) {#ch7 .cols { grid-template-columns:1fr; }}
+#ch7 .cols h4 {font:700 15px/1.2 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;}
+#ch7 .cols p {font:500 14px/1.5 'Archivo Narrow', sans-serif; text-transform:uppercase; opacity:.9;}
+#ch7 .acts {display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; justify-content:center; pointer-events:auto;}
+#ch7 .acts a {padding:15px 24px; border:2.5px solid #fff; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.1em; box-shadow:5px 5px 0 var(--ink); transition:.2s;}
+#ch7 .acts a.main {background:#fff; color:#b0141a;}
+#ch7 .acts a:hover {transform:translate(3px,3px); box-shadow:2px 2px 0 var(--ink);}
+#ch7 .dirs7 {display:flex; gap:8px; margin-top:22px; flex-wrap:wrap; justify-content:center; pointer-events:auto;}
+#ch7 .dirs7 a {padding:7px 11px; border:1.5px solid rgba(255,255,255,.7); color:#fff; text-decoration:none; font:700 12px/1 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.06em;}
+#ch7 .dirs7 a:hover {background:#fff; color:#b0141a;}
+#ch7 .cap.light {z-index:10;}
+@media (max-height:560px), (max-width:420px) {#ch7 .poster { padding:60px 4vw 20px; justify-content:center; }#ch7 .poster .rule { margin:12px 0 10px; }#ch7 .cols { gap:10px; }#ch7 .cols p { display:none; }#ch7 .cols h4 { margin:0; font-size:12px; }#ch7 .acts { margin-top:14px; }#ch7 .acts a { padding:10px 14px; font-size:12px; }#ch7 .dirs7 { margin-top:10px; }#ch7 .dirs7 a { font-size:10px; padding:5px 8px; }}
+</style>
+<style>
+#allrecords, .t-records, .t-rec, .t123, .t123__wrapper { overflow:visible !important; }
+.t-rec { padding:0 !important; } body { background:#efede8; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>window.__W3 = {"2": "https://static.tildacdn.com/tild3330-6666-4666-b633-653037336262/w2.webp", "3": "https://static.tildacdn.com/tild6637-3939-4933-b666-383538303062/w3.webp", "4": "https://static.tildacdn.com/tild6638-3963-4961-b836-353538663435/w4.webp", "5": "https://static.tildacdn.com/tild6163-3463-4461-a333-336664386534/w5.webp", "6": "https://static.tildacdn.com/tild3563-6663-4535-b237-323937326232/w6.webp"};
+gsap.registerPlugin(ScrollTrigger);
+const lenis = window.lenis = new Lenis({ lerp:.085 });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+</script>
+<div class="paper"></div>
+<header class="hdr">
+<div></div>
+<div class="pill"><span class="on">МЕНЮ</span></div>
+</header><div class="logo logo-solo">A3<small>agency</small></div>
+<div id="ch1" class="chapter">
+<svg width="0" height="0" style="position:absolute"><filter id="boil_1"><feTurbulence id="boilT_1" type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter></svg>
+<section class="scene">
+<div class="stage">
+<div class="panel p1">
+<canvas class="abs sky" id="sky_1"></canvas>
+<div class="abs img bg"></div>
+<div class="abs walker"><div class="abs hero"></div></div>
+</div>
+<div class="panel eyes"><div class="abs img"></div></div>
+<div class="abs prof">
+<div class="panel strip"><canvas class="abs clouds2" id="sky2_1"></canvas></div>
+<svg class="abs ticks" id="ticks_1"></svg>
+<div class="abs profile"></div>
+</div>
+<div class="sunout" id="sunout_1"><img src="https://static.tildacdn.com/tild3131-6265-4635-a438-333166623839/sun-cut.webp" alt=""></div>
+<div class="panel p2">
+<div class="abs sky"></div>
+<div class="abs shop mul"></div>
+<div class="tw"><i class="tw-sh"></i><b class="tw-hop"><img src="https://static.tildacdn.com/tild3162-3538-4532-b137-636137376535/tumbleweed-cut.webp" alt=""></b></div>
+</div>
+<div class="panel hand"><div class="abs img"></div></div>
+<p class="cap c1 tl" style="left:9vw;top:60vh">На <b>бескрайнем</b> рынке, где каждый кричит о себе, идёт человек. В руках у него <b>дело</b>, которому он отдал годы.</p>
+<p class="cap c2 tr" style="left:8vw;top:30vh;max-width:400px">Он знает, что делает <b>хорошо</b>. Его клиенты возвращаются и советуют друзьям.</p>
+<p class="cap c2b tl" style="right:8vw;top:64vh;max-width:400px">Но новых клиентов не прибавляется. Вокруг только ветер и пустая <b>равнина</b>.</p>
+<p class="cap c3 tl" style="left:14vw;top:18vh">Он открывает двери, включает <b>свет</b> и готов принять первого клиента.</p>
+<p class="cap c4 tl" style="left:14vw;top:70vh">Проходит час, потом день. Мимо катится только перекати поле. Клиентов <b>нет</b>.</p>
+<p class="cap c5 tr" style="right:5vw;top:40vh;max-width:460px">Каждый день без клиентов <b>стоит денег</b>. Аренда, зарплаты, реклама, которая не работает. А конкуренты делают то же самое хуже, но их находят первыми.</p>
+<div class="abs title">
+<canvas class="abs clouds" id="titleSky_1"></canvas>
+<h1><small>Глава I</small><span class="sdf">A3 <i>A</i>gency</span></h1>
+<div class="intro">
+<div class="hook" id="hook_1">Почему хороший бизнес никто не <b>видит</b>?</div>
+<p class="lede">История одного предпринимателя, который сделал отличное дело, но остался незаметным. И о том, как его нашли, выбрали и запомнили.</p>
+<button class="start" id="startStory_1">История ↓</button>
+</div>
+<div class="corner l">МАРКЕТИНГОВОЕ АГЕНТСТВО<br>ПОЛНОГО ЦИКЛА</div>
+<div class="corner r"><a href="https://a3-agency.ru/a3-studio" target="_blank" rel="noopener">Сайты</a> · <a href="#" target="_blank" rel="noopener">SEO</a> · <a href="#" target="_blank" rel="noopener">Реклама</a><br><a href="#" target="_blank" rel="noopener">Соцсети</a> · <a href="#" target="_blank" rel="noopener">Маркетплейсы</a> · <a href="#" target="_blank" rel="noopener">ИИ боты</a></div>
+<ol class="toc"><li><b>I</b>Тишина</li><li><b>II</b>Маяк</li><li><b>III</b>Дороги</li><li><b>IV</b>Голоса</li><li><b>V</b>Рынок</li><li><b>VI</b>Страж</li><li><b>VII</b>Ответ</li></ol>
+</div>
+<div class="abs ink"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none" id="inkSvg_1"></svg></div>
+<div class="abs final">
+<h2><span>Вас</span> <span>никто</span><br><span>не</span> <span>видит</span></h2>
+<div class="bar"></div>
+</div>
+<div class="abs nextT" style="display:none">
+<h1><small>Глава II</small><i>М</i>аяк</h1>
+<div class="lead">Создание сайтов</div>
+<div class="brand">A3 STUDIO</div>
+<div><a class="go" href="https://a3-agency.ru/a3-studio" target="_blank" rel="noopener">Смотреть проект <i>↗</i></a></div>
+</div>
+</div>
+</section>
+</div>
+<script>// ---- chapter 1: scene1.html
+(() => {
+const root = window.document.getElementById('ch1');
+const document_ = window.document;
+const document = {
+querySelector: s => root.querySelector(s), querySelectorAll: s => root.querySelectorAll(s),
+getElementById: id => root.querySelector('#' + id), createElement: t => document_.createElement(t),
+createDocumentFragment: () => document_.createDocumentFragment(), documentElement: document_.documentElement
+};
+gsap.context(() => {
+if (1 > 1) {
+const st = root.querySelector('.stage'); gsap.set(st, { autoAlpha:0 });
+ScrollTrigger.create({ trigger:root, start:'top top', end:'bottom bottom',
+onEnter:() => gsap.set(st, { autoAlpha:1 }), onLeaveBack:() => gsap.set(st, { autoAlpha:0 }) });
+}
+(() => {
+let d = 'M0,1000 L0,140 ';
+for (let x = 0; x <= 1000; x += 6) {
+const y = 60 + Math.random() * 160 + Math.sin(x / 37) * 30;
+d += `L${x},${y} L${x + 3},${y + 40 + Math.random() * 90} `;
+}
+d += 'L1000,1000 Z';
+let strokes = '';
+for (let i = 0; i < 160; i++) {
+const x = Math.random() * 1000, y = Math.random() * 220, h = 30 + Math.random() * 120;
+strokes += `<rect x="${x}" y="${y - h}" width="${1 + Math.random() * 3}" height="${h}" />`;
+}
+inkSvg_1.innerHTML = `<g fill="#0d0d0d"><path d="${d}"/>${strokes}</g>`;
+})();
+gsap.set(['.p1','.eyes','.p2','.hand'], { autoAlpha:0 });
+gsap.set('.final h2 span', { yPercent:110, autoAlpha:0 });
+gsap.set('.final p', { autoAlpha:0 });
+document.querySelectorAll('.cap').forEach(c => {
+const walk = n => [...n.childNodes].forEach(ch => {
+if (ch.nodeType === 3) { const f = document.createDocumentFragment();
+ch.textContent.split(/(\s+)/).forEach(t => { if (!t) return; if (/^\s+$/.test(t)) f.append(t); else { const sp = document.createElement('span'); sp.className = 'w'; sp.textContent = t; f.append(sp); } });
+ch.replaceWith(f);
+} else walk(ch);
+});
+walk(c);
+});
+function typeIn(sel) {
+const el = document.querySelector(sel), words = [...el.querySelectorAll('.w')], st = { p:0 };
+return gsap.timeline()
+.set(el, { autoAlpha:1 })
+.fromTo(el, { clipPath:'inset(0 100% 0 0)' }, { clipPath:'inset(0 0% 0 0)', duration:.12, ease:'power2.out' })
+.fromTo(st, { p:0 }, { p:1, duration:.4, ease:'none', onUpdate:() => {
+const k = Math.round(st.p * words.length); words.forEach((w,i) => w.classList.toggle('on', i < k)); } });
+}
+function inkFrames() {
+const S = [];
+document.querySelectorAll('.panel, .cap').forEach(pn => {
+pn.querySelector('.ink-frame')?.remove();
+const isCap = pn.classList.contains('cap');
+const inset = isCap || pn.classList.contains('eyes') || pn.classList.contains('hand') || pn.classList.contains('hands');
+pn.insertAdjacentHTML('beforeend', `<svg class="ink-frame"><path pathLength="1"/><path pathLength="1"/><path pathLength="1"/><path pathLength="1"/></svg>`);
+const svg = pn.querySelector('.ink-frame'), paths = [...svg.querySelectorAll('path')];
+paths.forEach(p => { p.setAttribute('stroke-width', inset ? 4 : 2.4); p.style.strokeDasharray = 1; p.style.strokeDashoffset = 1; });
+S.push({ pn, svg, paths, inset, seed: Math.random()*100, shown:false });
+});
+const line = (x1,y1,x2,y2,j) => { const L = Math.hypot(x2-x1,y2-y1), n = Math.max(2, Math.round(L/50)); let d = '';
+for (let i=0;i<=n;i++){ const t=i/n, x=x1+(x2-x1)*t+(Math.random()-.5)*j, y=y1+(y2-y1)*t+(Math.random()-.5)*j; d += (i?'L':'M')+x.toFixed(1)+','+y.toFixed(1); } return d; };
+let last = 0, mx = 0, my = 0;
+addEventListener('pointermove', e => { mx = e.clientX/innerWidth-.5; my = e.clientY/innerHeight-.5; });
+gsap.ticker.add(time => {
+S.forEach(f => {
+const vis = getComputedStyle(f.pn).visibility !== 'hidden' && +getComputedStyle(f.pn).opacity > 0;
+if (vis && !f.shown) { f.shown = true; f.paths.forEach((p,i) => gsap.fromTo(p, { strokeDashoffset:1 }, { strokeDashoffset:0, duration:.7, delay:i*.12, ease:'power2.inOut' })); }
+if (!vis && f.shown) { f.shown = false; f.paths.forEach(p => p.style.strokeDashoffset = 1); }
+const k = f.inset ? 6 : 3.5, s = f.seed;
+f.pn.style.rotate = `y ${(mx*k + Math.sin(time*.5+s)*.8).toFixed(2)}deg`;
+f.pn.style.translate = `${(Math.sin(time*.4+s)*3).toFixed(1)}px ${(Math.cos(time*.35+s)*2 + my*-6).toFixed(1)}px`;
+});
+if (time - last < 1/8) return; last = time;
+S.forEach(f => {
+if (!f.shown) return;
+const w = f.pn.clientWidth, h = f.pn.clientHeight, s = f.seed, j = f.inset ? .9 : 1.4, e = f.inset ? 2 : 1.2;
+f.svg.setAttribute('viewBox', `0 0 ${w} ${h}`); f.svg.setAttribute('preserveAspectRatio','none');
+const o = i => f.inset ? 0 : -(3 + 5*Math.sin(time*.7 + s + i*1.7));   // ends stop short of the corners and drift
+const tp = f.pn.dataset.trap ? w*+f.pn.dataset.trap : 0;   // trapezoid: top edge pulled in
+f.paths[0].setAttribute('d', line(tp-o(0), e, w-tp+o(1), e+Math.sin(time+s)*1.2, j));
+f.paths[1].setAttribute('d', line(w-tp-e, -o(2), w-e+Math.sin(time*.8+s)*1.2, h+o(3), j));
+f.paths[2].setAttribute('d', line(w+o(4), h-e, -o(5), h-e+Math.cos(time+s)*1.2, j));
+f.paths[3].setAttribute('d', line(e, h+o(6), tp+e+Math.cos(time*.9+s)*1.2, -o(7), j));
+});
+});
+}
+inkFrames();
+function splitL(el) {
+(function walk(n) {
+[...n.childNodes].forEach(c => {
+if (c.nodeType === 3) {
+const f = window.document.createDocumentFragment();
+[...c.textContent].forEach(ch => {
+if (ch === ' ' || ch === '\n') { f.append(ch); return; }
+const l = window.document.createElement('span'); l.className = 'l'; l.textContent = ch; f.append(l);
+});
+c.replaceWith(f);
+} else walk(c);
+});
+})(el);
+}
+function inkText(h1, { show = 1 } = {}) {
+const state = { show };
+const parts = [], nodes = [];
+[...h1.childNodes].forEach(n => {
+if (n.nodeType === 1 && n.tagName === 'SMALL') return;
+const txt = n.textContent; if (!txt.trim() && n.nodeType === 3) return;
+parts.push([txt, n.nodeType === 1 ? getComputedStyle(n).color : '#f2f0ea']); nodes.push(n);
+});
+if (!parts.length) return { state };
+const build = async () => {
+try { await window.document.fonts.load("400 100px 'Instrument Serif'"); } catch (e) {}
+if (getComputedStyle(h1).position === 'static') h1.style.position = 'relative';
+const first = nodes[0], last = nodes[nodes.length - 1];
+const wordsW = (last.offsetLeft + last.offsetWidth) - first.offsetLeft;
+if (!wordsW || !h1.offsetWidth) return requestAnimationFrame(build);
+const rr = { width:wordsW };
+const fontPx = parseFloat(getComputedStyle(h1).fontSize), pad = fontPx*.35, K = Math.min(devicePixelRatio, 2);
+const W = Math.ceil(rr.width + pad*2), H = Math.ceil(fontPx*1.2 + pad*2);
+const col = window.document.createElement('canvas'); col.width = W*K; col.height = H*K;
+const cx = col.getContext('2d'); cx.scale(K, K); cx.font = `400 ${fontPx}px 'Instrument Serif'`;
+const text = (t) => t.toUpperCase();
+const total = parts.reduce((s, [t]) => s + cx.measureText(text(t)).width, 0);
+let x = (W - total)/2; const base = pad + fontPx*.92;
+parts.forEach(([t, c]) => { cx.fillStyle = c; cx.fillText(text(t), x, base); x += cx.measureText(text(t)).width; });
+const S = 2, gw = Math.ceil(W*K/S), gh = Math.ceil(H*K/S);
+const sm = window.document.createElement('canvas'); sm.width = gw; sm.height = gh;
+const sx = sm.getContext('2d'); sx.drawImage(col, 0, 0, gw, gh);
+const a = sx.getImageData(0, 0, gw, gh).data, INF = 1e20;
+const edt = (inside) => {
+const g = new Float64Array(gw*gh);
+for (let i = 0; i < gw*gh; i++) g[i] = ((a[i*4+3] > 127) === inside) ? 0 : INF;
+const L = Math.max(gw, gh), f = new Float64Array(L), d = new Float64Array(L), v = new Int32Array(L), z = new Float64Array(L + 1);
+const pass = (n) => { let k = 0; v[0] = 0; z[0] = -INF; z[1] = INF;
+for (let q = 1; q < n; q++) { let s; do { const p = v[k]; s = ((f[q] + q*q) - (f[p] + p*p)) / (2*q - 2*p); } while (s <= z[k] && --k >= 0); k++; v[k] = q; z[k] = s; z[k+1] = INF; }
+k = 0; for (let q = 0; q < n; q++) { while (z[k+1] < q) k++; const p = v[k]; d[q] = (q-p)*(q-p) + f[p]; } };
+for (let xx = 0; xx < gw; xx++) { for (let y = 0; y < gh; y++) f[y] = g[y*gw + xx]; pass(gh); for (let y = 0; y < gh; y++) g[y*gw + xx] = d[y]; }
+for (let y = 0; y < gh; y++) { for (let xx = 0; xx < gw; xx++) f[xx] = g[y*gw + xx]; pass(gw); for (let xx = 0; xx < gw; xx++) g[y*gw + xx] = d[xx]; }
+return g;
+};
+const outD = edt(false), inD = edt(true), R = 24, sdf = new Uint8Array(gw*gh*4);
+for (let i = 0; i < gw*gh; i++) { const sd = Math.sqrt(outD[i]) - Math.sqrt(inD[i]); const vv = Math.max(0, Math.min(255, 128 + sd/R*127)); sdf[i*4] = sdf[i*4+1] = sdf[i*4+2] = vv; sdf[i*4+3] = 255; }
+let cv = window.document.createElement('canvas'); cv.width = W*K; cv.height = H*K;
+Object.assign(cv.style, { position:'absolute', left:(first.offsetLeft + wordsW/2) + 'px', top:(first.offsetTop + first.offsetHeight/2) + 'px',
+width:W + 'px', height:H + 'px', transform:'translate(-50%,-50%)', pointerEvents:'none' });
+h1.append(cv);
+const VS = 'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
+const FS = `#extension GL_OES_standard_derivatives : enable
+precision highp float;varying vec2 v;uniform sampler2D sd,co;uniform float t;uniform vec2 res;
+float h(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 q){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*n(q);q*=2.1;a*=.5;}return s;}
+void main(){
+vec2 q=v*res/38.; float fb=floor(t*8.);
+vec2 warp=vec2(fbm(q*.35+vec2(t*.09,0.)), fbm(q*.35+vec2(5.2,-t*.08)))-.5;
+vec2 vv=v+warp*vec2(.010,.035)+(vec2(h(vec2(fb,1.)),h(vec2(fb,7.)))-.5)*.0016;
+float d=(texture2D(sd,vv).r-.5)*2.;
+float grain=fbm(q*2.2+vec2(t*.5,-t*.35)+fb*.37);
+float e=d+.06+(grain-.5)*.24+sin(t*1.3+q.x*.25)*.035;
+float aa=fwidth(e)*1.2+.002;
+vec3 c=texture2D(co,vv).rgb; if(c.r+c.g+c.b<.1) c=vec3(.95,.94,.92);
+gl_FragColor=vec4(c,smoothstep(-aa,aa,e));
+}`;
+let gl = null, prog = null, uT = null, t0 = performance.now(), offFor = 0;
+const setup = () => {
+gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) return false;
+gl.getExtension('OES_standard_derivatives');
+const sh = (ty, src) => { const o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog); gl.useProgram(prog);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+const tex = (unit, w, h, data, img) => { const tx = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tx);
+if (img) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); };
+tex(0, gw, gh, sdf); tex(1, 0, 0, null, col);
+gl.uniform1i(gl.getUniformLocation(prog, 'sd'), 0); gl.uniform1i(gl.getUniformLocation(prog, 'co'), 1); gl.uniform2f(gl.getUniformLocation(prog, 'res'), W, H);
+gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+uT = gl.getUniformLocation(prog, 't'); return true;
+};
+const release = () => { const ext = gl && gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); gl = null;
+const c2 = cv.cloneNode(); c2.style.cssText = cv.style.cssText; cv.replaceWith(c2); cv = c2; };
+(function frame() {
+cv.style.opacity = state.show;
+nodes.forEach(nd => { if (nd.nodeType === 1) nd.style.opacity = 1 - state.show; });
+const r = cv.getBoundingClientRect();
+const onScreen = state.show > 0 && r.bottom > 0 && r.top < innerHeight && getComputedStyle(cv).visibility !== 'hidden' && cv.offsetParent !== null;
+if (onScreen) {
+offFor = 0;
+if (gl || setup()) {
+gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+gl.uniform1f(uT, (performance.now() - t0)/1000); gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+} else if (gl && ++offFor > 30) release();
+requestAnimationFrame(frame);
+})();
+};
+nodes.forEach((nd, i) => { if (nd.nodeType === 3) { const sp = window.document.createElement('span'); sp.textContent = nd.textContent; nd.replaceWith(sp); nodes[i] = sp; } });
+build();
+return { state };
+}
+splitL(document.querySelector('.final h2')); splitL(document.querySelector('.nextT h1'));
+const ntInk = inkText(document.querySelector('.nextT h1'), { show:0 });
+const nextP = document.querySelectorAll('.nextT .lead, .nextT .brand, .nextT .go');
+gsap.set(['.prof', '.strip'], { autoAlpha:0 });
+gsap.set('.nextT .l', { autoAlpha:0 });
+gsap.set(nextP, { autoAlpha:0 });
+(() => {
+const svg = document.querySelector('.ticks'); let h = '';
+for (let i = 0; i < 26; i++) {
+const a = Math.random()*Math.PI*2, r = 22 + Math.random()*26, x = 50 + Math.cos(a)*r*.75, y = 45 + Math.sin(a)*r, L = 1 + Math.random()*2.5;
+h += `<line x1="${x}%" y1="${y}%" x2="${x + Math.cos(a)*L}%" y2="${y + Math.sin(a)*L*1.3}%" style="opacity:${.5 + Math.random()*.5}"/>`;
+}
+svg.innerHTML = h;
+svg.querySelectorAll('line').forEach(l => gsap.to(l, { x:gsap.utils.random(-8,8), y:gsap.utils.random(-6,6), duration:gsap.utils.random(1.5,3), repeat:-1, yoyo:true, ease:'sine.inOut' }));
+})();
+const inkTitle = { p:0 };
+(async () => {
+const span = document.querySelector('.title .sdf');
+try { await window.document.fonts.load("400 100px 'Instrument Serif'"); } catch (e) {}
+const cs = getComputedStyle(span), fontPx = parseFloat(cs.fontSize);
+const r = span.getBoundingClientRect(), pad = fontPx*.35;
+const W = Math.ceil(r.width + pad*2), H = Math.ceil(fontPx*1.25 + pad*2), K = Math.min(devicePixelRatio, 2);
+const mk = () => { const c = window.document.createElement('canvas'); c.width = W*K; c.height = H*K; return c; };
+const col = mk(), cx = col.getContext('2d');
+cx.scale(K, K); cx.font = `400 ${fontPx}px 'Instrument Serif'`; cx.textBaseline = 'alphabetic';
+const base = pad + fontPx*.95;
+const parts = [['A3 ', '#f2f0ea'], ['A', '#c4161c'], ['GENCY', '#f2f0ea']];
+const total = parts.reduce((s, [t]) => s + cx.measureText(t).width, 0);
+let x = (W - total)/2;
+parts.forEach(([t, c]) => { cx.fillStyle = c; cx.fillText(t, x, base); x += cx.measureText(t).width; });
+const S = 2, gw = Math.ceil(W*K/S), gh = Math.ceil(H*K/S);
+const small = window.document.createElement('canvas'); small.width = gw; small.height = gh;
+const sx = small.getContext('2d'); sx.drawImage(col, 0, 0, gw, gh);
+const a = sx.getImageData(0, 0, gw, gh).data, INF = 1e20;
+const edt = (inside) => {
+const g = new Float64Array(gw*gh);
+for (let i = 0; i < gw*gh; i++) g[i] = ((a[i*4+3] > 127) === inside) ? 0 : INF;
+const f = new Float64Array(Math.max(gw, gh)), d = new Float64Array(f.length), v = new Int32Array(f.length), z = new Float64Array(f.length + 1);
+const pass = (n) => { let k = 0; v[0] = 0; z[0] = -INF; z[1] = INF;
+for (let q = 1; q < n; q++) { let s; do { const p = v[k]; s = ((f[q] + q*q) - (f[p] + p*p)) / (2*q - 2*p); } while (s <= z[k] && --k >= 0); k++; v[k] = q; z[k] = s; z[k+1] = INF; }
+k = 0; for (let q = 0; q < n; q++) { while (z[k+1] < q) k++; const p = v[k]; d[q] = (q-p)*(q-p) + f[p]; } };
+for (let xx = 0; xx < gw; xx++) { for (let y = 0; y < gh; y++) f[y] = g[y*gw + xx]; pass(gh); for (let y = 0; y < gh; y++) g[y*gw + xx] = d[y]; }
+for (let y = 0; y < gh; y++) { for (let xx = 0; xx < gw; xx++) f[xx] = g[y*gw + xx]; pass(gw); for (let xx = 0; xx < gw; xx++) g[y*gw + xx] = d[xx]; }
+return g;
+};
+const outD = edt(false), inD = edt(true), R = 24;              // distances in grid px, clamp at R
+const sdf = new Uint8Array(gw*gh*4);
+for (let i = 0; i < gw*gh; i++) { const sd = Math.sqrt(outD[i]) - Math.sqrt(inD[i]); const vv = Math.max(0, Math.min(255, 128 + sd/R*127)); sdf[i*4] = sdf[i*4+1] = sdf[i*4+2] = vv; sdf[i*4+3] = 255; }
+const cv = window.document.createElement('canvas'); cv.width = W*K; cv.height = H*K;
+Object.assign(cv.style, { position:'absolute', left:'50%', top:'50%', width:W + 'px', height:H + 'px', transform:'translate(-50%,-50%)', pointerEvents:'none' });
+span.append(cv); span.style.color = 'transparent';
+const gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) { span.style.color = ''; return; }
+const vs = 'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
+const fs = `precision highp float;varying vec2 v;uniform sampler2D sd,co;uniform float t,p;uniform vec2 res;
+float h(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 q){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*n(q);q*=2.1;a*=.5;}return s;}
+void main(){
+vec2 q=v*res/38.;
+float fb=floor(t*8.);                                         // hand-drawn boil steps
+vec2 warp=vec2(fbm(q*.35+vec2(t*.09,0.)), fbm(q*.35+vec2(5.2,-t*.08)))-.5;
+vec2 jit=(vec2(h(vec2(fb,1.)),h(vec2(fb,7.)))-.5)*.0016;
+vec2 vv=v+warp*vec2(.010,.035)+jit;
+float d=(texture2D(sd,vv).r-.5)*2.;                          // -1 outside .. +1 inside (in R units)
+float big=fbm(q*.6+vec2(0.,t*.05));                        // where ink arrives first
+float grain=fbm(q*2.2+vec2(t*.5,-t*.35)+fb*.37);              // ragged edge, boils and flows
+float front=mix(1.2,-.06,p) + (big-.5)*1.1*(1.-p*.85);       // reveal front sweeps through the field
+float breath=sin(t*1.3+q.x*.25)*.035;
+float e=d - front + (grain-.5)*.24 + breath;
+float aa=fwidth(e)*1.2+.002;
+float alpha=smoothstep(-aa,aa,e);
+float speck=step(.86,h(floor(v*res/3.)+floor(t*6.)))*smoothstep(.25,.0,abs(e+.08))*(1.-p)*step(.02,p);
+vec3 c=texture2D(co,vv).rgb; if(c.r+c.g+c.b<.1) c=vec3(.95,.94,.92);
+gl_FragColor=vec4(c,max(alpha,speck));
+}`;
+gl.getExtension('OES_standard_derivatives');
+const sh = (ty, src) => { const o = gl.createShader(ty); gl.shaderSource(o, ty === gl.FRAGMENT_SHADER ? '#extension GL_OES_standard_derivatives : enable\n' + src : src); gl.compileShader(o); return o; };
+const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr); gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+const tex = (unit, w, h, data, img) => { const tx = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tx);
+if (img) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); };
+tex(0, gw, gh, sdf); tex(1, 0, 0, null, col);
+gl.uniform1i(gl.getUniformLocation(pr, 'sd'), 0); gl.uniform1i(gl.getUniformLocation(pr, 'co'), 1);
+gl.uniform2f(gl.getUniformLocation(pr, 'res'), W, H);
+gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+const uT = gl.getUniformLocation(pr, 't'), uP = gl.getUniformLocation(pr, 'p'), t0 = performance.now();
+const intro = { p:0 }; gsap.to(intro, { p:1, duration:2.6, ease:'power2.out', delay:.3 });
+(function frame() {
+gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+gl.uniform1f(uT, (performance.now() - t0)/1000); gl.uniform1f(uP, Math.min(intro.p, 1 - inkTitle.p));
+gl.drawArrays(gl.TRIANGLES, 0, 3); requestAnimationFrame(frame);
+})();
+})();
+{
+const hooks = { 2:'Зачем вам <b>реклама</b>, если продукт и так хорош?', 3:'Как сделать, чтобы вас <b>нашли</b>, выбрали и вернулись', 4:'История о том, куда уходят ваши <b>клиенты</b>' };
+const hv = new URLSearchParams(location.search).get('h'); if (hooks[hv]) document.querySelector('.title .hook').innerHTML = hooks[hv];
+gsap.fromTo('.title .intro > *', { y:20, autoAlpha:0 }, { y:0, autoAlpha:1, stagger:.25, duration:.9, delay:1.6, ease:'power3.out' });
+}
+document.getElementById('startStory_1').onclick = () => {
+const snd = window.document.querySelector('.hdr .pill .snd'); if (snd && !snd.classList.contains('on')) snd.click();
+const sc = document.querySelector('.scene'); window.lenis.scrollTo(sc.offsetTop + (sc.offsetHeight - innerHeight)*.16, { duration:2.4 });
+};
+const tl = gsap.timeline({ defaults:{ ease:'none' },
+scrollTrigger:{ trigger:'.scene', start:'top top', end:'bottom bottom', scrub:.4 } });
+tl.to('.hint', { autoAlpha:0, duration:.2 }, 0)
+.to('.title .clouds', { scale:1.15, transformOrigin:'50% 100%', duration:1 }, 0)
+.to('.title h1', { yPercent:-40, duration:.8 }, .25)
+.to(inkTitle, { p:1, duration:.6 }, .25)
+.to('.title h1 small', { autoAlpha:0, duration:.5 }, .1)
+.to('.title .intro', { yPercent:-40, autoAlpha:0, duration:.3 }, 0)
+.to(['.title .corner','.title .toc'], { autoAlpha:0, duration:.4 }, 0)
+.set('.p1', { autoAlpha:1 }, .6)
+.fromTo('.p1', { z:-500, rotateX:18, y:120 }, { z:0, rotateX:0, y:0, duration:1.4, ease:'power2.out' }, .6)
+.to('.title', { yPercent:-100, duration:1, ease:'power2.inOut' }, .5)
+.set('.title', { autoAlpha:0 }, 1.6)
+.fromTo('.p1 .bg', { scale:1.2 }, { scale:1, duration:3 }, .6)
+.fromTo('.p1 .walker', { scale:1.1, transformOrigin:'50% 96%' }, { scale:.62, duration:3 }, 1.2)
+.add(typeIn('.c1'), 1.6)
+.set('.eyes', { autoAlpha:1 }, 2.2)
+.fromTo('.eyes', { xPercent:-120, rotate:-3 }, { xPercent:0, rotate:-1.5, duration:.6, ease:'power3.out' }, 2.2)
+.fromTo('.eyes .img', { scale:1.3 }, { scale:1, duration:1.4 }, 2.2)
+.to('.c1', { autoAlpha:0, duration:.2 }, 3.0)
+.to('.eyes', { xPercent:-130, duration:.5, ease:'power2.in' }, 3.0)
+.to('.p1', { y:'-110vh', rotateX:-25, duration:1, ease:'power2.in' }, 3.2)
+.set(['.prof', '.strip'], { autoAlpha:1 }, 3.5)
+.fromTo('.strip', { yPercent:40, scaleY:.6 }, { yPercent:0, scaleY:1, duration:.8, ease:'power3.out' }, 3.5)
+.fromTo('.profile', { xPercent:30, autoAlpha:0 }, { xPercent:0, autoAlpha:1, duration:.9, ease:'power3.out' }, 3.6)
+.fromTo('.ticks', { autoAlpha:0, scale:1.3 }, { autoAlpha:1, scale:1, duration:.8 }, 3.7)
+.add(typeIn('.c2'), 3.9)
+.add(typeIn('.c2b'), 4.5)
+.to(['.c2', '.c2b'], { autoAlpha:0, duration:.2 }, 5.3)
+.to('.profile', { xPercent:-40, autoAlpha:0, duration:.6, ease:'power2.in' }, 5.3)
+.to(['.strip', '.ticks'], { y:'-100vh', duration:.7, ease:'power2.in' }, 5.35)
+.set('.prof', { autoAlpha:0 }, 6.05)
+.set('.p2', { autoAlpha:1 }, 5.6)
+.fromTo('.p2', { rotateX:62, y:'40vh', z:-300 }, { rotateX:0, y:0, z:0, duration:1.4, ease:'power3.out' }, 5.6)
+.fromTo('.p2 .shop', { scale:1.25 }, { scale:1.02, duration:3 }, 5.6)
+.add(typeIn('.c3'), 6.4)
+.set('.hand', { autoAlpha:1 }, 6.8)
+.fromTo('.hand', { yPercent:130, rotate:4 }, { yPercent:0, rotate:2, duration:.6, ease:'power3.out' }, 6.8)
+.fromTo('.hand .img', { x:40 }, { x:0, duration:1.2 }, 6.8)
+.add(typeIn('.c4'), 7.5)
+.to('.c3', { autoAlpha:0, duration:.2 }, 7.85)
+.add(typeIn('.c5'), 8.0)
+.to('.p2', { z:260, duration:1.2, ease:'power1.in' }, 8.6)
+.to(['.c3', '.c4', '.c5', '.hand'], { autoAlpha:0, duration:.3 }, 8.6)
+.to('.ink', { y:'-80vh', duration:1, ease:'power2.inOut' }, 8.8)
+.set(['.p2', '.hand'], { autoAlpha:0 }, 9.8)
+.to('.final h2 span:not(.l)', { yPercent:0, autoAlpha:1, stagger:.08, duration:.4, ease:'power3.out' }, 9.5)
+.to('.final .bar', { width:120, duration:.4 }, 9.9)
+.to('.final h2 .l', { x:() => gsap.utils.random(-260,260), y:() => gsap.utils.random(-200,260), rotation:() => gsap.utils.random(-90,90), scale:() => gsap.utils.random(.3,.9), autoAlpha:0, duration:.7, stagger:{ each:.015, from:'random' }, ease:'power2.in' }, 10.5)
+.to('.final .bar', { scaleX:0, duration:.3 }, 10.5)
+.to(nextP, { autoAlpha:1, duration:.3 }, 11.3)
+.to(ntInk.state, { show:1, duration:.4 }, 11.4)
+.to({}, { duration:.15 });
+(() => {
+const p2el = document.querySelector('.p2'), shopEl = document.querySelector('.p2 .shop'), sunout = document.querySelector('.sunout'), sunImg = sunout.querySelector('img');
+gsap.ticker.add(() => {
+const cs = getComputedStyle(p2el);
+if (cs.visibility === 'hidden') { sunout.style.visibility = 'hidden'; return; }
+sunout.style.visibility = 'visible';
+const w = p2el.offsetWidth, h = p2el.offsetHeight;
+Object.assign(sunout.style, { left:p2el.offsetLeft + 'px', top:p2el.offsetTop + 'px', width:w + 'px', height:h + 'px',
+transform:cs.transform, transformOrigin:cs.transformOrigin, rotate:cs.rotate, translate:cs.translate, opacity:cs.opacity });
+const k = gsap.getProperty(shopEl, 'scale'), sc = Math.max(w/1448, h/1086), W = 1448*sc, H = 1086*sc, ox = (w - W)*.5, oy = (h - H)*.7;
+const X = x => (ox + x*sc - w/2)*k + w/2, Y = y => (oy + y*sc - h/2)*k + h/2;
+Object.assign(sunImg.style, { left:X(374) + 'px', top:Y(42) + 'px', width:(783*sc*k) + 'px' });
+});
+})();
+let seed = 1; setInterval(() => boilT_1.setAttribute('seed', (seed = seed % 4 + 1)), 125);
+function clouds(canvas, { ink=[.168,.168,.176], horizon=-.52, height=.95 } = {}) {
+const gl = canvas.getContext('webgl'); if (!gl) return;
+const NC = 90, rnd = (a,b) => a + Math.random()*(b-a), cl = [];
+const prof = x => height*Math.exp(-x*x*1.6) + .18;
+for (let i=0;i<38;i++){ const x=rnd(-1.6,1.6); cl.push([x, horizon+rnd(0,prof(x)*.75), rnd(.16,.3)]); }
+for (let i=0;i<40;i++){ const x=rnd(-1.6,1.6), r=rnd(.04,.12); cl.push([x, horizon+prof(x)*rnd(.75,.95)+r*.4, r]); }
+for (let i=0;i<12;i++){ const x=rnd(-1.5,1.5); cl.push([x, horizon+prof(x)+rnd(.08,.3), rnd(.012,.03)]); }
+const vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+const fs = `precision highp float;uniform vec2 r;uniform float t;uniform vec2 m;uniform vec4 C[${NC}];uniform vec3 ink;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float smin(float a,float b,float k){float hh=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,hh)-k*hh*(1.-hh);}
+void main(){
+vec2 uv=gl_FragCoord.xy/r; float f=floor(t*8.);
+uv+=(vec2(n(uv*9.+f*3.1),n(uv*9.+f*7.7))-.5)*.0018;           // line boil
+float aspect=r.x/r.y;
+vec2 p=vec2((uv.x-.5)*2.*aspect,uv.y*2.-1.)+m*.03;
+float W=aspect+.4, d=10.;
+for(int i=0;i<${NC};i++){
+vec4 c=C[i]; vec2 cp=c.xy; cp.x=mod(cp.x*aspect*.62+t*.01+W,2.*W)-W;
+d=smin(d,length(p-cp)-c.z*(1.+.07*sin(t*.6+c.w)),.008);
+}
+d+=(n(p*38.+t*.2)-.5)*.006;
+float cloud=1.-step(0.,d);
+vec3 paper=vec3(.965,.96,.945), col=mix(ink,paper,cloud);
+float s=step(.93,n(vec2(uv.x*260.+uv.y*40.,uv.y*6.+f)));
+col=mix(col,vec3(.36),s*(1.-cloud)*.75);
+gl_FragColor=vec4(col,1.);
+}`;
+const sh = (t,src) => { const o = gl.createShader(t); gl.shaderSource(o,src); gl.compileShader(o); return o; };
+const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER,vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER,fs)); gl.linkProgram(pr); gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(pr,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+const data = new Float32Array(NC*4); cl.forEach((c,i) => data.set([c[0],c[1],c[2],Math.random()*6.28], i*4));
+gl.uniform4fv(gl.getUniformLocation(pr,'C'), data);
+gl.uniform3fv(gl.getUniformLocation(pr,'ink'), ink);
+const uR = gl.getUniformLocation(pr,'r'), uT = gl.getUniformLocation(pr,'t'), uM = gl.getUniformLocation(pr,'m');
+const mouse = [0,0]; addEventListener('pointermove', e => { mouse[0] = e.clientX/innerWidth-.5; mouse[1] = .5-e.clientY/innerHeight; });
+const size = () => { const k = Math.min(devicePixelRatio,1.5); canvas.width = canvas.clientWidth*k; canvas.height = canvas.clientHeight*k; gl.viewport(0,0,canvas.width,canvas.height); };
+size(); addEventListener('resize', size);
+const t0 = performance.now();
+(function frame(){
+if (canvas.offsetParent !== null || canvas === titleSky_1) {
+gl.uniform2f(uR,canvas.width,canvas.height); gl.uniform1f(uT,(performance.now()-t0)/1000); gl.uniform2f(uM,mouse[0],mouse[1]);
+gl.drawArrays(gl.TRIANGLES,0,3);
+}
+requestAnimationFrame(frame);
+})();
+}
+drawnSky(document.getElementById('sky_1'), 'https://static.tildacdn.com/tild3635-6637-4465-a331-373534633637/p1-bg.webp');
+function drawnSky(canvas, src) {
+const gl = canvas.getContext('webgl'); if (!gl) return;
+const vs = 'attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
+const fs = `precision highp float;varying vec2 v;uniform sampler2D tex;uniform float t;uniform vec2 r;uniform vec2 ir;uniform vec2 m;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+vec2 cover(vec2 uv){ float ca=r.x/r.y, ia=ir.x/ir.y; vec2 s=ca>ia?vec2(1.,ia/ca):vec2(ca/ia,1.); return (uv-.5)*s+.5; }
+vec4 samp(vec2 uv){ return texture2D(tex, vec2(uv.x, 1.-uv.y)); }
+void main(){
+vec2 uv=cover(v);
+float f=floor(t*8.); uv+=(vec2(n(uv*9.+f*3.1),n(uv*9.+f*7.7))-.5)*.0015;   // line boil
+float sky=smoothstep(.27,.33,uv.y);
+vec2 q=uv+m*.006*sky;
+vec2 flow=vec2(n(q*2.5+vec2(0.,t*.04))-.5, n(q*2.5+vec2(5.2,t*.04))-.5)*vec2(.06,.03)+vec2(.02,0.);
+float ph=fract(t*.06), ph2=fract(t*.06+.5);
+vec2 a=q-flow*ph*sky, b=q-flow*ph2*sky;
+a.x=1.-abs(1.-mod(a.x,2.)); b.x=1.-abs(1.-mod(b.x,2.));
+a.y=min(a.y,.995); b.y=min(b.y,.995);
+vec4 ca=samp(a), cb=samp(b); float w=abs(ph-.5)*2.;
+vec4 c=mix(ca,cb,w);
+float l=dot(c.rgb,vec3(.333)), la=dot(ca.rgb,vec3(.333)), lb=dot(cb.rgb,vec3(.333));
+vec4 lightC=la>lb?ca:cb, darkC=la>lb?cb:ca;
+vec4 bin=mix(darkC,lightC,smoothstep(.5,.56,l));
+c=mix(c,bin,sky);
+gl_FragColor=vec4(c.rgb,1.);
+}`;
+const sh = (t,s) => { const o = gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o); return o; };
+const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER,vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER,fs)); gl.linkProgram(pr); gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(pr,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+const uR = gl.getUniformLocation(pr,'r'), uIR = gl.getUniformLocation(pr,'ir'), uT = gl.getUniformLocation(pr,'t'), uM = gl.getUniformLocation(pr,'m');
+const mouse = [0,0]; addEventListener('pointermove', e => { mouse[0] = e.clientX/innerWidth-.5; mouse[1] = .5-e.clientY/innerHeight; });
+const size = () => { const k = Math.min(devicePixelRatio,1.5); canvas.width = canvas.clientWidth*k; canvas.height = canvas.clientHeight*k; gl.viewport(0,0,canvas.width,canvas.height); };
+size(); addEventListener('resize', size);
+const img = new Image(); img.crossOrigin = 'anonymous';
+img.onload = () => {
+gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+const t0 = performance.now();
+(function frame(){
+gl.uniform2f(uR,canvas.width,canvas.height); gl.uniform2f(uIR,img.width,img.height);
+gl.uniform1f(uT,(performance.now()-t0)/1000); gl.uniform2f(uM,mouse[0],mouse[1]);
+gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(frame);
+})();
+};
+img.src = src;
+}
+clouds(document.getElementById('titleSky_1'), { ink:[.05,.05,.05], horizon:-1.25, height:.42 });
+clouds(document.getElementById('sky2_1'), { horizon:-.35, height:.7 });
+const qs = (s,k) => { const x = gsap.quickTo(s,'x',{duration:1,ease:'power3'}), y = gsap.quickTo(s,'y',{duration:1,ease:'power3'}); return (nx,ny)=>{x(nx*k);y(ny*k*.6);} };
+const par = [qs('.p1 .bg',-12), qs('.p2 .shop',8), qs('.title .clouds',-20)];
+addEventListener('pointermove', e => {
+const nx = e.clientX/innerWidth - .5, ny = e.clientY/innerHeight - .5;
+par.forEach(f => f(nx,ny));
+});
+}, root);
+})();
+</script>

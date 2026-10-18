@@ -1,0 +1,316 @@
+<div id="ch4" class="chapter" style="margin-top:-100vh;position:relative;z-index:4">
+<section class="scene">
+<div class="stage">
+<div class="panel q1">
+<div class="abs square"></div>
+<div class="abs bubbles" id="bubbles_4"></div>
+</div>
+<div class="panel talk"><div class="abs img"></div></div>
+<div class="abs ph">
+<div class="phone">
+<div class="screen"><div class="feed" id="feed_4"></div></div>
+<div class="body"></div>
+<div class="hearts" id="hearts_4"></div>
+</div>
+</div>
+<p class="cap c1 tr" style="right:7vw;top:15vh">Тогда он начинает <b>говорить</b> сам. Не кричать громче всех, а рассказывать: как работает, кому помог и почему делает именно так.</p>
+<p class="cap c2 tr" style="right:7vw;top:66vh">Каждую неделю истории, фото, ответы на вопросы. Люди подписываются, спорят, ставят лайки и пересылают <b>друзьям</b>.</p>
+<p class="cap c3 tl" style="left:7vw;top:20vh;max-width:460px">О нём начинают говорить. Соседи советуют соседям, и новый клиент приходит уже с <b>доверием</b>.</p>
+<p class="cap c4 tl" style="left:7vw;top:60vh;max-width:460px">Но чем больше людей, тем больше витрин вокруг. На огромном рынке его дело должно стоять на <b>первой полке</b>.</p>
+<div class="abs title">
+<h1><small>Глава IV</small><i>Г</i>олоса</h1>
+<div class="intro">
+<div class="lead">Соцсети и мессенджеры</div>
+<div class="brand">A3 SMM</div>
+<div class="gos"><a class="go" href="#" target="_blank" rel="noopener">Смотреть проект <i>↗</i></a></div>
+</div>
+</div>
+<div class="abs ink"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none" id="inkSvg_4"></svg></div>
+<div class="abs final">
+<h2><span>О</span> <span>вас</span> <span>говорят</span></h2>
+<div class="bar"></div>
+<div class="ask">Хотите, чтобы о вашем бизнесе <b>говорили</b>?</div>
+<div class="brand">A3 SMM</div>
+<div class="gos"><a class="go" href="#" target="_blank" rel="noopener">Смотреть проект <i>↗</i></a></div>
+</div>
+<div class="abs nextT" style="display:none"><h1></h1><div class="intro"></div></div>
+</div>
+</section>
+</div>
+<script>// ---- chapter 4: scene4.html
+(() => {
+const root = window.document.getElementById('ch4');
+const document_ = window.document;
+const document = {
+querySelector: s => root.querySelector(s), querySelectorAll: s => root.querySelectorAll(s),
+getElementById: id => root.querySelector('#' + id), createElement: t => document_.createElement(t),
+createDocumentFragment: () => document_.createDocumentFragment(), documentElement: document_.documentElement
+};
+gsap.context(() => {
+if (4 > 1) {
+const st = root.querySelector('.stage'); gsap.set(st, { autoAlpha:0 });
+ScrollTrigger.create({ trigger:root, start:'top top', end:'bottom bottom',
+onEnter:() => gsap.set(st, { autoAlpha:1 }), onLeaveBack:() => gsap.set(st, { autoAlpha:0 }) });
+}
+(() => {
+let d = 'M0,1000 L0,140 ';
+for (let x = 0; x <= 1000; x += 6) { const y = 60 + Math.random()*160 + Math.sin(x/37)*30; d += `L${x},${y} L${x+3},${y+40+Math.random()*90} `; }
+d += 'L1000,1000 Z';
+let st = ''; for (let i = 0; i < 160; i++) { const x = Math.random()*1000, y = Math.random()*220, h = 30 + Math.random()*120; st += `<rect x="${x}" y="${y-h}" width="${1+Math.random()*3}" height="${h}"/>`; }
+inkSvg_4.innerHTML = `<g fill="#0d0d0d"><path d="${d}"/>${st}</g>`;
+})();
+document.querySelectorAll('.cap').forEach(c => {
+const walk = n => [...n.childNodes].forEach(ch => {
+if (ch.nodeType === 3) { const f = document.createDocumentFragment();
+ch.textContent.split(/(\s+)/).forEach(t => { if (!t) return; if (/^\s+$/.test(t)) f.append(t); else { const sp = document.createElement('span'); sp.className = 'w'; sp.textContent = t; f.append(sp); } });
+ch.replaceWith(f);
+} else walk(ch);
+});
+walk(c);
+});
+function typeIn(sel) {
+const el = document.querySelector(sel), words = [...el.querySelectorAll('.w')], st = { p:0 };
+return gsap.timeline().set(el, { autoAlpha:1 })
+.fromTo(el, { clipPath:'inset(0 100% 0 0)' }, { clipPath:'inset(0 0% 0 0)', duration:.12, ease:'power2.out' })
+.fromTo(st, { p:0 }, { p:1, duration:.4, ease:'none', onUpdate:() => { const k = Math.round(st.p*words.length); words.forEach((w,i) => w.classList.toggle('on', i < k)); } });
+}
+function inkFrames() {
+const S = [];
+document.querySelectorAll('.panel, .cap').forEach(pn => {
+pn.querySelector('.ink-frame')?.remove();
+const isCap = pn.classList.contains('cap');
+const inset = isCap || pn.classList.contains('eyes') || pn.classList.contains('hand') || pn.classList.contains('hands');
+pn.insertAdjacentHTML('beforeend', `<svg class="ink-frame"><path pathLength="1"/><path pathLength="1"/><path pathLength="1"/><path pathLength="1"/></svg>`);
+const svg = pn.querySelector('.ink-frame'), paths = [...svg.querySelectorAll('path')];
+paths.forEach(p => { p.setAttribute('stroke-width', inset ? 4 : 2.4); p.style.strokeDasharray = 1; p.style.strokeDashoffset = 1; });
+S.push({ pn, svg, paths, inset, seed: Math.random()*100, shown:false });
+});
+const line = (x1,y1,x2,y2,j) => { const L = Math.hypot(x2-x1,y2-y1), n = Math.max(2, Math.round(L/50)); let d = '';
+for (let i=0;i<=n;i++){ const t=i/n, x=x1+(x2-x1)*t+(Math.random()-.5)*j, y=y1+(y2-y1)*t+(Math.random()-.5)*j; d += (i?'L':'M')+x.toFixed(1)+','+y.toFixed(1); } return d; };
+let last = 0, mx = 0, my = 0;
+addEventListener('pointermove', e => { mx = e.clientX/innerWidth-.5; my = e.clientY/innerHeight-.5; });
+gsap.ticker.add(time => {
+S.forEach(f => {
+const vis = getComputedStyle(f.pn).visibility !== 'hidden' && +getComputedStyle(f.pn).opacity > 0;
+if (vis && !f.shown) { f.shown = true; f.paths.forEach((p,i) => gsap.fromTo(p, { strokeDashoffset:1 }, { strokeDashoffset:0, duration:.7, delay:i*.12, ease:'power2.inOut' })); }
+if (!vis && f.shown) { f.shown = false; f.paths.forEach(p => p.style.strokeDashoffset = 1); }
+const k = f.inset ? 6 : 3.5, s = f.seed;
+f.pn.style.rotate = `y ${(mx*k + Math.sin(time*.5+s)*.8).toFixed(2)}deg`;
+f.pn.style.translate = `${(Math.sin(time*.4+s)*3).toFixed(1)}px ${(Math.cos(time*.35+s)*2 + my*-6).toFixed(1)}px`;
+});
+if (time - last < 1/8) return; last = time;
+S.forEach(f => {
+if (!f.shown) return;
+const w = f.pn.clientWidth, h = f.pn.clientHeight, s = f.seed, j = f.inset ? .9 : 1.4, e = f.inset ? 2 : 1.2;
+f.svg.setAttribute('viewBox', `0 0 ${w} ${h}`); f.svg.setAttribute('preserveAspectRatio','none');
+const o = i => f.inset ? 0 : -(3 + 5*Math.sin(time*.7 + s + i*1.7));   // ends stop short of the corners and drift
+const tp = f.pn.dataset.trap ? w*+f.pn.dataset.trap : 0;   // trapezoid: top edge pulled in
+f.paths[0].setAttribute('d', line(tp-o(0), e, w-tp+o(1), e+Math.sin(time+s)*1.2, j));
+f.paths[1].setAttribute('d', line(w-tp-e, -o(2), w-e+Math.sin(time*.8+s)*1.2, h+o(3), j));
+f.paths[2].setAttribute('d', line(w+o(4), h-e, -o(5), h-e+Math.cos(time+s)*1.2, j));
+f.paths[3].setAttribute('d', line(e, h+o(6), tp+e+Math.cos(time*.9+s)*1.2, -o(7), j));
+});
+});
+}
+inkFrames();
+function inkText(h1, { show = 1 } = {}) {
+const state = { show, p:1 };
+const parts = [], nodes = [];
+[...h1.childNodes].forEach(n => {
+if (n.nodeType === 1 && n.tagName === 'SMALL') return;
+const txt = n.textContent; if (!txt.trim() && n.nodeType === 3) return;
+parts.push([txt, n.nodeType === 1 ? getComputedStyle(n).color : '#f2f0ea']); nodes.push(n);
+});
+if (!parts.length) return { state };
+const build = async () => {
+try { await window.document.fonts.load("400 100px 'Instrument Serif'"); } catch (e) {}
+if (getComputedStyle(h1).position === 'static') h1.style.position = 'relative';
+const first = nodes[0], last = nodes[nodes.length - 1];
+const wordsW = (last.offsetLeft + last.offsetWidth) - first.offsetLeft;
+if (!wordsW || !h1.offsetWidth) return requestAnimationFrame(build);
+const rr = { width:wordsW };
+const fontPx = parseFloat(getComputedStyle(h1).fontSize), pad = fontPx*.35, K = Math.min(devicePixelRatio, 2);
+const W = Math.ceil(rr.width + pad*2), H = Math.ceil(fontPx*1.2 + pad*2);
+const col = window.document.createElement('canvas'); col.width = W*K; col.height = H*K;
+const cx = col.getContext('2d'); cx.scale(K, K); cx.font = `400 ${fontPx}px 'Instrument Serif'`;
+const text = (t) => t.toUpperCase();
+const total = parts.reduce((s, [t]) => s + cx.measureText(text(t)).width, 0);
+let x = (W - total)/2; const base = pad + fontPx*.92;
+parts.forEach(([t, c]) => { cx.fillStyle = c; cx.fillText(text(t), x, base); x += cx.measureText(text(t)).width; });
+const S = 2, gw = Math.ceil(W*K/S), gh = Math.ceil(H*K/S);
+const sm = window.document.createElement('canvas'); sm.width = gw; sm.height = gh;
+const sx = sm.getContext('2d'); sx.drawImage(col, 0, 0, gw, gh);
+const a = sx.getImageData(0, 0, gw, gh).data, INF = 1e20;
+const edt = (inside) => {
+const g = new Float64Array(gw*gh);
+for (let i = 0; i < gw*gh; i++) g[i] = ((a[i*4+3] > 127) === inside) ? 0 : INF;
+const L = Math.max(gw, gh), f = new Float64Array(L), d = new Float64Array(L), v = new Int32Array(L), z = new Float64Array(L + 1);
+const pass = (n) => { let k = 0; v[0] = 0; z[0] = -INF; z[1] = INF;
+for (let q = 1; q < n; q++) { let s; do { const p = v[k]; s = ((f[q] + q*q) - (f[p] + p*p)) / (2*q - 2*p); } while (s <= z[k] && --k >= 0); k++; v[k] = q; z[k] = s; z[k+1] = INF; }
+k = 0; for (let q = 0; q < n; q++) { while (z[k+1] < q) k++; const p = v[k]; d[q] = (q-p)*(q-p) + f[p]; } };
+for (let xx = 0; xx < gw; xx++) { for (let y = 0; y < gh; y++) f[y] = g[y*gw + xx]; pass(gh); for (let y = 0; y < gh; y++) g[y*gw + xx] = d[y]; }
+for (let y = 0; y < gh; y++) { for (let xx = 0; xx < gw; xx++) f[xx] = g[y*gw + xx]; pass(gw); for (let xx = 0; xx < gw; xx++) g[y*gw + xx] = d[xx]; }
+return g;
+};
+const outD = edt(false), inD = edt(true), R = 24, sdf = new Uint8Array(gw*gh*4);
+for (let i = 0; i < gw*gh; i++) { const sd = Math.sqrt(outD[i]) - Math.sqrt(inD[i]); const vv = Math.max(0, Math.min(255, 128 + sd/R*127)); sdf[i*4] = sdf[i*4+1] = sdf[i*4+2] = vv; sdf[i*4+3] = 255; }
+let cv = window.document.createElement('canvas'); cv.width = W*K; cv.height = H*K;
+Object.assign(cv.style, { position:'absolute', left:(first.offsetLeft + wordsW/2) + 'px', top:(first.offsetTop + first.offsetHeight/2) + 'px',
+width:W + 'px', height:H + 'px', transform:'translate(-50%,-50%)', pointerEvents:'none' });
+h1.append(cv);
+const VS = 'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
+const FS = `#extension GL_OES_standard_derivatives : enable
+precision highp float;varying vec2 v;uniform sampler2D sd,co;uniform float t,p;uniform vec2 res;
+float h(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 q){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*n(q);q*=2.1;a*=.5;}return s;}
+void main(){
+vec2 q=v*res/38.; float fb=floor(t*8.);
+vec2 warp=vec2(fbm(q*.35+vec2(t*.09,0.)), fbm(q*.35+vec2(5.2,-t*.08)))-.5;
+vec2 vv=v+warp*vec2(.010,.035)+(vec2(h(vec2(fb,1.)),h(vec2(fb,7.)))-.5)*.0016;
+float d=(texture2D(sd,vv).r-.5)*2.;
+float grain=fbm(q*2.2+vec2(t*.5,-t*.35)+fb*.37);
+float big=fbm(q*.6+vec2(0.,t*.05));
+float front=mix(1.2,-.06,p)+(big-.5)*1.1*(1.-p);
+float e=d-front+(grain-.5)*.24+sin(t*1.3+q.x*.25)*.035;
+float aa=fwidth(e)*1.2+.002;
+vec3 c=texture2D(co,vv).rgb; if(c.r+c.g+c.b<.1) c=vec3(.95,.94,.92);
+gl_FragColor=vec4(c,smoothstep(-aa,aa,e));
+}`;
+let gl = null, prog = null, uT = null, uP = null, t0 = performance.now(), offFor = 0;
+const setup = () => {
+gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) return false;
+gl.getExtension('OES_standard_derivatives');
+const sh = (ty, src) => { const o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+const kk = Math.min(1, fontPx/150), FSk = FS.replace('(grain-.5)*.24', '(grain-.5)*' + (.24*kk).toFixed(3)).replace('*.035;', '*' + (.035*kk).toFixed(4) + ';');
+prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FSk)); gl.linkProgram(prog); gl.useProgram(prog);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+const tex = (unit, w, h, data, img) => { const tx = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tx);
+if (img) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); };
+tex(0, gw, gh, sdf); tex(1, 0, 0, null, col);
+gl.uniform1i(gl.getUniformLocation(prog, 'sd'), 0); gl.uniform1i(gl.getUniformLocation(prog, 'co'), 1); gl.uniform2f(gl.getUniformLocation(prog, 'res'), W, H);
+gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+uT = gl.getUniformLocation(prog, 't'); uP = gl.getUniformLocation(prog, 'p'); return true;
+};
+const release = () => { const ext = gl && gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); gl = null;
+const c2 = cv.cloneNode(); c2.style.cssText = cv.style.cssText; cv.replaceWith(c2); cv = c2; };
+(function frame() {
+cv.style.opacity = state.show;
+nodes.forEach(nd => { if (nd.nodeType === 1) nd.style.opacity = 1 - state.show; });
+const r = cv.getBoundingClientRect();
+const onScreen = !(window.__menuOpen && !cv.closest('.mnu')) && state.show > 0 && r.bottom > 0 && r.top < innerHeight && getComputedStyle(cv).visibility !== 'hidden' && cv.offsetParent !== null;
+if (onScreen) {
+offFor = 0;
+if (gl || setup()) {
+gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+gl.uniform1f(uT, (performance.now() - t0)/1000); gl.uniform1f(uP, state.p); gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+} else if (gl && ++offFor > 30) release();
+requestAnimationFrame(frame);
+})();
+};
+nodes.forEach((nd, i) => { if (nd.nodeType === 3) { const sp = window.document.createElement('span'); sp.textContent = nd.textContent; nd.replaceWith(sp); nodes[i] = sp; } });
+build();
+return { state };
+}
+function splitL(el) {
+(function walk(n) {
+[...n.childNodes].forEach(c => {
+if (c.nodeType === 3) {
+const f = window.document.createDocumentFragment();
+[...c.textContent].forEach(ch => {
+if (ch === ' ' || ch === '\n') { f.append(ch); return; }
+const l = window.document.createElement('span'); l.className = 'l'; l.textContent = ch; f.append(l);
+});
+c.replaceWith(f);
+} else walk(c);
+});
+})(el);
+}
+gsap.set('.final h2 span', { yPercent:110, autoAlpha:0 });
+splitL(document.querySelector('.final h2')); splitL(document.querySelector('.nextT h1'));
+gsap.set('.nextT .l', { autoAlpha:0 }); gsap.set('.nextT .intro', { autoAlpha:0 });
+const ntInk = { state:{} };
+const ttInk = window.__ttInk = inkText(document.querySelector('.title h1'));
+if (window.__ttInk) { const st = window.__ttInk.state, intro = document.querySelectorAll('.title h1 small, .title .intro > *, .title > .lead, .title > .brand, .title > div:has(.go)');
+st.p = 0; gsap.set(intro, { autoAlpha:0, y:16 });
+ScrollTrigger.create({ trigger:document.querySelector('.scene'), start:'top top', end:'+=180', scrub:.2,
+animation:gsap.timeline().fromTo(st, { p:0 }, { p:1, duration:1, ease:'power2.out' }).fromTo(intro, { autoAlpha:0, y:16 }, { autoAlpha:1, y:0, stagger:.08, duration:.4 }, .3) }); }
+gsap.set(['.final .ask', '.final .brand', '.final .gos'], { autoAlpha:0 });
+const talkState = { on:0 };
+(() => {
+const box = document.getElementById('bubbles_4');
+const lines = ['Вы были <b>у них</b>?', 'Советую, не пожалеете', 'Где вы это <b>нашли</b>?', 'Подписалась!', 'Сходил вчера, <b>огонь</b>',
+'Скинь контакт', 'Лучше, чем <b>у соседей</b>', 'Видели новый пост?', 'Там всегда <b>отвечают</b>', 'Записался на завтра'];
+let i = 0;
+setInterval(() => {
+if (talkState.on < .5 || window.document.hidden) return;
+const b = window.document.createElement('div'), right = Math.random() < .5;
+b.className = 'bub' + (right ? ' r' : ''); b.innerHTML = lines[i++ % lines.length];
+const slot = [[6,8],[30,4],[56,9],[74,22],[14,26],[44,20],[64,34],[24,40]][i % 8];
+b.style.left = (slot[0] + Math.random()*4) + '%'; b.style.top = (slot[1] + Math.random()*3) + '%';
+box.append(b);
+gsap.timeline({ onComplete:() => b.remove() })
+.fromTo(b, { scale:0, rotate:right ? 6 : -6, transformOrigin:right ? '90% 120%' : '10% 120%' }, { scale:1, rotate:0, duration:.35, ease:'back.out(2)' })
+.to(b, { y:-14, duration:2.4, ease:'none' })
+.to(b, { scale:.6, autoAlpha:0, duration:.3, ease:'power2.in' });
+}, 650);
+})();
+(() => {
+const posts = [['https://static.tildacdn.com/tild6434-3237-4661-a261-343865303165/p2-shop.webp','Открылись!','Ждём вас каждый день с 9 до 21'], ['https://static.tildacdn.com/tild3062-3564-4965-b636-633639313361/ch2-night.webp','Ночная смена','Отвечаем даже ночью'],
+['https://static.tildacdn.com/tild3736-3430-4134-b466-666231353631/ch3-plain.webp','Как нас найти','Две дороги ведут прямо к маяку'], ['https://static.tildacdn.com/tild3635-6637-4465-a331-373534633637/p1-bg.webp','История','С чего всё начиналось'],
+['https://static.tildacdn.com/tild3962-3339-4135-a265-396633663233/ch4-square.webp','Спасибо!','Вчера пришло рекордное число гостей']];
+const html = posts.map(([src,t,d], k) => `<div class="post"><div class="pic" style="background-image:url(${src})"></div><div class="meta"><span>${t}</span><b>♥ <i class="lk" data-n="${40 + k*17}">${40 + k*17}</i></b></div><div class="txt">${d}</div></div>`).join('');
+const feed = document.getElementById('feed_4'); feed_4.innerHTML = html + html;
+setInterval(() => feed.querySelectorAll('.lk').forEach(l => { if (Math.random() < .35) l.textContent = ++l.dataset.n; }), 700);
+const hearts = document.getElementById('hearts_4');
+setInterval(() => {
+if (gsap.getProperty(document.querySelector('.ph'), 'autoAlpha') < .5) return;
+const h = window.document.createElement('div'); h.className = 'heart';
+h.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.3-9C1 8.4 3.3 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.7 0 6 3.9 4.3 7.5C19 16.4 12 21 12 21z" fill="currentColor" stroke="#0d0d0d" stroke-width="1.6"/></svg>';
+h.style.left = (40 + Math.random()*30) + '%'; h.style.top = '40%';
+hearts_4.append(h);
+gsap.timeline({ onComplete:() => h.remove() })
+.fromTo(h, { scale:0, x:0 }, { scale:gsap.utils.random(.8,1.6), duration:.3, ease:'back.out(2)' })
+.to(h, { y:-gsap.utils.random(260,480), x:gsap.utils.random(-160,80), rotate:gsap.utils.random(-30,30), duration:2.6, ease:'power1.out' }, 0)
+.to(h, { autoAlpha:0, duration:.5 }, 2.1);
+}, 420);
+})();
+gsap.set(['.q1','.talk','.ph'], { autoAlpha:0 });
+const tl = gsap.timeline({ defaults:{ ease:'none' },
+scrollTrigger:{ trigger:'.scene', start:'top top', end:'bottom bottom', scrub:.4 } });
+tl.to('.title h1, .title .intro', { yPercent:-60, autoAlpha:0, duration:.7 }, .75)
+.to('.title', { yPercent:-100, duration:.9, ease:'power2.inOut' }, .95)
+.set('.q1', { autoAlpha:1 }, .6)
+.fromTo('.q1', { z:-500, rotateX:18, y:120 }, { z:0, rotateX:0, y:0, duration:1.4, ease:'power2.out' }, .6)
+.fromTo('.q1 .square', { scale:1.2 }, { scale:1, duration:3.4 }, .6)
+.add(typeIn('.c1'), 1.4)
+.to(talkState, { on:1, duration:.1 }, 1.9)
+.to('.c1', { autoAlpha:0, duration:.2 }, 2.6)
+.set('.talk', { autoAlpha:1 }, 2.6)
+.fromTo('.talk', { xPercent:-130, rotate:-4 }, { xPercent:0, rotate:-2, duration:.6, ease:'power3.out' }, 2.6)
+.add(typeIn('.c2'), 2.9)
+.to(['.c2','.talk'], { autoAlpha:0, duration:.25 }, 4.1)
+.to(talkState, { on:0, duration:.1 }, 4.1)
+.to('.q1', { y:'-110vh', rotateX:-25, duration:1, ease:'power2.in' }, 4.1)
+.set('.ph', { autoAlpha:1 }, 4.5)
+.fromTo('.phone', { yPercent:70, rotate:8 }, { yPercent:0, rotate:-4, duration:1, ease:'power3.out' }, 4.5)
+.add(typeIn('.c3'), 5.1)
+.add(typeIn('.c4'), 5.9)
+.to(['.c3','.c4'], { autoAlpha:0, duration:.3 }, 7.0)
+.to('.phone', { yPercent:80, rotate:10, duration:.8, ease:'power2.in' }, 7.0)
+.to('.ink', { y:'-80vh', duration:1, ease:'power2.inOut' }, 7.6)
+.set('.panel', { autoAlpha:0 }, 8.6)
+.to('.final h2 span:not(.l)', { yPercent:0, autoAlpha:1, stagger:.08, duration:.4, ease:'power3.out' }, 8.299999999999999)
+.to('.final .bar', { width:120, duration:.4 }, 8.7)
+.fromTo(['.final .ask', '.final .brand', '.final .gos'], { y:20, autoAlpha:0 }, { y:0, autoAlpha:1, stagger:.12, duration:.4, ease:'power3.out' }, 8.9)
+.to(['.final .ask', '.final .brand', '.final .gos'], { autoAlpha:0, y:-20, duration:.3 }, 10.2)
+.to('.final h2 .l', { x:() => gsap.utils.random(-260,260), y:() => gsap.utils.random(-200,260), rotation:() => gsap.utils.random(-90,90), scale:() => gsap.utils.random(.3,.9), autoAlpha:0, duration:.7, stagger:{ each:.015, from:'random' }, ease:'power2.in' }, 10.3)
+.to('.final .bar', { scaleX:0, duration:.3 }, 10.3)
+.to({}, { duration:.15 });
+}, root);
+})();
+</script>

@@ -1,0 +1,330 @@
+<script>
+function inkText(h1, { show = 1 } = {}) {
+const state = { show, p:1 };
+const parts = [], nodes = [];
+[...h1.childNodes].forEach(n => {
+if (n.nodeType === 1 && n.tagName === 'SMALL') return;
+const txt = n.textContent; if (!txt.trim() && n.nodeType === 3) return;
+parts.push([txt, n.nodeType === 1 ? getComputedStyle(n).color : '#f2f0ea']); nodes.push(n);
+});
+if (!parts.length) return { state };
+const build = async () => {
+try { await window.document.fonts.load("400 100px 'Instrument Serif'"); } catch (e) {}
+if (getComputedStyle(h1).position === 'static') h1.style.position = 'relative';
+const first = nodes[0], last = nodes[nodes.length - 1];
+const wordsW = (last.offsetLeft + last.offsetWidth) - first.offsetLeft;
+if (!wordsW || !h1.offsetWidth) return requestAnimationFrame(build);
+const rr = { width:wordsW };
+const fontPx = parseFloat(getComputedStyle(h1).fontSize), pad = fontPx*.35, K = Math.min(devicePixelRatio, 2);
+const W = Math.ceil(rr.width + pad*2), H = Math.ceil(fontPx*1.2 + pad*2);
+const col = window.document.createElement('canvas'); col.width = W*K; col.height = H*K;
+const cx = col.getContext('2d'); cx.scale(K, K); cx.font = `400 ${fontPx}px 'Instrument Serif'`;
+const text = (t) => t.toUpperCase();
+const total = parts.reduce((s, [t]) => s + cx.measureText(text(t)).width, 0);
+let x = (W - total)/2; const base = pad + fontPx*.92;
+parts.forEach(([t, c]) => { cx.fillStyle = c; cx.fillText(text(t), x, base); x += cx.measureText(text(t)).width; });
+const S = 2, gw = Math.ceil(W*K/S), gh = Math.ceil(H*K/S);
+const sm = window.document.createElement('canvas'); sm.width = gw; sm.height = gh;
+const sx = sm.getContext('2d'); sx.drawImage(col, 0, 0, gw, gh);
+const a = sx.getImageData(0, 0, gw, gh).data, INF = 1e20;
+const edt = (inside) => {
+const g = new Float64Array(gw*gh);
+for (let i = 0; i < gw*gh; i++) g[i] = ((a[i*4+3] > 127) === inside) ? 0 : INF;
+const L = Math.max(gw, gh), f = new Float64Array(L), d = new Float64Array(L), v = new Int32Array(L), z = new Float64Array(L + 1);
+const pass = (n) => { let k = 0; v[0] = 0; z[0] = -INF; z[1] = INF;
+for (let q = 1; q < n; q++) { let s; do { const p = v[k]; s = ((f[q] + q*q) - (f[p] + p*p)) / (2*q - 2*p); } while (s <= z[k] && --k >= 0); k++; v[k] = q; z[k] = s; z[k+1] = INF; }
+k = 0; for (let q = 0; q < n; q++) { while (z[k+1] < q) k++; const p = v[k]; d[q] = (q-p)*(q-p) + f[p]; } };
+for (let xx = 0; xx < gw; xx++) { for (let y = 0; y < gh; y++) f[y] = g[y*gw + xx]; pass(gh); for (let y = 0; y < gh; y++) g[y*gw + xx] = d[y]; }
+for (let y = 0; y < gh; y++) { for (let xx = 0; xx < gw; xx++) f[xx] = g[y*gw + xx]; pass(gw); for (let xx = 0; xx < gw; xx++) g[y*gw + xx] = d[xx]; }
+return g;
+};
+const outD = edt(false), inD = edt(true), R = 24, sdf = new Uint8Array(gw*gh*4);
+for (let i = 0; i < gw*gh; i++) { const sd = Math.sqrt(outD[i]) - Math.sqrt(inD[i]); const vv = Math.max(0, Math.min(255, 128 + sd/R*127)); sdf[i*4] = sdf[i*4+1] = sdf[i*4+2] = vv; sdf[i*4+3] = 255; }
+let cv = window.document.createElement('canvas'); cv.width = W*K; cv.height = H*K;
+Object.assign(cv.style, { position:'absolute', left:(first.offsetLeft + wordsW/2) + 'px', top:(first.offsetTop + first.offsetHeight/2) + 'px',
+width:W + 'px', height:H + 'px', transform:'translate(-50%,-50%)', pointerEvents:'none' });
+h1.append(cv);
+const VS = 'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
+const FS = `#extension GL_OES_standard_derivatives : enable
+precision highp float;varying vec2 v;uniform sampler2D sd,co;uniform float t,p;uniform vec2 res;
+float h(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 q){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*n(q);q*=2.1;a*=.5;}return s;}
+void main(){
+vec2 q=v*res/38.; float fb=floor(t*8.);
+vec2 warp=vec2(fbm(q*.35+vec2(t*.09,0.)), fbm(q*.35+vec2(5.2,-t*.08)))-.5;
+vec2 vv=v+warp*vec2(.010,.035)+(vec2(h(vec2(fb,1.)),h(vec2(fb,7.)))-.5)*.0016;
+float d=(texture2D(sd,vv).r-.5)*2.;
+float grain=fbm(q*2.2+vec2(t*.5,-t*.35)+fb*.37);
+float big=fbm(q*.6+vec2(0.,t*.05));
+float front=mix(1.2,-.06,p)+(big-.5)*1.1*(1.-p);
+float e=d-front+(grain-.5)*.24+sin(t*1.3+q.x*.25)*.035;
+float aa=fwidth(e)*1.2+.002;
+vec3 c=texture2D(co,vv).rgb; if(c.r+c.g+c.b<.1) c=vec3(.95,.94,.92);
+gl_FragColor=vec4(c,smoothstep(-aa,aa,e));
+}`;
+let gl = null, prog = null, uT = null, uP = null, t0 = performance.now(), offFor = 0;
+const setup = () => {
+gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) return false;
+gl.getExtension('OES_standard_derivatives');
+const sh = (ty, src) => { const o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+const kk = Math.min(1, fontPx/150), FSk = FS.replace('(grain-.5)*.24', '(grain-.5)*' + (.24*kk).toFixed(3)).replace('*.035;', '*' + (.035*kk).toFixed(4) + ';');
+prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FSk)); gl.linkProgram(prog); gl.useProgram(prog);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+const tex = (unit, w, h, data, img) => { const tx = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tx);
+if (img) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); };
+tex(0, gw, gh, sdf); tex(1, 0, 0, null, col);
+gl.uniform1i(gl.getUniformLocation(prog, 'sd'), 0); gl.uniform1i(gl.getUniformLocation(prog, 'co'), 1); gl.uniform2f(gl.getUniformLocation(prog, 'res'), W, H);
+gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+uT = gl.getUniformLocation(prog, 't'); uP = gl.getUniformLocation(prog, 'p'); return true;
+};
+const release = () => { const ext = gl && gl.getExtension('WEBGL_lose_context'); if (ext) ext.loseContext(); gl = null;
+const c2 = cv.cloneNode(); c2.style.cssText = cv.style.cssText; cv.replaceWith(c2); cv = c2; };
+(function frame() {
+cv.style.opacity = state.show;
+nodes.forEach(nd => { if (nd.nodeType === 1) nd.style.opacity = 1 - state.show; });
+const r = cv.getBoundingClientRect();
+const onScreen = !(window.__menuOpen && !cv.closest('.mnu')) && state.show > 0 && r.bottom > 0 && r.top < innerHeight && getComputedStyle(cv).visibility !== 'hidden' && cv.offsetParent !== null;
+if (onScreen) {
+offFor = 0;
+if (gl || setup()) {
+gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+gl.uniform1f(uT, (performance.now() - t0)/1000); gl.uniform1f(uP, state.p); gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+} else if (gl && ++offFor > 30) release();
+requestAnimationFrame(frame);
+})();
+};
+nodes.forEach((nd, i) => { if (nd.nodeType === 3) { const sp = window.document.createElement('span'); sp.textContent = nd.textContent; nd.replaceWith(sp); nodes[i] = sp; } });
+build();
+return { state };
+}
+</script>
+<!--EXTRA: directions, footer, menu (appended after the story by build-story.py)-->
+<style>
+.xs { position:relative; z-index:40; background:#e9e6df; color:#0d0d0d; font-family:'Archivo Narrow', sans-serif; }
+.xs .wrap { max-width:1400px; margin:0 auto; padding:110px 4vw 110px; }
+.ttl { font:400 clamp(56px,9vw,150px)/.84 'Instrument Serif', serif; text-transform:uppercase; color:#0d0d0d; }
+.ttl small { display:block; font-size:.2em; letter-spacing:.4em; margin-bottom:.4em; color:#0d0d0d; }
+.ttl i { font-style:normal; color:#c4161c; }
+.ttl span { color:#0d0d0d; }
+.dhead { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:40px; }
+.dhead p { max-width:400px; font:600 15px/1.6 'Archivo Narrow', sans-serif; text-transform:uppercase; }
+.dgrid { display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:minmax(340px,38vh); gap:18px; }
+.dp { position:relative; background:#fff; border:3px solid #0d0d0d; overflow:hidden; }
+.dp:nth-child(1) { grid-column:span 4; } .dp:nth-child(2) { grid-column:span 2; }
+.dp:nth-child(3), .dp:nth-child(4), .dp:nth-child(5) { grid-column:span 2; } .dp:nth-child(6) { grid-column:span 6; }
+.dp .img { position:absolute; inset:0; background-size:cover; background-position:center; transition:transform 1.2s cubic-bezier(.2,.7,.2,1); }
+.dp:hover .img { transform:scale(1.05); }
+.dp .num { position:absolute; left:14px; top:12px; padding:5px 8px; background:#0d0d0d; color:#fff; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.2em; }
+.dp .card { position:absolute; left:14px; right:14px; bottom:14px; max-width:520px; background:#fff; border:3px solid #0d0d0d; padding:16px 18px; }
+.dp h3 { font:400 clamp(30px,3vw,46px)/.95 'Instrument Serif', serif; text-transform:uppercase; color:#0d0d0d; }
+.dp h3 i { font-style:normal; color:#c4161c; } .dp h3 span { color:#0d0d0d; }
+.dp p { margin-top:8px; font:600 14px/1.45 'Archivo Narrow', sans-serif; text-transform:uppercase; }
+.dp .bts { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.dp .bts a { padding:11px 15px; border:2.5px solid #0d0d0d; color:#0d0d0d; text-decoration:none; font:700 13px/1 'Archivo Narrow', sans-serif; letter-spacing:.1em; text-transform:uppercase; box-shadow:4px 4px 0 #c4161c; transition:.2s; }
+.dp .bts a.st { background:#0d0d0d; color:#fff; }
+.dp .bts a:hover { transform:translate(3px,3px); box-shadow:1px 1px 0 #c4161c; }
+@media (max-width:900px) { .dgrid { grid-template-columns:1fr; grid-auto-rows:380px; } .dp { grid-column:auto !important; } }
+.ft .wrap { padding-top:150px; padding-bottom:40px; overflow:hidden; }
+.ft .top { display:flex; justify-content:space-between; align-items:flex-start; gap:30px; flex-wrap:wrap; }
+.ft .lead { font:400 clamp(30px,3.6vw,56px)/1 'Instrument Serif', serif; text-transform:uppercase; max-width:900px; }
+.ft .lead i { font-style:normal; color:#c4161c; }
+.ft .cta { display:inline-flex; gap:12px; padding:16px 24px; background:#0d0d0d; color:#fff; text-decoration:none; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.12em; text-transform:uppercase; box-shadow:6px 6px 0 #c4161c; }
+.ft .cols { display:grid; grid-template-columns:repeat(4,auto) 1fr; gap:24px 56px; margin-top:80px; font:600 14px/2 'Archivo Narrow', sans-serif; text-transform:uppercase; letter-spacing:.06em; }
+.ft .cols h5 { font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.25em; color:#777; margin-bottom:6px; }
+.ft .cols a { display:block; color:#0d0d0d; text-decoration:none; } .ft .cols a:hover { color:#c4161c; }
+.ft .contacts { justify-self:end; text-align:right; }
+.ft .contacts .row { display:flex; gap:14px; justify-content:flex-end; flex-wrap:wrap; }
+.ft .contacts .row a { padding:9px 14px; border:2px solid #0d0d0d; }
+.ft .contacts small { display:block; margin-top:14px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.15em; color:#666; }
+@media (max-width:900px) { .ft .cols { grid-template-columns:1fr 1fr; } .ft .contacts { justify-self:start; text-align:left; grid-column:1/-1; } .ft .contacts .row { justify-content:flex-start; } }
+.ft .giant { margin-top:60px; font:400 clamp(56px,11.5vw,190px)/.8 'Instrument Serif', serif; text-transform:uppercase; color:#0d0d0d; }
+.ft .giant span { color:#0d0d0d; } .ft .giant i { font-style:normal; color:#c4161c; }
+.ft .giant a { color:inherit; text-decoration:none; }
+.lite { filter:url(#boilLite); }
+.mnu { position:fixed; inset:0; z-index:90; background:#0d0d0d; color:#fff; display:none; padding:90px 5vw 40px; overflow:auto; }
+.mnu.on { display:block; }
+#mnuRain { position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+.mnu .g, .mnu .x { position:relative; z-index:1; }
+.mnu a { position:relative; width:max-content; }
+.mnu .x { position:absolute; right:24px; top:18px; background:#fff; color:#0d0d0d; border:0; padding:8px 14px; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.15em; cursor:pointer; }
+.mnu .g { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:40px; }
+.mnu h5 { font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.3em; color:#888; margin-bottom:14px; }
+.mnu a { display:block; color:#fff; text-decoration:none; font:400 clamp(28px,3vw,44px)/1.2 'Instrument Serif', serif; text-transform:uppercase; }
+.mnu a:hover { color:#c4161c; }
+.mnu a.sm { font:600 15px/2 'Archivo Narrow', sans-serif; letter-spacing:.08em; }
+.pill span { cursor:pointer; pointer-events:auto; }
+.hdr .pill { pointer-events:auto; }
+@media (max-width:700px) { .ft .wrap { padding-top:110px; } .xs .wrap { padding-left:16px; padding-right:16px; } .dp .card { left:10px; right:10px; bottom:10px; padding:12px 14px; } .dp h3 { font-size:30px; } }
+</style>
+<svg width="0" height="0" style="position:absolute"><filter id="boilLite"><feTurbulence id="boilLiteT" type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="1.6"/></filter></svg>
+<section class="xs dirs" id="dirs">
+<div class="wrap">
+<div class="dhead">
+<h2 class="ttl"><small>Направления</small><i>Ш</i><span>есть систем</span></h2>
+<p class="lite">Каждое работает само. Вместе они дают систему, в которой вас видят, находят и выбирают.</p>
+</div>
+<div class="dgrid">
+<div class="dp"><div class="img" style="background-image:url(https://static.tildacdn.com/tild3062-3564-4965-b636-633639313361/ch2-night.webp);background-position:70% 60%"></div><span class="num">01</span>
+<div class="card"><h3><i>A</i><span>3 Studio</span></h3><p class="lite">Сайты, которые за три секунды объясняют, почему выбрать вас</p>
+<div class="bts"><a class="st" href="#ch2" data-ch="2">Смотреть историю</a><a href="https://a3-agency.ru/a3-studio" target="_blank" rel="noopener">Смотреть проект ↗</a></div></div></div>
+<div class="dp"><div class="img" style="background-image:url(https://static.tildacdn.com/tild3338-3265-4536-b934-626338346435/ch5-shelves.webp)"></div><span class="num">02</span>
+<div class="card"><h3><i>A</i><span>3 Marketplace</span></h3><p class="lite">Ведём магазины на маркетплейсах в прибыль, а не в оборот</p>
+<div class="bts"><a class="st" href="#ch5" data-ch="5">Смотреть историю</a><a href="#" target="_blank" rel="noopener">Смотреть проект ↗</a></div></div></div>
+<div class="dp"><div class="img" style="background-image:url(https://static.tildacdn.com/tild6434-3230-4032-b561-663363653636/ch6-guard.webp);background-position:55% 55%"></div><span class="num">03</span>
+<div class="card"><h3><i>A</i><span>3 Bot</span></h3><p class="lite">ИИ бот отвечает клиентам и принимает заявки 24/7</p>
+<div class="bts"><a class="st" href="#ch6" data-ch="6">Смотреть историю</a><a href="#" target="_blank" rel="noopener">Смотреть проект ↗</a></div></div></div>
+<div class="dp"><div class="img" style="background-image:url(https://static.tildacdn.com/tild6134-3332-4262-a664-663937306236/ch3-stones.webp)"></div><span class="num">04</span>
+<div class="card"><h3><i>A</i><span>3 Context</span></h3><p class="lite">Реклама в поиске: клиенты уже сегодня</p>
+<div class="bts"><a class="st" href="#ch3" data-ch="3">Смотреть историю</a><a href="#" target="_blank" rel="noopener">Смотреть проект ↗</a></div></div></div>
+<div class="dp"><div class="img" style="background-image:url(https://static.tildacdn.com/tild3736-3430-4134-b466-666231353631/ch3-plain.webp)"></div><span class="num">05</span>
+<div class="card"><h3><i>A</i><span>3 SEO</span></h3><p class="lite">Вас находят в поиске сами, месяцами и годами</p>
+<div class="bts"><a class="st" href="#ch3" data-ch="3">Смотреть историю</a><a href="#" target="_blank" rel="noopener">Смотреть проект ↗</a></div></div></div>
+<div class="dp"><div class="img" style="background-image:url(https://static.tildacdn.com/tild3962-3339-4135-a265-396633663233/ch4-square.webp)"></div><span class="num">06</span>
+<div class="card"><h3><i>A</i><span>3 SMM</span></h3><p class="lite">О вас говорят в соцсетях и мессенджерах</p>
+<div class="bts"><a class="st" href="#ch4" data-ch="4">Смотреть историю</a><a href="#" target="_blank" rel="noopener">Смотреть проект ↗</a></div></div></div>
+</div>
+</div>
+</section>
+<footer class="xs ft" id="contact">
+<div class="wrap">
+<div class="top">
+<div class="lead lite">Расскажите о задаче. Предложим <i>решение</i> за один звонок.</div>
+<a class="cta" href="#">Обсудить проект ↗</a>
+</div>
+<div class="cols lite">
+<div><h5>Агентство</h5><a href="#ch1" data-ch="1">История</a><a href="#dirs" data-to="dirs">Направления</a><a href="#">О нас</a><a href="#">Контакты</a></div>
+<div><h5>Направления</h5><a href="https://a3-agency.ru/a3-studio">A3 Studio</a><a href="#">A3 Marketplace</a><a href="#">A3 Bot</a><a href="#">A3 Context</a><a href="#">A3 SEO</a><a href="#">A3 SMM</a></div>
+<div><h5>Ссылки</h5><a href="#">Telegram-канал</a><a href="#">VK</a><a href="#">Behance</a><a href="#">YouTube</a></div>
+<div><h5>Ещё</h5><a href="https://a3-agency.ru/a3-studio/blog">Блог</a><a href="#">Работы</a></div>
+<div class="contacts"><div class="row"><a href="#">Telegram ↗</a><a href="#">WhatsApp ↗</a><a href="#">MAX ↗</a></div>
+<small>ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ · ©2026 A3 AGENCY</small></div>
+</div>
+<h2 class="giant"><a href="#"><i>Н</i><span>аписать</span></a></h2>
+</div>
+</footer>
+<div class="mnu" id="mnu"><canvas id="mnuRain"></canvas><button class="x" id="mnuX">ЗАКРЫТЬ ✕</button>
+<div class="g">
+<div><h5>История</h5><a href="#ch1" data-ch="1">I · A3 Agency</a><a href="#ch2" data-ch="2">II · Маяк</a><a href="#ch3" data-ch="3">III · Дороги</a><a href="#ch4" data-ch="4">IV · Голоса</a><a href="#ch5" data-ch="5">V · Рынок</a><a href="#ch6" data-ch="6">VI · Страж</a><a href="#ch7" data-ch="7">VII · Ответ</a></div>
+<div><h5>Направления</h5><a href="https://a3-agency.ru/a3-studio">A3 Studio</a><a href="#">A3 Marketplace</a><a href="#">A3 Bot</a><a href="#">A3 Context</a><a href="#">A3 SEO</a><a href="#">A3 SMM</a></div>
+<div><h5>Агентство</h5><a class="sm" href="#dirs" data-to="dirs">Все направления</a><a class="sm" href="#contact" data-to="contact">Контакты</a><a class="sm" href="https://a3-agency.ru/a3-studio/blog">Блог</a></div>
+</div>
+</div>
+<script>
+(() => {
+gsap.ticker.add(() => document.querySelectorAll('.chapter .cap').forEach(c => {
+if (getComputedStyle(c).visibility === 'hidden') { c.style.marginTop = ''; return; }
+const r = c.getBoundingClientRect(), over = r.bottom - (innerHeight - 10);
+if (over > 0) c.style.marginTop = ((parseFloat(c.style.marginTop) || 0) - over) + 'px';
+}));
+addEventListener('resize', () => document.querySelectorAll('.chapter .cap').forEach(c => c.style.marginTop = ''));
+let sd = 1; setInterval(() => { const t = document.getElementById('boilLiteT'); if (t) t.setAttribute('seed', (sd = sd % 4 + 1)); }, 125);
+document.querySelectorAll('.xs .ttl, .xs .dp h3, .xs .giant a').forEach(h => inkText(h));
+const go = (el) => { mnu.classList.remove('on'); window.__menuOpen = false; window.lenis ? lenis.scrollTo(el, { duration:1.6 }) : el.scrollIntoView({ behavior:'smooth' }); };
+document.addEventListener('click', e => {
+const a = e.target.closest('[data-ch],[data-to]'); if (!a) return; e.preventDefault();
+go(document.getElementById(a.dataset.ch ? 'ch' + a.dataset.ch : a.dataset.to));
+});
+const mnu = document.getElementById('mnu');
+document.getElementById('mnuX').onclick = () => mnu.classList.remove('on');
+let inked = false;
+const open = () => { mnu.classList.add('on'); window.__menuOpen = true;
+if (!inked) { inked = true; requestAnimationFrame(() => mnu.querySelectorAll('a:not(.sm)').forEach(a => inkText(a))); } };
+const close = () => { mnu.classList.remove('on'); window.__menuOpen = false; };
+document.getElementById('mnuX').onclick = close;
+document.querySelectorAll('.hdr .pill span').forEach(s => s.onclick = open);
+const rc = document.getElementById('mnuRain'), rx = rc.getContext('2d'); let drops = [];
+const size = () => { rc.width = innerWidth; rc.height = innerHeight;
+drops = Array.from({ length:140 }, () => ({ x:Math.random()*innerWidth, y:Math.random()*innerHeight, l:30 + Math.random()*90, v:9 + Math.random()*10, w:1 + Math.random()*2.2, a:.25 + Math.random()*.4 })); };
+size(); addEventListener('resize', size);
+(function rain() {
+if (mnu.classList.contains('on')) {
+rx.fillStyle = '#0d0d0d'; rx.fillRect(0, 0, rc.width, rc.height);
+drops.forEach(d => { rx.strokeStyle = `rgba(150,150,150,${d.a})`; rx.lineWidth = d.w; rx.beginPath(); rx.moveTo(d.x, d.y); rx.lineTo(d.x - d.l*.22, d.y + d.l); rx.stroke();
+d.y += d.v; d.x -= d.v*.22; if (d.y > rc.height) { d.y = -d.l; d.x = Math.random()*(rc.width + 200); } });
+}
+requestAnimationFrame(rain);
+})();
+})();
+</script>
+<!--/EXTRA-->
+<!--SOUND: narration per caption + procedural ambience per chapter (appended by build-story.py)-->
+<style>
+.hdr .pill .snd { display:inline-flex; align-items:center; gap:6px; }
+.hdr .pill .snd i { display:inline-block; width:14px; height:10px; background:linear-gradient(90deg,currentColor 0 2px,transparent 2px 4px,currentColor 4px 6px,transparent 6px 8px,currentColor 8px 10px,transparent 10px 12px,currentColor 12px 14px); opacity:.4; }
+.hdr .pill .snd.on i { opacity:1; animation:eq .8s steps(2) infinite; }
+@keyframes eq { 50% { clip-path:inset(30% 0 0 0); } }
+</style>
+<script>
+(() => {
+const pill = document.querySelector('.hdr .pill');
+const btn = window.document.createElement('span'); btn.className = 'snd'; btn.innerHTML = '<i></i>ЗВУК';
+pill.prepend(btn);
+let ctx = null, on = false, master, ambBus, voiceEl = null, voiceId = null, chapter = 0, layers = {};
+const noiseBuf = () => { const b = ctx.createBuffer(1, ctx.sampleRate*4, ctx.sampleRate), d = b.getChannelData(0); let last = 0;
+for (let i = 0; i < d.length; i++) { const w = Math.random()*2 - 1; last = (last + .02*w)/1.02; d[i] = w*.5 + last*3; } return b; };
+const noise = () => { const s = ctx.createBufferSource(); s.buffer = layers._nb; s.loop = true; s.start(); return s; };
+const filt = (type, f, q = 1) => { const x = ctx.createBiquadFilter(); x.type = type; x.frequency.value = f; x.Q.value = q; return x; };
+const gain = v => { const g = ctx.createGain(); g.gain.value = v; return g; };
+const lfo = (target, rate, depth, base) => { const o = ctx.createOscillator(), g = gain(depth); o.frequency.value = rate; o.connect(g).connect(target); target.value = base; o.start(); };
+function build() {
+layers._nb = noiseBuf();
+const mk = (name, fn) => { const g = gain(0); g.connect(ambBus); fn(g); layers[name] = g; };
+mk('pad', g => { [110, 130.8, 164.8, 220.5].forEach((f, i) => { const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f; o.detune.value = (i - 1.5)*6;
+const lp = filt('lowpass', 700), gg = gain(.25); lfo(gg.gain, .05 + i*.02, .12, .2); o.connect(lp).connect(gg).connect(g); o.start(); }); });
+mk('rain', g => { const n = noise(), hp = filt('highpass', 900), lp = filt('lowpass', 7000); n.connect(hp).connect(lp).connect(g);
+setInterval(() => { if (g.gain.value < .01) return; const s = ctx.createBufferSource(); s.buffer = layers._nb; const e = gain(0), bp = filt('bandpass', 2000 + Math.random()*3000, 8);
+s.connect(bp).connect(e).connect(g); const t = ctx.currentTime; e.gain.setValueAtTime(.6, t); e.gain.exponentialRampToValueAtTime(.001, t + .05); s.start(t, Math.random()*3, .06); }, 70); });
+mk('wind', g => { const n = noise(), bp = filt('bandpass', 400, .8); lfo(bp.frequency, .07, 250, 450); const gg = gain(.8); lfo(gg.gain, .11, .5, .6); n.connect(bp).connect(gg).connect(g); });
+mk('crickets', g => { const o = ctx.createOscillator(); o.frequency.value = 4400; const am = gain(0); o.connect(am).connect(g); o.start();
+setInterval(() => { if (g.gain.value < .01) return; const t = ctx.currentTime; for (let k = 0; k < 3; k++) { am.gain.setValueAtTime(.25, t + k*.06); am.gain.setValueAtTime(0, t + k*.06 + .03); } }, 900); });
+mk('hum', g => { [55, 110.5].forEach(f => { const o = ctx.createOscillator(); o.frequency.value = f; const gg = gain(.5); lfo(gg.gain, .2, .25, .5); o.connect(gg).connect(g); o.start(); }); });
+mk('steps', g => { setInterval(() => { if (g.gain.value < .01) return; const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = layers._nb; const lp = filt('lowpass', 260), e = gain(0);
+s.connect(lp).connect(e).connect(g); e.gain.setValueAtTime(1.2, t); e.gain.exponentialRampToValueAtTime(.001, t + .12); s.start(t, Math.random()*3, .14); }, 560); });
+mk('crowd', g => { [700, 1100, 1700].forEach((f, i) => { const n = noise(), bp = filt('bandpass', f, 3), gg = gain(.5); lfo(gg.gain, .3 + i*.17, .35, .4); n.connect(bp).connect(gg).connect(g); }); });
+mk('market', g => { const n = noise(), lp = filt('lowpass', 320); n.connect(lp).connect(g); });
+mk('crackle', g => { setInterval(() => { if (g.gain.value < .01 || Math.random() < .4) return; const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = layers._nb; const hp = filt('highpass', 2500), e = gain(0);
+s.connect(hp).connect(e).connect(g); e.gain.setValueAtTime(.8, t); e.gain.exponentialRampToValueAtTime(.001, t + .03); s.start(t, Math.random()*3, .04); }, 120); });
+}
+const MIX = { 1:{ pad:.05, rain:.10, wind:.07 }, 2:{ pad:.05, crickets:.03, hum:.05, wind:.03 }, 3:{ pad:.05, wind:.06, steps:.05 },
+4:{ pad:.04, crowd:.05 }, 5:{ pad:.04, market:.10, crowd:.025 }, 6:{ pad:.05, crickets:.03, crackle:.05 }, 7:{ pad:.07, hum:.06, wind:.04 }, 8:{ pad:.04 } };
+const setMix = (n) => { const m = MIX[n] || MIX[8], t = ctx.currentTime;
+Object.keys(layers).forEach(k => { if (k[0] === '_') return; layers[k].gain.cancelScheduledValues(t); layers[k].gain.setTargetAtTime(m[k] || 0, t, 1.2); }); };
+const rustle = () => { const t = ctx.currentTime, s = ctx.createBufferSource(); s.buffer = layers._nb; const bp = filt('bandpass', 3200, .7), e = gain(0);
+s.connect(bp).connect(e).connect(master); e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(.18, t + .08); e.gain.exponentialRampToValueAtTime(.001, t + .55); s.start(t, Math.random()*3, .6); };
+const fadeOut = (el) => { if (!el) return; const a = el; const st = a.volume; let k = 0; const iv = setInterval(() => { k++; a.volume = Math.max(0, st*(1 - k/6)); if (k >= 6) { clearInterval(iv); a.pause(); } }, 50); };
+const say = (id) => { if (id === voiceId) return; fadeOut(voiceEl); voiceId = id; voiceEl = null; if (!id || !on) return;
+const ext = new Audio().canPlayType('audio/ogg; codecs=opus') ? 'ogg' : 'mp3', a = new Audio(`https://yellowmacaw70707-svg.github.io/a3-embed/story/audio/${id}.${ext}`); a.volume = .95; a.play().catch(() => {}); voiceEl = a; };
+const chapters = [...document.querySelectorAll('.chapter')];
+const seen = new Map();
+function tick() {
+if (on) {
+let cur = 0;
+chapters.forEach((c, i) => { const st = c.querySelector('.stage'); const r = st.getBoundingClientRect(); if (getComputedStyle(st).visibility !== 'hidden' && r.top <= 1 && r.bottom > innerHeight*.5) cur = i + 1; });
+if (!cur && document.getElementById('dirs').getBoundingClientRect().top < innerHeight*.5) cur = 8;
+if (cur !== chapter) { chapter = cur; setMix(cur || 1); if (cur > 1) rustle(); say(null); }
+if (cur && cur < 8) {
+let newest = null;
+chapters[cur - 1].querySelectorAll('.cap').forEach(c => { const vis = getComputedStyle(c).visibility !== 'hidden' && +getComputedStyle(c).opacity > .5;
+const id = `ch${cur}-` + [...c.classList].find(k => /^c\d+b?$/.test(k));
+if (vis && !seen.get(id)) { seen.set(id, performance.now()); }
+if (!vis) seen.delete(id);
+if (vis && (!newest || seen.get(id) > seen.get(newest))) newest = id; });
+if (newest) say(newest); else if (voiceEl && voiceEl.ended) say(null);
+}
+}
+requestAnimationFrame(tick);
+}
+btn.onclick = (e) => { e.stopPropagation();
+if (!ctx) { ctx = new (window.AudioContext || window.webkitAudioContext)(); master = gain(0); master.connect(ctx.destination); ambBus = gain(1); ambBus.connect(master); build(); tick(); }
+on = !on; btn.classList.toggle('on', on); ctx.resume();
+master.gain.setTargetAtTime(on ? 1 : 0, ctx.currentTime, .4);
+if (on) { chapter = -1; } else { say(null); voiceId = null; }
+};
+})();
+</script>
+<!--/SOUND-->
