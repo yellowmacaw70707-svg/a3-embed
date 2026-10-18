@@ -160,6 +160,7 @@ return { state };
 .pill span { cursor:pointer; pointer-events:auto; }
 .hdr .pill { pointer-events:auto; }
 @media (max-width:700px) { .ft .wrap { padding-top:110px; } .xs .wrap { padding-left:16px; padding-right:16px; } .dp .card { left:10px; right:10px; bottom:10px; padding:12px 14px; } .dp h3 { font-size:30px; } }
+@media (max-width:700px) { .xs .ttl { font-size:clamp(34px,10.5vw,60px); white-space:nowrap; } .xs .dp h3 { white-space:nowrap; font-size:28px; } .ft .giant { white-space:nowrap; } }
 </style>
 <svg width="0" height="0" style="position:absolute"><filter id="boilLite"><feTurbulence id="boilLiteT" type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="1.6"/></filter></svg>
 <section class="xs dirs" id="dirs">
@@ -233,7 +234,7 @@ const mnu = document.getElementById('mnu');
 document.getElementById('mnuX').onclick = () => mnu.classList.remove('on');
 let inked = false;
 const open = () => { mnu.classList.add('on'); window.__menuOpen = true;
-if (!inked) { inked = true; requestAnimationFrame(() => mnu.querySelectorAll('a:not(.sm)').forEach(a => inkText(a))); } };
+if (!inked && innerWidth > 900) { inked = true; requestAnimationFrame(() => mnu.querySelectorAll('a:not(.sm)').forEach(a => inkText(a))); } };
 const close = () => { mnu.classList.remove('on'); window.__menuOpen = false; };
 document.getElementById('mnuX').onclick = close;
 document.querySelectorAll('.hdr .pill span').forEach(s => s.onclick = open);

@@ -251,6 +251,7 @@ st.p = 0; gsap.set(intro, { autoAlpha:0, y:16 });
 ScrollTrigger.create({ trigger:document.querySelector('.scene'), start:'top top', end:'+=180', scrub:.2,
 animation:gsap.timeline().fromTo(st, { p:0 }, { p:1, duration:1, ease:'power2.out' }).fromTo(intro, { autoAlpha:0, y:16 }, { autoAlpha:1, y:0, stagger:.08, duration:.4 }, .3) }); }
 gsap.set(['.final .ask', '.final .brand', '.final .gos'], { autoAlpha:0 });
+if (innerWidth < 700) document.querySelector('.roads').setAttribute('preserveAspectRatio', 'xMaxYMid slice');
 (() => {
 const g = document.getElementById('dots_3'), A = document.getElementById('cA_3');
 const imgs = [2,3,4,5,6], NS = 'http://www.w3.org/2000/svg', walkers = [];
