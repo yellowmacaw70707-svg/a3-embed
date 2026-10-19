@@ -419,11 +419,43 @@ if (on) { chapter = -1; } else { say(null); voiceId = null; }
 <script>
 (() => {
 const ov = document.getElementById('a3f'), card = ov.querySelector('.card'), ag = card.querySelector('.agree'), sb = card.querySelector('.send');
+const hideCss = document.createElement('style');
+hideCss.textContent = '.t-rec:has(.tn-atom__form){position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;height:440px!important;opacity:0!important;pointer-events:none!important;z-index:-1!important;overflow:hidden!important;}[class*="t-form-success-popup"],.js-form-popup-errorbox,.t-form__errorbox-popup{display:none!important;}';
+document.head.append(hideCss);
+const findForm = () => [...document.querySelectorAll('.t396 form')].find(f => f.querySelector('[name="page"]'));
+const rebuild = () => document.querySelectorAll('.t396 .tn-elem[data-elem-type="form"]').forEach(el => {
+if (el.querySelector('form') || !window.t_zeroForms__init) return;
+const rec = el.closest('.t-rec')?.id?.replace('rec', ''); if (!rec) return;
+el.removeAttribute('data-form-ready'); try { window.t_zeroForms__init(rec, el.dataset.elemId); } catch (e) {}
+});
+const waitForm = (ms = 15000) => new Promise((res, rej) => { const t0 = Date.now(); (function tick() { const f = findForm(); if (f) return res(f); rebuild(); if (Date.now() - t0 > ms) return rej(new Error('no form')); setTimeout(tick, 200); })(); });
+const vis = el => !!el && getComputedStyle(el).display !== 'none' && el.offsetParent !== null;
+async function sendLead(d) {
+const form = await waitForm();
+const set = (n, v) => { const el = form.querySelector(`[name="${n}"]`); if (!el) return; el.value = v ?? ''; el.dispatchEvent(new Event('input', { bubbles:true })); el.dispatchEvent(new Event('change', { bubbles:true })); };
+set('name', d.name); set('contact', d.contact); set('services', d.goal.join(', ')); set('comment', d.task); set('page', location.href);
+const consent = form.querySelector('[name="personal_data_consent"]'); if (consent && !consent.checked) consent.click();
+const success = form.querySelector('.js-successbox') ?? form.parentElement.querySelector('.js-successbox'), errors = form.querySelector('.js-errorbox-all');
+return new Promise((resolve, reject) => {
+let done = false; const fin = (ok, why) => { if (done) return; done = true; clearInterval(poll); ok ? resolve() : reject(new Error(why)); };
+form.addEventListener('tildaform:aftersuccess', () => fin(true), { once:true });
+const orig = window.t396_onSuccess; window.t396_onSuccess = function (...a) { fin(true); window.t396_onSuccess = orig; return orig?.apply(this, a); };
+if (window.jQuery) window.jQuery(form).one('tildaform:aftersuccess', () => fin(true));
+const t0 = Date.now(); const poll = setInterval(() => { if (vis(success)) fin(true); else if (vis(errors)) fin(false, errors.textContent.trim() || 'form error'); else if (Date.now() - t0 > 45000) fin(false, 'timeout'); }, 250);
+(form.querySelector('.t-submit') ?? form.querySelector('[type="submit"]'))?.click();
+});
+}
+const COUNTER = 113658769;
+if (!window.ym) { (function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); }; m[i].l = 1 * new Date();
+k = e.createElement(t); a = e.getElementsByTagName(t)[0]; k.async = 1; k.src = r; a.parentNode.insertBefore(k, a); })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=' + COUNTER, 'ym');
+ym(COUNTER, 'init', { ssr:true, webvisor:true, clickmap:true, referrer:document.referrer, url:location.href, accurateTrackBounce:true, trackLinks:true }); }
+const goal = id => window.ym && ym(COUNTER, 'reachGoal', id);
+document.addEventListener('click', e => { const a = e.target.closest('a[href]'); if (a && /^(https?:)?\/\/(t\.me|wa\.me|api\.whatsapp\.com|max\.ru)\//.test(a.getAttribute('href'))) goal('click_messenger'); }, true);
 const chips = [...card.querySelectorAll('.chips button')];
 chips.forEach(c => c.onclick = () => { c.classList.toggle('on'); gsap.fromTo(c, { scale:.9 }, { scale:1, duration:.3, ease:'back.out(3)' }); });
 ag.onchange = () => sb.disabled = !ag.checked;
 card.querySelector('.ok .txt').onclick = e => { if (e.target.tagName !== 'A') { ag.checked = !ag.checked; ag.onchange(); } };
-const close = () => gsap.to(card, { autoAlpha:0, y:30, duration:.25, onComplete:() => { ov.classList.remove('on'); gsap.set(card, { clearProps:'transform,opacity,visibility' }); window.__menuOpen = false; window.lenis && lenis.start(); } });
+const close = () => gsap.to(card, { autoAlpha:0, y:30, duration:.25, onComplete:() => { if (back) { history.replaceState(null, '', back); back = null; } ov.classList.remove('on'); gsap.set(card, { clearProps:'transform,opacity,visibility' }); window.__menuOpen = false; window.lenis && lenis.start(); } });
 card.querySelector('.x').onclick = close; ov.querySelector('.shade').onclick = close;
 addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('on')) close(); });
 window.a3OpenForm = (goal) => {
@@ -436,9 +468,21 @@ gsap.timeline()
 .fromTo(card.querySelector('.bubble'), { scale:0, rotation:12 }, { scale:1, rotation:-4, duration:.4, ease:'back.out(2.5)' }, .75)
 .fromTo(card.querySelectorAll('.col-l > *, .col-r > *'), { y:16, autoAlpha:0 }, { y:0, autoAlpha:1, stagger:.05, duration:.35 }, .45);
 };
-sb.onclick = () => {
-if (!ag.checked) return;
-window.__a3lead = { goal:chips.filter(c => c.classList.contains('on')).map(c => c.textContent), name:card.querySelector('[name=name]').value, contact:card.querySelector('[name=contact]').value, task:card.querySelector('[name=task]').value };
+const err = document.createElement('p'); err.style.cssText = 'display:none;margin:8px 0 0;font:600 12px/1.4 Archivo Narrow,sans-serif;color:#c4161c';
+err.innerHTML = 'Не получилось отправить. Напишите нам: <a href="https://t.me/Agency_a3" target="_blank" style="color:#c4161c">Telegram</a>, <a href="https://wa.me/79180337015" target="_blank" style="color:#c4161c">WhatsApp</a>.';
+sb.after(err);
+let back = null;
+sb.onclick = async () => {
+if (!ag.checked || sb.disabled) return;
+const name = card.querySelector('[name=name]'), contact = card.querySelector('[name=contact]');
+if (!name.value.trim() || !contact.value.trim()) { (name.value.trim() ? contact : name).focus(); gsap.fromTo(card, { x:-6 }, { x:0, duration:.4, ease:'elastic.out(1,.3)' }); return; }
+const data = { goal:chips.filter(c => c.classList.contains('on')).map(c => c.textContent), name:name.value.trim(), contact:contact.value.trim(), task:card.querySelector('[name=task]').value.trim() };
+sb.disabled = true; sb.textContent = 'Отправляем…'; err.style.display = 'none';
+try { await sendLead(data); } catch (x) { console.warn('lead not sent', x); err.style.display = 'block'; sb.disabled = false; sb.textContent = 'Отправить →'; return; }
+sb.textContent = 'Отправить →';
+goal('lead_form');
+back = location.pathname + location.search + location.hash; history.pushState({ spasibo:1 }, '', '/story/spasibo');
+if (window.ym) ym(COUNTER, 'hit', location.href, { title:'Спасибо за заявку | A3 Agency', referer:back });
 const st = card.querySelector('.stamp');
 gsap.timeline().fromTo(st, { scale:3, opacity:0 }, { scale:1, opacity:1, duration:.2, ease:'power4.in' })
 .to(card, { x:6, duration:.05, yoyo:true, repeat:5 })
