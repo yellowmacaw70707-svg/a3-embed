@@ -337,3 +337,119 @@ if (on) { chapter = -1; } else { say(null); voiceId = null; }
 })();
 </script>
 <!--/SOUND-->
+<!--FORM: lead form (variant C, comic page unfolds, stamp on send). window.a3OpenForm(goal) opens it.-->
+<style>
+#a3f { position:fixed; inset:0; z-index:95; display:none; place-items:center; padding:16px; perspective:1400px; font-family:'Archivo Narrow', sans-serif; color:#0d0d0d; }
+#a3f.on { display:grid; }
+#a3f * { box-sizing:border-box; }
+#a3f .shade { position:absolute; inset:0; background:rgba(13,13,13,.6); }
+#a3f .card { position:relative; width:min(480px,100%); background:#f4f2ee; border:3px solid #0d0d0d; box-shadow:10px 10px 0 #0d0d0d; padding:26px 26px 22px; text-align:left; transform-origin:50% 0; }
+#a3f h2 { margin:0; font:400 clamp(34px,5vw,48px)/.92 'Instrument Serif', serif; text-transform:uppercase; }
+#a3f h2 i { font-style:normal; color:#c4161c; }
+#a3f .sub { margin:10px 0 16px; font:600 14px/1.5 'Archivo Narrow', sans-serif; text-transform:uppercase; color:#444; }
+#a3f .f-cap { font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.2em; color:#666; margin:0 0 8px; text-transform:uppercase; }
+#a3f .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+#a3f .chips button { padding:9px 13px; background:#fff; color:#0d0d0d; border:2.5px solid #0d0d0d; font:700 13px/1 'Archivo Narrow', sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; }
+#a3f .chips button.on { background:#0d0d0d; color:#fff; box-shadow:3px 3px 0 #c4161c; }
+#a3f .f { display:block; margin-bottom:12px; }
+#a3f .f span { display:block; font:600 11px 'IBM Plex Mono', monospace; letter-spacing:.2em; color:#666; margin-bottom:5px; }
+#a3f .f input, #a3f .f textarea { width:100%; padding:12px 14px; background:#fff; border:2.5px solid #0d0d0d; border-radius:0; font:600 16px 'Archivo Narrow', sans-serif; color:#0d0d0d; outline:none; resize:none; }
+#a3f .f input:focus, #a3f .f textarea:focus { box-shadow:4px 4px 0 #c4161c; }
+#a3f .ok { display:flex; gap:10px; align-items:flex-start; margin:4px 0 12px; font:500 13px/1.45 'Archivo Narrow', sans-serif; color:#444; }
+#a3f .okbox { flex:none; display:block; cursor:pointer; }
+#a3f .agree { position:absolute; opacity:0; width:0; height:0; }
+#a3f .box { display:block; width:20px; height:20px; margin-top:1px; background:#fff; border:2.5px solid #0d0d0d; position:relative; }
+#a3f .agree:checked + .box::after { content:''; position:absolute; left:4px; top:0; width:6px; height:11px; border:solid #c4161c; border-width:0 3px 3px 0; transform:rotate(45deg); }
+#a3f .ok .txt { margin:0; cursor:pointer; } #a3f .ok a { color:#c4161c; }
+#a3f .send { width:100%; padding:15px; background:#0d0d0d; color:#fff; border:0; font:700 15px/1 'Archivo Narrow', sans-serif; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; box-shadow:5px 5px 0 #c4161c; }
+#a3f .send:disabled { opacity:.35; cursor:not-allowed; box-shadow:none; }
+#a3f .x { position:absolute; right:0; top:0; width:42px; height:42px; background:#0d0d0d; color:#fff; border:0; font:700 18px sans-serif; cursor:pointer; z-index:2; }
+#a3f .bubble { position:absolute; right:-14px; top:-34px; padding:9px 14px; background:#fff; border:2.5px solid #0d0d0d; border-radius:20px; font:700 13px 'Archivo Narrow', sans-serif; text-transform:uppercase; }
+#a3f .bubble::after { content:''; position:absolute; left:20px; bottom:-12px; width:14px; height:14px; background:#fff; border-right:2.5px solid #0d0d0d; border-bottom:2.5px solid #0d0d0d; transform:skewX(-30deg) rotate(45deg); }
+#a3f .stamp { position:absolute; right:26px; bottom:70px; width:110px; height:110px; border-radius:50%; border:4px double #c4161c; color:#c4161c; display:grid; place-content:center; text-align:center; font:700 11px/1.2 'Archivo Narrow', sans-serif; letter-spacing:.1em; text-transform:uppercase; transform:rotate(-14deg); opacity:0; pointer-events:none; z-index:3; }
+#a3f .stamp b { display:block; font:400 28px/1 'Instrument Serif', serif; }
+#a3f .thanks { display:none; text-align:center; padding:10px 0; }
+#a3f .thanks p { font:600 14px/1.5 'Archivo Narrow', sans-serif; text-transform:uppercase; margin:12px 0 16px; }
+#a3f .thanks .row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+#a3f .thanks .row a { padding:11px 14px; border:2.5px solid #0d0d0d; color:#0d0d0d; text-decoration:none; font:700 13px 'Archivo Narrow', sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+#a3f .done .fields { display:none; } #a3f .done .thanks { display:block; }
+@media (min-width:901px) {
+#a3f .card { width:min(940px,100%); padding:34px 36px 30px; }
+#a3f .fields { display:grid; grid-template-columns:1fr 1.05fr; gap:34px; align-items:start; }
+#a3f h2 { font-size:clamp(44px,4.6vw,64px); }
+}
+@media (max-width:900px) {
+#a3f { padding:10px; align-items:start; padding-top:max(44px, 6svh); }
+#a3f .card { max-height:calc(100svh - 60px); overflow-y:auto; overflow-x:hidden; scrollbar-width:none; padding:20px 18px 16px; box-shadow:6px 6px 0 #0d0d0d; }
+#a3f h2 { font-size:32px; } #a3f .sub { margin:6px 0 12px; font-size:12.5px; }
+#a3f .chips { gap:6px; margin-bottom:10px; } #a3f .chips button { padding:7px 10px; font-size:12px; }
+#a3f .f { margin-bottom:9px; } #a3f .f input, #a3f .f textarea { padding:10px 12px; font-size:16px; } #a3f .f textarea { height:64px; }
+#a3f .ok { font-size:12px; margin:2px 0 10px; } #a3f .send { padding:13px; } #a3f .bubble { right:6px; }
+}
+@media (max-width:900px) and (max-height:680px) {
+#a3f .card { padding:14px 14px 12px; } #a3f h2 { font-size:26px; } #a3f .sub, #a3f .f-cap, #a3f .f span { display:none; }
+#a3f .chips button { padding:6px 8px; font-size:11px; } #a3f .chips { margin-bottom:8px; }
+#a3f .f input { padding:8px 10px; } #a3f .f textarea { height:48px; padding:8px 10px; } #a3f .f { margin-bottom:7px; } #a3f .ok { font-size:11px; }
+}
+</style>
+<div id="a3f" role="dialog" aria-modal="true" aria-label="Обсудить проект"><div class="shade"></div>
+<div class="card"><button class="x" type="button" aria-label="Закрыть">✕</button><span class="bubble">Ваш ход!</span><div class="stamp">A3<b>Принято</b>в работу</div>
+<div class="fields">
+<div class="col-l">
+<h2>Расскажите о <i>задаче</i></h2>
+<p class="sub">Ответим в течение часа и предложим план без шаблонов.</p>
+<p class="f-cap">Что нужно? Можно выбрать несколько</p>
+<div class="chips"><button type="button">Сайт</button><button type="button">SEO</button><button type="button">Реклама</button><button type="button">Соцсети</button><button type="button">Маркетплейсы</button><button type="button">ИИ бот</button><button type="button">Пока не знаю</button></div>
+</div>
+<div class="col-r">
+<label class="f"><span>ИМЯ</span><input name="name" autocomplete="name" placeholder="Как к вам обращаться"></label>
+<label class="f"><span>ТЕЛЕФОН ИЛИ TELEGRAM</span><input name="contact" autocomplete="tel" placeholder="+7 … или @username"></label>
+<label class="f"><span>ЗАДАЧА</span><textarea name="task" rows="3" placeholder="Например: сайт и реклама для клиники"></textarea></label>
+<div class="ok"><label class="okbox"><input type="checkbox" class="agree"><span class="box"></span></label><p class="txt">Согласен на <a href="https://a3-agency.ru/consent" target="_blank" rel="noopener">обработку персональных данных</a> и&nbsp;с&nbsp;<a href="https://a3-agency.ru/story/confidence" target="_blank" rel="noopener">политикой конфиденциальности</a></p></div>
+<button class="send" type="button" disabled>Отправить →</button>
+</div>
+</div>
+<div class="thanks">
+<h2>Заявка <i>принята</i></h2>
+<p>Скоро свяжемся. Если задача срочная, напишите нам прямо сейчас:</p>
+<div class="row"><a href="https://t.me/Agency_a3" target="_blank" rel="noopener">Telegram</a><a href="https://wa.me/79180337015" target="_blank" rel="noopener">WhatsApp</a><a href="https://max.ru/u/f9LHodD0cOL55TPSFyPvoONvFPdmK_7ai1wAXHZZeKI27mL5WTRMpC79K4I" target="_blank" rel="noopener">MAX</a></div>
+</div>
+</div>
+</div>
+<script>
+(() => {
+const ov = document.getElementById('a3f'), card = ov.querySelector('.card'), ag = card.querySelector('.agree'), sb = card.querySelector('.send');
+const chips = [...card.querySelectorAll('.chips button')];
+chips.forEach(c => c.onclick = () => { c.classList.toggle('on'); gsap.fromTo(c, { scale:.9 }, { scale:1, duration:.3, ease:'back.out(3)' }); });
+ag.onchange = () => sb.disabled = !ag.checked;
+card.querySelector('.ok .txt').onclick = e => { if (e.target.tagName !== 'A') { ag.checked = !ag.checked; ag.onchange(); } };
+const close = () => gsap.to(card, { autoAlpha:0, y:30, duration:.25, onComplete:() => { ov.classList.remove('on'); gsap.set(card, { clearProps:'transform,opacity,visibility' }); window.__menuOpen = false; window.lenis && lenis.start(); } });
+card.querySelector('.x').onclick = close; ov.querySelector('.shade').onclick = close;
+addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('on')) close(); });
+window.a3OpenForm = (goal) => {
+card.classList.remove('done'); ag.checked = false; sb.disabled = true;
+chips.forEach(c => c.classList.toggle('on', !!goal && goal.split(',').includes(c.textContent)));
+ov.classList.add('on'); window.__menuOpen = true; window.lenis && lenis.stop();
+gsap.timeline()
+.fromTo(ov.querySelector('.shade'), { opacity:0 }, { opacity:1, duration:.3 }, 0)
+.fromTo(card, { rotationX:-95, y:-60, autoAlpha:0 }, { rotationX:0, y:0, autoAlpha:1, duration:.9, ease:'back.out(1.4)' }, .05)
+.fromTo(card.querySelector('.bubble'), { scale:0, rotation:12 }, { scale:1, rotation:-4, duration:.4, ease:'back.out(2.5)' }, .75)
+.fromTo(card.querySelectorAll('.col-l > *, .col-r > *'), { y:16, autoAlpha:0 }, { y:0, autoAlpha:1, stagger:.05, duration:.35 }, .45);
+};
+sb.onclick = () => {
+if (!ag.checked) return;
+window.__a3lead = { goal:chips.filter(c => c.classList.contains('on')).map(c => c.textContent), name:card.querySelector('[name=name]').value, contact:card.querySelector('[name=contact]').value, task:card.querySelector('[name=task]').value };
+const st = card.querySelector('.stamp');
+gsap.timeline().fromTo(st, { scale:3, opacity:0 }, { scale:1, opacity:1, duration:.2, ease:'power4.in' })
+.to(card, { x:6, duration:.05, yoyo:true, repeat:5 })
+.to(st, { opacity:0, duration:.3, delay:.5 })
+.call(() => card.classList.add('done'))
+.fromTo(card.querySelectorAll('.thanks > *'), { y:16, autoAlpha:0 }, { y:0, autoAlpha:1, stagger:.1, duration:.35 });
+};
+document.addEventListener('click', e => {
+const a = e.target.closest('[data-form], a'); if (!a || ov.contains(a)) return;
+if (a.hasAttribute('data-form') || /обсудить проект/i.test(a.textContent)) { e.preventDefault(); e.stopPropagation(); window.a3OpenForm(a.dataset.form || ''); }
+}, true);
+})();
+</script>
+<!--/FORM-->
