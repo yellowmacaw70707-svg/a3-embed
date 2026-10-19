@@ -97,7 +97,7 @@ body {overflow-x:hidden; font-family:Manrope, sans-serif;}
 #ch1 .go:hover {background:#fff; color:var(--ink); box-shadow:2px 2px 0 var(--red); transform:translate(4px,4px);}
 #ch1 .go:hover i {transform:translate(3px,-3px);}
 #ch1 .title .sdf {position:relative; display:inline-block;}
-#ch1 .title .sdf i {color:transparent !important;}
+#ch1 .title .sdf.gl-on i {color:transparent !important;}
 #ch1 .title .hint {color:#fff !important; font-weight:700; background:#0d0d0d; padding:10px 16px; border:1.5px solid #fff; white-space:nowrap; z-index:5;}
 #ch1 .title .intro {position:absolute; left:0; right:0; top:calc(28% + clamp(64px,11vw,190px)*1.08 + 40px); text-align:center; color:#fff; z-index:2; padding:0 16px;}
 #ch1 .title .hook {font:400 clamp(26px,3vw,48px)/1.05 'Instrument Serif', serif; text-transform:uppercase; letter-spacing:.02em;}
@@ -876,7 +876,8 @@ gl_FragColor=vec4(c,smoothstep(-aa,aa,e));
 }`;
 let gl = null, prog = null, uT = null, t0 = performance.now(), offFor = 0;
 const setup = () => {
-gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) return false;
+gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) return false; /* a3NoGL */
+cv.addEventListener('webglcontextlost', e => { e.preventDefault(); window.__a3NoGL = true; }, { once:true });
 gl.getExtension('OES_standard_derivatives');
 const sh = (ty, src) => { const o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o); return o; };
 prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog); gl.useProgram(prog);
@@ -900,7 +901,8 @@ const r = cv.getBoundingClientRect();
 const onScreen = state.show > 0 && r.bottom > 0 && r.top < innerHeight && getComputedStyle(cv).visibility !== 'hidden' && cv.offsetParent !== null;
 if (onScreen) {
 offFor = 0;
-if (gl || setup()) {
+if (window.__a3NoGL || (!gl && !setup())) { window.__a3NoGL = true; cv.style.display = 'none'; nodes.forEach(nd => { if (nd.nodeType === 1) nd.style.opacity = 1; }); return; }
+{
 gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
 gl.uniform1f(uT, (performance.now() - t0)/1000); gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
@@ -962,8 +964,8 @@ const sdf = new Uint8Array(gw*gh*4);
 for (let i = 0; i < gw*gh; i++) { const sd = Math.sqrt(outD[i]) - Math.sqrt(inD[i]); const vv = Math.max(0, Math.min(255, 128 + sd/R*127)); sdf[i*4] = sdf[i*4+1] = sdf[i*4+2] = vv; sdf[i*4+3] = 255; }
 const cv = window.document.createElement('canvas'); cv.width = W*K; cv.height = H*K;
 Object.assign(cv.style, { position:'absolute', left:'50%', top:'50%', width:W + 'px', height:H + 'px', transform:'translate(-50%,-50%)', pointerEvents:'none' });
-span.append(cv); span.style.color = 'transparent';
-const gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) { span.style.color = ''; return; }
+span.append(cv); span.style.color = 'transparent'; span.classList.add('gl-on');
+const gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) { span.style.color = ''; span.classList.remove('gl-on'); cv.remove(); return; }
 const vs = 'attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
 const fs = `precision highp float;varying vec2 v;uniform sampler2D sd,co;uniform float t,p;uniform vec2 res;
 float h(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}
@@ -1141,7 +1143,8 @@ requestAnimationFrame(frame);
 }
 drawnSky(document.getElementById('sky_1'), 'https://static.tildacdn.com/tild3635-6637-4465-a331-373534633637/p1-bg.webp');
 function drawnSky(canvas, src) {
-const gl = canvas.getContext('webgl'); if (!gl) return;
+const gl = canvas.getContext('webgl');
+if (!gl) { const bg = document.querySelector('.p1 .bg'); if (bg) { bg.style.display = 'block'; bg.style.webkitMaskImage = bg.style.maskImage = 'none'; } return; }
 const vs = 'attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
 const fs = `precision highp float;varying vec2 v;uniform sampler2D tex;uniform float t;uniform vec2 r;uniform vec2 ir;uniform vec2 m;
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}

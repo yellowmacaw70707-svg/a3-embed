@@ -65,7 +65,8 @@ gl_FragColor=vec4(c,smoothstep(-aa,aa,e));
 }`;
 let gl = null, prog = null, uT = null, uP = null, t0 = performance.now(), offFor = 0;
 const setup = () => {
-gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) return false;
+gl = cv.getContext('webgl', { premultipliedAlpha:false }); if (!gl) return false; /* a3NoGL */
+cv.addEventListener('webglcontextlost', e => { e.preventDefault(); window.__a3NoGL = true; }, { once:true });
 gl.getExtension('OES_standard_derivatives');
 const sh = (ty, src) => { const o = gl.createShader(ty); gl.shaderSource(o, src); gl.compileShader(o); return o; };
 const kk = Math.min(1, fontPx/150), FSk = FS.replace('(grain-.5)*.24', '(grain-.5)*' + (.24*kk).toFixed(3)).replace('*.035;', '*' + (.035*kk).toFixed(4) + ';');
@@ -90,7 +91,8 @@ const r = cv.getBoundingClientRect();
 const onScreen = !(window.__menuOpen && !cv.closest('.mnu')) && state.show > 0 && r.bottom > 0 && r.top < innerHeight && getComputedStyle(cv).visibility !== 'hidden' && cv.offsetParent !== null;
 if (onScreen) {
 offFor = 0;
-if (gl || setup()) {
+if (window.__a3NoGL || (!gl && !setup())) { window.__a3NoGL = true; cv.style.display = 'none'; nodes.forEach(nd => { if (nd.nodeType === 1) nd.style.opacity = 1; }); return; }
+{
 gl.viewport(0, 0, cv.width, cv.height); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
 gl.uniform1f(uT, (performance.now() - t0)/1000); gl.uniform1f(uP, state.p); gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
